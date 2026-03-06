@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameAssasins Web | Gambling King</title>
+  <meta name="description" content="Gambling King: a roguelite slot machine game.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="casino-page">
+  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+
+  <nav class="site-nav reveal" aria-label="Main navigation">
+    <a class="brand" href="./index.html">GameAssasins Web</a>
+    <div class="nav-links">
+      <a class="nav-link" href="./index.html">Home</a>
+      <a class="nav-link" href="./about.html">About</a>
+      <a class="nav-link" href="./rules.html">Help & Rules</a>
+      <a class="nav-link active" href="./gambling-king.html">Gambling King</a>
+    </div>
+  </nav>
+
+  <header class="hero section reveal casino-hero">
+    <p class="eyebrow">4th Page Game</p>
+    <h1>Gambling King</h1>
+    <p class="lead">
+      Roguelite slot machine run. Start fresh every time, push your luck, and survive as long as possible before debt destroys your run.
+    </p>
+  </header>
+
+  <main>
+    <section class="section card reveal">
+      <h2>Objective</h2>
+      <p>Earn as much money as possible before you go completely bankrupt.</p>
+      <ul class="simple-list">
+        <li>Every run starts with small money and no saved progress.</li>
+        <li>Spin to win or lose, then invest into upgrades.</li>
+        <li>Debt can keep your run alive, but too much debt ends everything.</li>
+      </ul>
+    </section>
+
+    <section class="section card reveal">
+      <h2>Machine</h2>
+      <div class="slot-machine">
+        <div class="marquee-lights" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">Money</div>
+            <div class="stat-value" id="moneyValue">$0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Debt</div>
+            <div class="stat-value" id="debtValue">$0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Debt Limit</div>
+            <div class="stat-value" id="debtLimitValue">$0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Debt Interest / Roll</div>
+            <div class="stat-value" id="interestValue">10%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Best Net Worth</div>
+            <div class="stat-value" id="bestValue">$0</div>
+          </div>
+        </div>
+
+        <div class="bet-panel">
+          <label class="stat-label" for="betInput">Bet Size (1 - 10000)</label>
+          <div class="bet-row">
+            <input id="betRange" type="range" min="1" max="10000" step="1" value="10">
+            <input id="betInput" type="number" min="1" max="10000" step="1" value="10">
+          </div>
+        </div>
+
+        <div class="reels" aria-live="polite">
+          <div class="reel" id="reel1">?</div>
+          <div class="reel" id="reel2">?</div>
+          <div class="reel" id="reel3">?</div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-primary game-btn" id="spinBtn">Spin ($10)</button>
+          <button class="btn btn-outline game-btn" id="repayBtn">Repay $50 Debt</button>
+          <button class="btn btn-outline game-btn" id="restartBtn">Restart Run</button>
+        </div>
+
+        <p class="event-log" id="eventLog">Run started. Push your luck.</p>
+      </div>
+    </section>
+
+    <section class="section card reveal">
+      <h2>Upgrades</h2>
+      <p>Choose carefully. Upgrade paths can decide whether your run survives or collapses.</p>
+      <div class="upgrade-grid">
+        <article class="upgrade-card">
+          <h3>Lucky Charm</h3>
+          <p>Increase luck to make high-value symbols appear more often.</p>
+          <p class="upgrade-meta">Level: <span id="luckLevel">0</span> | Cost: <span id="luckCost">$60</span></p>
+          <button class="btn btn-outline game-btn" id="buyLuckBtn">Buy Luck</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>High Roller</h3>
+          <p>Boost payout multiplier for bigger wins on every successful spin.</p>
+          <p class="upgrade-meta">Level: <span id="multLevel">0</span> | Cost: <span id="multCost">$90</span></p>
+          <button class="btn btn-outline game-btn" id="buyMultBtn">Buy Multiplier</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Chaos Engine</h3>
+          <p>Unlock stronger gambling effects: double wins, jackpot surge, and free spin chance.</p>
+          <p class="upgrade-meta">Level: <span id="effectLevel">0</span> | Cost: <span id="effectCost">$140</span></p>
+          <button class="btn btn-outline game-btn" id="buyEffectBtn">Buy Effect</button>
+        </article>
+        <article class="upgrade-card danger-upgrade">
+          <h3>Devil's Contract</h3>
+          <p>Buffs all upgrade power. Negative: higher debt interest and stronger house pressure.</p>
+          <p class="upgrade-meta">Level: <span id="contractLevel">0</span> | Cost: <span id="contractCost">$180</span></p>
+          <button class="btn btn-outline game-btn" id="buyContractBtn">Sign Contract</button>
+        </article>
+      </div>
+      <p class="note">
+        This game is intentionally unsaved. Refreshing or leaving the page resets everything.
+      </p>
+    </section>
+  </main>
+
+  <footer class="section reveal">
+    <p>&copy; <span id="year"></span> Paul</p>
+  </footer>
+
+  <script src="./script.js"></script>
+  <script src="./gambling-king.js"></script>
+</body>
+</html>
