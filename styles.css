@@ -167,6 +167,10 @@ h2 {
   font-size: clamp(1.6rem, 4vw, 2.2rem);
 }
 
+.centered-title {
+  text-align: center;
+}
+
 .lead {
   margin: 0;
   max-width: 63ch;
@@ -309,6 +313,12 @@ h2 {
   box-shadow: inset 0 0 0 1px rgba(255, 214, 122, 0.2), 0 14px 24px rgba(0, 0, 0, 0.35);
 }
 
+.machine-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 0.8rem;
+}
+
 .marquee-lights {
   display: grid;
   grid-template-columns: repeat(16, minmax(0, 1fr));
@@ -333,7 +343,7 @@ h2 {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 0.65rem;
 }
 
@@ -386,11 +396,56 @@ h2 {
   accent-color: #f4bd29;
 }
 
+.bet-row select {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(20, 4, 9, 0.9);
+  color: var(--ink);
+  padding: 0.5rem 0.55rem;
+  font-weight: 700;
+}
+
+.difficulty-pill {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  color: #ffe7a1;
+  font-size: 0.9rem;
+  font-weight: 800;
+  background: rgba(255, 238, 198, 0.1);
+}
+
+.difficulty-note {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  color: #ffd18a;
+  font-size: 0.85rem;
+  background: rgba(255, 238, 198, 0.08);
+}
+
 .reels {
   margin-top: 0.9rem;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.65rem;
+}
+
+.reel-slot {
+  border: 1px solid rgba(244, 189, 41, 0.35);
+  border-radius: 12px;
+  background: rgba(255, 238, 198, 0.06);
+  padding: 0.45rem;
+}
+
+.reel-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffd89a;
+  margin-bottom: 0.28rem;
+  text-align: center;
 }
 
 .reel {
@@ -411,6 +466,19 @@ h2 {
   flex-wrap: wrap;
   gap: 0.55rem;
   margin-top: 0.9rem;
+}
+
+.skip-toggle {
+  margin-top: 0.65rem;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: #ffe7a1;
+  font-size: 0.92rem;
+}
+
+.skip-toggle input {
+  accent-color: #f4bd29;
 }
 
 .game-btn {
@@ -453,6 +521,42 @@ h2 {
   font-size: 0.9rem;
 }
 
+.payout-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(43, 8, 17, 0.9), rgba(22, 5, 11, 0.94));
+  padding: 0.85rem;
+}
+
+.payout-card h3 {
+  margin: 0;
+}
+
+.payout-scroll {
+  margin-top: 0.65rem;
+  border: 1px solid rgba(244, 189, 41, 0.35);
+  border-radius: 10px;
+}
+
+.payout-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.payout-table th,
+.payout-table td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid rgba(244, 189, 41, 0.2);
+  text-align: left;
+}
+
+.payout-table thead th {
+  position: sticky;
+  top: 0;
+  background: rgba(24, 5, 9, 0.95);
+}
+
 .danger-upgrade {
   border-color: rgba(203, 31, 63, 0.7);
   box-shadow: inset 0 0 0 1px rgba(203, 31, 63, 0.45);
@@ -473,6 +577,32 @@ h2 {
   background: rgba(78, 14, 27, 0.96);
 }
 
+.controls select {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(46, 8, 16, 0.95);
+  color: #ffe7a1;
+  padding: 0.48rem 0.55rem;
+  font-weight: 700;
+  min-height: 38px;
+}
+
+.keybind-chip {
+  display: none;
+  margin-left: 0.45rem;
+  padding: 0.08rem 0.35rem;
+  border: 1px solid rgba(244, 189, 41, 0.5);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffe7a1;
+  background: rgba(24, 5, 9, 0.7);
+}
+
+.show-keybinds .keybind-chip {
+  display: inline-block;
+}
+
 .locked-upgrade {
   opacity: 0.92;
 }
@@ -489,6 +619,68 @@ h2 {
 
 .locked-upgrade.locked .lock-note {
   color: #ff9d8a;
+}
+
+.devil-event {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 1, 2, 0.68);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  z-index: 20;
+}
+
+.devil-event.hidden {
+  display: none;
+}
+
+.devil-card {
+  width: min(540px, 92vw);
+  border: 1px solid rgba(203, 31, 63, 0.9);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(49, 5, 13, 0.96), rgba(22, 4, 8, 0.98));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  padding: 1rem;
+}
+
+.inventory-card {
+  width: min(1050px, 95vw);
+  max-height: 88vh;
+  overflow: auto;
+}
+
+.lose-card {
+  border-color: rgba(225, 52, 72, 0.95);
+  animation: losePulse 1s ease-in-out infinite alternate;
+}
+
+.win-card {
+  border-color: rgba(244, 189, 41, 0.9);
+  box-shadow: 0 0 20px rgba(244, 189, 41, 0.25), 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.devil-head {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #ffcf71;
+}
+
+.coin {
+  margin: 0.7rem auto;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  border: 1px solid rgba(244, 189, 41, 0.5);
+  background: radial-gradient(circle at 30% 30%, #fff1c7, #e8af29);
+  color: #312100;
+}
+
+.coin.flipping {
+  animation: coinFlip 0.8s linear infinite;
 }
 
 a {
@@ -561,6 +753,10 @@ footer {
     grid-template-columns: 1fr 1fr;
   }
 
+  .machine-layout {
+    grid-template-columns: 1fr;
+  }
+
   .bet-row {
     grid-template-columns: 1fr;
   }
@@ -570,5 +766,25 @@ footer {
   .stats-grid,
   .upgrade-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@keyframes coinFlip {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(720deg);
+  }
+}
+
+@keyframes losePulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(225, 52, 72, 0.2), 0 18px 40px rgba(0, 0, 0, 0.45);
+  }
+  to {
+    transform: scale(1.01);
+    box-shadow: 0 0 16px rgba(225, 52, 72, 0.45), 0 18px 40px rgba(0, 0, 0, 0.45);
   }
 }
