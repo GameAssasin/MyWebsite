@@ -7,6 +7,10 @@ const gameState = {
   multLevel: 0,
   effectLevel: 0,
   contractLevel: 0,
+  shieldLevel: 0,
+  royalLevel: 0,
+  spins: 0,
+  peakDebt: 0,
   bestNetWorth: 300,
   isGameOver: false,
 };
@@ -43,14 +47,24 @@ const el = {
   multLevel: document.getElementById("multLevel"),
   effectLevel: document.getElementById("effectLevel"),
   contractLevel: document.getElementById("contractLevel"),
+  shieldLevel: document.getElementById("shieldLevel"),
+  royalLevel: document.getElementById("royalLevel"),
   luckCost: document.getElementById("luckCost"),
   multCost: document.getElementById("multCost"),
   effectCost: document.getElementById("effectCost"),
   contractCost: document.getElementById("contractCost"),
+  shieldCost: document.getElementById("shieldCost"),
+  royalCost: document.getElementById("royalCost"),
   buyLuckBtn: document.getElementById("buyLuckBtn"),
   buyMultBtn: document.getElementById("buyMultBtn"),
   buyEffectBtn: document.getElementById("buyEffectBtn"),
   buyContractBtn: document.getElementById("buyContractBtn"),
+  buyShieldBtn: document.getElementById("buyShieldBtn"),
+  buyRoyalBtn: document.getElementById("buyRoyalBtn"),
+  shieldReq: document.getElementById("shieldReq"),
+  royalReq: document.getElementById("royalReq"),
+  shieldCard: document.getElementById("shieldCard"),
+  royalCard: document.getElementById("royalCard"),
 };
 
 function fmt(amount) {
@@ -69,11 +83,12 @@ function getContractPower() {
 }
 
 function getDebtInterestRate() {
-  return 0.1 + gameState.contractLevel * 0.04;
+  const rate = 0.1 + gameState.contractLevel * 0.04 - gameState.shieldLevel * 0.01;
+  return Math.max(0.03, rate);
 }
 
 function getDebtLimit() {
-  const limit = gameState.debtLimitBase + gameState.effectLevel * 120 - gameState.contractLevel * 45;
+  const limit = gameState.debtLimitBase + gameState.effectLevel * 120 + gameState.shieldLevel * 220 - gameState.contractLevel * 45;
   return Math.max(200, Math.round(limit));
 }
 
@@ -99,6 +114,22 @@ function effectCost() {
 
 function contractCost() {
   return Math.round(180 * Math.pow(2.2, gameState.contractLevel));
+}
+
+function shieldCost() {
+  return getCost(220, gameState.shieldLevel, 2.1);
+}
+
+function royalCost() {
+  return getCost(300, gameState.royalLevel, 2.35);
+}
+
+function isShieldUnlocked() {
+  return gameState.peakDebt >= 400 || gameState.spins >= 18;
+}
+
+function isRoyalUnlocked() {
+  return gameState.bestNetWorth >= 2500 || (gameState.luckLevel >= 3 && gameState.multLevel >= 3);
 }
 
 function chooseSymbol() {
@@ -176,6 +207,13 @@ function evaluateSpin(result) {
     gameState.money += bet;
     bonusLine += " Free spin refund.";
   }
+  if (gameState.royalLevel > 0 && payout > 0) {
+    payout *= 1 + gameState.royalLevel * 0.18;
+    if (Math.random() < 0.03 * gameState.royalLevel) {
+      payout += Math.max(200, bet * 5);
+      bonusLine += " Royal jackpot burst.";
+    }
+  }
 
   return {
     payout: Math.round(payout),
@@ -191,6 +229,8 @@ function endRun(reason) {
   el.buyMultBtn.disabled = true;
   el.buyEffectBtn.disabled = true;
   el.buyContractBtn.disabled = true;
+  el.buyShieldBtn.disabled = true;
+  el.buyRoyalBtn.disabled = true;
 }
 
 function setBet(value) {
@@ -213,14 +253,29 @@ function updateUI() {
   el.multLevel.textContent = String(gameState.multLevel);
   el.effectLevel.textContent = String(gameState.effectLevel);
   el.contractLevel.textContent = String(gameState.contractLevel);
+  el.shieldLevel.textContent = String(gameState.shieldLevel);
+  el.royalLevel.textContent = String(gameState.royalLevel);
   el.luckCost.textContent = fmt(luckCost());
   el.multCost.textContent = fmt(multCost());
   el.effectCost.textContent = fmt(effectCost());
   el.contractCost.textContent = fmt(contractCost());
+  el.shieldCost.textContent = fmt(shieldCost());
+  el.royalCost.textContent = fmt(royalCost());
 
   const canRepay = gameState.money >= 50 && gameState.debt > 0 && !gameState.isGameOver;
   el.repayBtn.disabled = !canRepay;
   el.spinBtn.disabled = gameState.isGameOver;
+
+  const shieldUnlocked = isShieldUnlocked();
+  const royalUnlocked = isRoyalUnlocked();
+  const shieldLocked = !shieldUnlocked;
+  const royalLocked = !royalUnlocked;
+  el.buyShieldBtn.disabled = gameState.isGameOver || shieldLocked;
+  el.buyRoyalBtn.disabled = gameState.isGameOver || royalLocked;
+  el.shieldCard.classList.toggle("locked", shieldLocked);
+  el.royalCard.classList.toggle("locked", royalLocked);
+  el.shieldReq.textContent = shieldLocked ? `Locked: Need debt $400 or 18 spins. Current debt peak: ${fmt(gameState.peakDebt)}, spins: ${gameState.spins}.` : "Unlocked";
+  el.royalReq.textContent = royalLocked ? `Locked: Need net worth $2500 or Luck 3 + Mult 3. Current best: ${fmt(gameState.bestNetWorth)}.` : "Unlocked";
 }
 
 function spin() {
@@ -229,6 +284,7 @@ function spin() {
   }
 
   const bet = gameState.currentBet;
+  gameState.spins += 1;
   const canPay = borrowIfNeeded(bet);
   if (!canPay) {
     endRun("Debt exceeded the maximum limit before the spin.");
@@ -246,6 +302,7 @@ function spin() {
   const outcome = evaluateSpin(result);
   gameState.money += outcome.payout;
   const interestGain = applyDebtInterest();
+  gameState.peakDebt = Math.max(gameState.peakDebt, gameState.debt);
   const netWorth = getNetWorth();
   if (netWorth > gameState.bestNetWorth) {
     gameState.bestNetWorth = Math.round(netWorth);
@@ -273,6 +330,18 @@ function buyUpgrade(kind) {
     cost = multCost();
   } else if (kind === "effect") {
     cost = effectCost();
+  } else if (kind === "shield") {
+    if (!isShieldUnlocked()) {
+      el.log.textContent = "Debt Shield is still locked.";
+      return;
+    }
+    cost = shieldCost();
+  } else if (kind === "royal") {
+    if (!isRoyalUnlocked()) {
+      el.log.textContent = "Royal Permit is still locked.";
+      return;
+    }
+    cost = royalCost();
   } else {
     cost = contractCost();
   }
@@ -292,6 +361,12 @@ function buyUpgrade(kind) {
   } else if (kind === "effect") {
     gameState.effectLevel += 1;
     el.log.textContent = "Chaos Engine upgraded. Stronger special effects unlocked.";
+  } else if (kind === "shield") {
+    gameState.shieldLevel += 1;
+    el.log.textContent = "Debt Shield upgraded. Debt limit higher and interest lower.";
+  } else if (kind === "royal") {
+    gameState.royalLevel += 1;
+    el.log.textContent = "Royal Permit upgraded. Premium payout power increased.";
   } else {
     gameState.contractLevel += 1;
     el.log.textContent = "Devil's Contract signed. Upgrades stronger, but debt pressure is worse.";
@@ -319,6 +394,10 @@ function restartRun() {
   gameState.multLevel = 0;
   gameState.effectLevel = 0;
   gameState.contractLevel = 0;
+  gameState.shieldLevel = 0;
+  gameState.royalLevel = 0;
+  gameState.spins = 0;
+  gameState.peakDebt = 0;
   gameState.bestNetWorth = 300;
   gameState.isGameOver = false;
   reels.forEach((reel) => {
@@ -330,6 +409,8 @@ function restartRun() {
   el.buyMultBtn.disabled = false;
   el.buyEffectBtn.disabled = false;
   el.buyContractBtn.disabled = false;
+  el.buyShieldBtn.disabled = true;
+  el.buyRoyalBtn.disabled = true;
   setBet(10);
   updateUI();
 }
@@ -342,6 +423,8 @@ if (el.spinBtn) {
   el.buyMultBtn.addEventListener("click", () => buyUpgrade("mult"));
   el.buyEffectBtn.addEventListener("click", () => buyUpgrade("effect"));
   el.buyContractBtn.addEventListener("click", () => buyUpgrade("contract"));
+  el.buyShieldBtn.addEventListener("click", () => buyUpgrade("shield"));
+  el.buyRoyalBtn.addEventListener("click", () => buyUpgrade("royal"));
   el.betInput.addEventListener("input", () => setBet(Number(el.betInput.value)));
   el.betRange.addEventListener("input", () => setBet(Number(el.betRange.value)));
   setBet(10);

@@ -188,6 +188,7 @@ h2 {
   border: 1px solid transparent;
   text-decoration: none;
   font-weight: 700;
+  background: transparent;
 }
 
 .btn-primary {
@@ -432,7 +433,7 @@ h2 {
 
 .upgrade-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.7rem;
 }
 
@@ -465,6 +466,29 @@ h2 {
 .casino-page .btn-outline {
   border-color: rgba(244, 189, 41, 0.65);
   color: #ffe7a1;
+  background: rgba(46, 8, 16, 0.92);
+}
+
+.casino-page .btn-outline:hover {
+  background: rgba(78, 14, 27, 0.96);
+}
+
+.locked-upgrade {
+  opacity: 0.92;
+}
+
+.locked-upgrade.locked {
+  opacity: 0.62;
+}
+
+.lock-note {
+  margin: 0.25rem 0 0.5rem;
+  color: #ffd18a;
+  font-size: 0.86rem;
+}
+
+.locked-upgrade.locked .lock-note {
+  color: #ff9d8a;
 }
 
 a {
