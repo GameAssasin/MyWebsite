@@ -21,6 +21,8 @@
       <a class="nav-link" href="./about.html">About</a>
       <a class="nav-link" href="./rules.html">Help & Rules</a>
       <a class="nav-link active" href="./gambling-king.html">Gambling King</a>
+      <a class="nav-link" href="./death-wheel.html">Death Wheel</a>
+      <a class="nav-link" href="./balance-changes.html">Balance</a>
     </div>
   </nav>
 
@@ -77,6 +79,10 @@
             <div class="stat-value" id="spinsLeftValue">10</div>
           </div>
           <div class="stat-box">
+            <div class="stat-label">Slots</div>
+            <div class="stat-value" id="reelSlotsValue">3</div>
+          </div>
+          <div class="stat-box">
             <div class="stat-label">Table Fee</div>
             <div class="stat-value" id="tableFeeValue">$0</div>
           </div>
@@ -88,11 +94,7 @@
             <div class="difficulty-pill" id="difficultyBadge">Normal</div>
             <div class="difficulty-note" id="difficultyInfo"></div>
           </div>
-          <label class="stat-label" for="betInput">Bet Size (1 - 10000)</label>
-          <div class="bet-row">
-            <input id="betRange" type="range" min="1" max="10000" step="1" value="10">
-            <input id="betInput" type="number" min="1" max="10000" step="1" value="10">
-          </div>
+          <p class="lock-note">Spin cost is fixed at <strong>$100</strong> for all runs.</p>
         </div>
 
         <div class="reels" aria-live="polite">
@@ -221,21 +223,6 @@
           <button class="btn btn-outline game-btn" id="buyGreedBtn" data-keybind="8">Buy Greed Engine</button>
         </article>
         <article class="upgrade-card">
-          <h3>Symbol Lock</h3>
-          <p>Lock one slot for next spin based on its current symbol.</p>
-          <p class="upgrade-meta">Level: <span id="lockLevel">0</span> | Cost: <span id="lockCost">$120</span></p>
-          <div class="controls">
-            <select id="lockReelSelect">
-              <option value="0">Slot 1</option>
-              <option value="1">Slot 2</option>
-              <option value="2">Slot 3</option>
-            </select>
-            <button class="btn btn-outline game-btn" id="armLockBtn" data-keybind="L">Arm Lock</button>
-            <button class="btn btn-outline game-btn" id="buyLockBtn" data-keybind="9">Upgrade Lock</button>
-          </div>
-          <p class="upgrade-meta" id="lockStatus">Not armed</p>
-        </article>
-        <article class="upgrade-card">
           <h3>Wild Generator</h3>
           <p>Small chance each spin to generate a wild symbol.</p>
           <p class="upgrade-meta">Level: <span id="wildLevel">0</span> | Cost: <span id="wildCost">$160</span></p>
@@ -255,6 +242,12 @@
           <p class="upgrade-meta">Level: <span id="bloodLevel">0</span> | Cost: <span id="bloodCost">$170</span></p>
           <p class="upgrade-meta">Effect: +<span id="bloodLuckBonus">0</span>% luck, -<span id="bloodDrainValue">0</span>% bet/spin</p>
           <button class="btn btn-outline game-btn" id="buyBloodBtn" data-keybind="=">Buy Blood Debt</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Reel Expansion</h3>
+          <p>Buy more slot reels. Bigger matches (4x, 5x, 6x+) now pay much higher.</p>
+          <p class="upgrade-meta">Level: <span id="reelExpandLevel">0</span> | Cost: <span id="reelExpandCost">$320</span></p>
+          <button class="btn btn-outline game-btn" id="buyReelBtn" data-keybind="]">Buy Extra Slot</button>
         </article>
         </div>
         <p class="note">

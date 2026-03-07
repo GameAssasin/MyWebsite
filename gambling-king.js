@@ -14,13 +14,12 @@ const gameState = {
   secondChanceTokens: 0,
   secondChanceArmed: false,
   greedLevel: 0,
-  symbolLockLevel: 0,
-  symbolLockArmed: false,
-  symbolLockReel: 0,
   wildGeneratorLevel: 0,
   debtRestructureLevel: 0,
   restructureSpinsLeft: 0,
   bloodDebtLevel: 0,
+  reelExpansionLevel: 0,
+  reelSlots: 3,
   spins: 0,
   peakDebt: 0,
   spinsInBlock: 0,
@@ -46,31 +45,34 @@ const SYMBOLS = [
 ];
 
 const WILD_SYMBOL = { name: "Wild", icon: "🃏", value: 6.2, weight: 0, isWild: true };
+const BASE_REEL_SLOTS = 3;
+const MAX_REEL_SLOTS = 8;
+const SPIN_COST = 115;
 
 const DIFFICULTIES = [
-  { key: "noob", label: "Noob", startMoney: 1100, debtLimit: 2600, baseInterest: 0.04, feeBase: 28, feeGrowth: 1.16, payoutScale: 1.32, devilChance: 0.05 },
-  { key: "easy", label: "Easy", startMoney: 900, debtLimit: 2200, baseInterest: 0.05, feeBase: 36, feeGrowth: 1.21, payoutScale: 1.22, devilChance: 0.06 },
-  { key: "casual", label: "Casual", startMoney: 760, debtLimit: 1900, baseInterest: 0.065, feeBase: 48, feeGrowth: 1.27, payoutScale: 1.12, devilChance: 0.08 },
-  { key: "normal", label: "Normal", startMoney: 620, debtLimit: 1550, baseInterest: 0.085, feeBase: 64, feeGrowth: 1.35, payoutScale: 1.03, devilChance: 0.1 },
-  { key: "hard", label: "Hard", startMoney: 520, debtLimit: 1300, baseInterest: 0.1, feeBase: 80, feeGrowth: 1.45, payoutScale: 0.97, devilChance: 0.12 },
-  { key: "expert", label: "Expert", startMoney: 450, debtLimit: 1120, baseInterest: 0.115, feeBase: 98, feeGrowth: 1.55, payoutScale: 0.92, devilChance: 0.14 },
-  { key: "master", label: "Master", startMoney: 380, debtLimit: 980, baseInterest: 0.13, feeBase: 120, feeGrowth: 1.67, payoutScale: 0.87, devilChance: 0.16 },
-  { key: "nightmare", label: "Nightmare", startMoney: 320, debtLimit: 840, baseInterest: 0.15, feeBase: 145, feeGrowth: 1.82, payoutScale: 0.81, devilChance: 0.18 },
-  { key: "insane", label: "Insane", startMoney: 260, debtLimit: 700, baseInterest: 0.17, feeBase: 175, feeGrowth: 1.98, payoutScale: 0.74, devilChance: 0.2 },
-  { key: "hell", label: "Hell", startMoney: 220, debtLimit: 560, baseInterest: 0.19, feeBase: 210, feeGrowth: 2.12, payoutScale: 0.68, devilChance: 0.22 },
+  { key: "noob", label: "Noob", startMoney: 1169, debtLimit: 2763, baseInterest: 0.0345, feeBase: 24, feeGrowth: 1.138, payoutScale: 1.4025, devilChance: 0.0437 },
+  { key: "easy", label: "Easy", startMoney: 956, debtLimit: 2338, baseInterest: 0.0437, feeBase: 31, feeGrowth: 1.182, payoutScale: 1.2963, devilChance: 0.0518 },
+  { key: "casual", label: "Casual", startMoney: 808, debtLimit: 2019, baseInterest: 0.0564, feeBase: 41, feeGrowth: 1.233, payoutScale: 1.19, devilChance: 0.069 },
+  { key: "normal", label: "Normal", startMoney: 808, debtLimit: 2019, baseInterest: 0.0587, feeBase: 45, feeGrowth: 1.241, payoutScale: 1.1688, devilChance: 0.069 },
+  { key: "hard", label: "Hard", startMoney: 553, debtLimit: 1381, baseInterest: 0.0863, feeBase: 69, feeGrowth: 1.389, payoutScale: 1.0311, devilChance: 0.1035 },
+  { key: "expert", label: "Expert", startMoney: 479, debtLimit: 1190, baseInterest: 0.0989, feeBase: 85, feeGrowth: 1.475, payoutScale: 0.9775, devilChance: 0.1207 },
+  { key: "master", label: "Master", startMoney: 291, debtLimit: 750, baseInterest: 0.1645, feeBase: 152, feeGrowth: 1.848, payoutScale: 0.6656, devilChance: 0.2024 },
+  { key: "nightmare", label: "Nightmare", startMoney: 245, debtLimit: 643, baseInterest: 0.1897, feeBase: 184, feeGrowth: 2.037, payoutScale: 0.6196, devilChance: 0.2277 },
+  { key: "insane", label: "Insane", startMoney: 199, debtLimit: 536, baseInterest: 0.215, feeBase: 222, feeGrowth: 2.24, payoutScale: 0.5661, devilChance: 0.253 },
+  { key: "hell", label: "Hell", startMoney: 168, debtLimit: 428, baseInterest: 0.2404, feeBase: 266, feeGrowth: 2.417, payoutScale: 0.5202, devilChance: 0.2783 },
 ];
 
 const DIFFICULTY_MAP = Object.fromEntries(DIFFICULTIES.map((d) => [d.key, d]));
 
-const reels = [document.getElementById("reel1"), document.getElementById("reel2"), document.getElementById("reel3")];
-
 const el = {
+  reelsContainer: document.querySelector(".reels"),
   money: document.getElementById("moneyValue"),
   debt: document.getElementById("debtValue"),
   debtLimit: document.getElementById("debtLimitValue"),
   interest: document.getElementById("interestValue"),
   best: document.getElementById("bestValue"),
   spinsLeft: document.getElementById("spinsLeftValue"),
+  reelSlots: document.getElementById("reelSlotsValue"),
   tableFee: document.getElementById("tableFeeValue"),
   log: document.getElementById("eventLog"),
   spinBtn: document.getElementById("spinBtn"),
@@ -80,8 +82,6 @@ const el = {
   restartBtn: document.getElementById("restartBtn"),
   autoSkipCheck: document.getElementById("autoSkipCheck"),
   showKeybindsCheck: document.getElementById("showKeybindsCheck"),
-  betInput: document.getElementById("betInput"),
-  betRange: document.getElementById("betRange"),
   difficultyBadge: document.getElementById("difficultyBadge"),
   difficultyInfo: document.getElementById("difficultyInfo"),
   difficultyModal: document.getElementById("difficultyModal"),
@@ -147,12 +147,6 @@ const el = {
   greedPayoutBonus: document.getElementById("greedPayoutBonus"),
   greedRiskPenalty: document.getElementById("greedRiskPenalty"),
   buyGreedBtn: document.getElementById("buyGreedBtn"),
-  lockLevel: document.getElementById("lockLevel"),
-  lockCost: document.getElementById("lockCost"),
-  lockReelSelect: document.getElementById("lockReelSelect"),
-  armLockBtn: document.getElementById("armLockBtn"),
-  buyLockBtn: document.getElementById("buyLockBtn"),
-  lockStatus: document.getElementById("lockStatus"),
   wildLevel: document.getElementById("wildLevel"),
   wildCost: document.getElementById("wildCost"),
   wildChanceValue: document.getElementById("wildChanceValue"),
@@ -166,7 +160,40 @@ const el = {
   bloodLuckBonus: document.getElementById("bloodLuckBonus"),
   bloodDrainValue: document.getElementById("bloodDrainValue"),
   buyBloodBtn: document.getElementById("buyBloodBtn"),
+  reelExpandLevel: document.getElementById("reelExpandLevel"),
+  reelExpandCost: document.getElementById("reelExpandCost"),
+  buyReelBtn: document.getElementById("buyReelBtn"),
 };
+
+function getReels() {
+  return Array.from(document.querySelectorAll(".reel"));
+}
+
+function ensureReelSlots() {
+  if (!el.reelsContainer) {
+    return;
+  }
+  const current = el.reelsContainer.querySelectorAll(".reel-slot").length;
+  if (current < gameState.reelSlots) {
+    for (let i = current; i < gameState.reelSlots; i += 1) {
+      const slot = document.createElement("div");
+      slot.className = "reel-slot";
+      const label = document.createElement("div");
+      label.className = "reel-label";
+      label.textContent = `Slot ${i + 1}`;
+      const reel = document.createElement("div");
+      reel.className = "reel";
+      reel.id = `reel${i + 1}`;
+      reel.textContent = "?";
+      slot.appendChild(label);
+      slot.appendChild(reel);
+      el.reelsContainer.appendChild(slot);
+    }
+  } else if (current > gameState.reelSlots) {
+    const slots = Array.from(el.reelsContainer.querySelectorAll(".reel-slot"));
+    slots.slice(gameState.reelSlots).forEach((slot) => slot.remove());
+  }
+}
 
 function fmt(amount) {
   return `$${Math.max(0, Math.round(amount)).toLocaleString()}`;
@@ -210,13 +237,6 @@ function randomSymbol() {
   return SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
 }
 
-function clampBet(value) {
-  if (!Number.isFinite(value)) {
-    return 1;
-  }
-  return Math.min(10000, Math.max(1, Math.round(value)));
-}
-
 function getContractPower() {
   return 1 + gameState.contractLevel * 0.25;
 }
@@ -248,7 +268,7 @@ function spinsLeftInBlock() {
 }
 
 function getCost(base, level, growth) {
-  return Math.round(base * Math.pow(growth, level) * (1 + gameState.contractLevel * 0.11));
+  return Math.round(base * Math.pow(growth, level) * (1 + gameState.contractLevel * 0.11) * 1.15);
 }
 
 function luckCost() {
@@ -264,7 +284,7 @@ function effectCost() {
 }
 
 function contractCost() {
-  return Math.round(180 * Math.pow(2.2, gameState.contractLevel));
+  return Math.round(180 * Math.pow(2.2, gameState.contractLevel) * 1.15);
 }
 
 function shieldCost() {
@@ -283,10 +303,6 @@ function greedCost() {
   return getCost(140, gameState.greedLevel, 1.95);
 }
 
-function symbolLockCost() {
-  return getCost(120, gameState.symbolLockLevel, 1.85);
-}
-
 function wildCost() {
   return getCost(160, gameState.wildGeneratorLevel, 2.0);
 }
@@ -297,6 +313,12 @@ function restructureCost() {
 
 function bloodCost() {
   return getCost(170, gameState.bloodDebtLevel, 1.95);
+}
+
+function reelExpandCost() {
+  const base = getCost(320, gameState.reelExpansionLevel, 2.45);
+  const slotPressure = 1 + Math.max(0, gameState.reelSlots - BASE_REEL_SLOTS) * 0.35;
+  return Math.round(base * slotPressure);
 }
 
 function isShieldUnlocked() {
@@ -326,9 +348,16 @@ function chooseSymbol() {
 }
 
 function setReels(result) {
+  const reels = getReels();
   reels.forEach((reel, i) => {
-    reel.textContent = result[i].icon;
-    reel.setAttribute("title", result[i].name);
+    const symbol = result[i];
+    if (!symbol) {
+      reel.textContent = "?";
+      reel.removeAttribute("title");
+      return;
+    }
+    reel.textContent = symbol.icon;
+    reel.setAttribute("title", symbol.name);
   });
 }
 
@@ -338,11 +367,38 @@ function getBaseMultPower() {
 
 function getDeterministicPayout(baseAmount) {
   const greedMult = 1 + gameState.greedLevel * 0.08;
-  let payout = baseAmount * getBaseMultPower() * currentDifficulty().payoutScale * greedMult;
+  const extraSlots = Math.max(0, gameState.reelSlots - BASE_REEL_SLOTS);
+  const slotPenalty = 1 / (1 + extraSlots * 0.3);
+  let payout = baseAmount * getBaseMultPower() * currentDifficulty().payoutScale * greedMult * 0.65 * slotPenalty;
   if (gameState.royalLevel > 0 && payout > 0) {
     payout *= 1 + gameState.royalLevel * 0.18;
   }
   return Math.round(payout);
+}
+
+function getComboMultiplier(matches) {
+  if (matches >= 8) {
+    return 4.5;
+  }
+  if (matches === 7) {
+    return 4.0;
+  }
+  if (matches === 6) {
+    return 3.6;
+  }
+  if (matches === 5) {
+    return 3.2;
+  }
+  if (matches === 4) {
+    return 2.8;
+  }
+  if (matches === 3) {
+    return 2.7;
+  }
+  if (matches === 2) {
+    return 1.05;
+  }
+  return 0;
 }
 
 function renderPayoutTable() {
@@ -350,11 +406,17 @@ function renderPayoutTable() {
     return;
   }
   const rows = [];
+  const maxMatches = Math.min(MAX_REEL_SLOTS, gameState.reelSlots);
   for (const sym of SYMBOLS) {
-    const tripleBase = gameState.currentBet * sym.value * 5.2;
-    const pairBase = gameState.currentBet * sym.value * 1.85;
-    rows.push({ combo: `${sym.icon} ${sym.icon} ${sym.icon} (${sym.name} x3)`, payout: getDeterministicPayout(tripleBase) });
-    rows.push({ combo: `${sym.icon} ${sym.icon} Any (${sym.name} pair)`, payout: getDeterministicPayout(pairBase) });
+    for (let count = maxMatches; count >= 2; count -= 1) {
+      const mult = getComboMultiplier(count);
+      if (mult <= 0) {
+        continue;
+      }
+      const base = gameState.currentBet * sym.value * mult;
+      const label = count === 2 ? `${sym.name} pair` : `${sym.name} x${count}`;
+      rows.push({ combo: `${sym.icon} ${label}`, payout: getDeterministicPayout(base) });
+    }
   }
   rows.push({ combo: "High-value mixed line bonus", payout: getDeterministicPayout(gameState.currentBet * 1.35) });
   el.payoutBody.innerHTML = rows.map((r) => `<tr><td>${r.combo}</td><td>${fmt(r.payout)}</td></tr>`).join("");
@@ -362,6 +424,7 @@ function renderPayoutTable() {
 
 function animateSpin(result) {
   return new Promise((resolve) => {
+    const reels = getReels();
     if (el.autoSkipCheck?.checked) {
       setReels(result);
       resolve();
@@ -424,26 +487,39 @@ function applyDebtInterest() {
 }
 
 function evaluateSpin(result) {
-  const [a, b, c] = result;
   const bet = gameState.currentBet;
-  let base = 0;
+  let bestBase = 0;
   let line = "No match.";
-  const match = (x, y) => x.name === y.name || x.isWild || y.isWild;
+  const wildCount = result.filter((s) => s.isWild).length;
 
-  if (match(a, b) && match(b, c) && match(a, c)) {
-    const best = [a, b, c].reduce((m, s) => (s.value > m.value ? s : m), a);
-    base = bet * best.value * 5.2;
-    line = `TRIPLE ${best.name}!`;
-  } else if (match(a, b) || match(b, c) || match(a, c)) {
-    const pair = match(a, b) ? (a.isWild ? b : a) : match(b, c) ? (b.isWild ? c : b) : (a.isWild ? c : a);
-    base = bet * pair.value * 1.85;
-    line = `Pair of ${pair.name}.`;
-  } else if (a.value + b.value + c.value > 10.5) {
-    base = bet * 1.35;
-    line = "High-value mixed line bonus.";
+  for (const sym of SYMBOLS) {
+    const ownCount = result.filter((s) => s.name === sym.name).length;
+    const matches = ownCount + wildCount;
+    const mult = getComboMultiplier(matches);
+    if (mult <= 0) {
+      continue;
+    }
+    const base = bet * sym.value * mult;
+    if (base > bestBase) {
+      bestBase = base;
+      if (matches >= 4) {
+        line = `MEGA ${sym.name} x${matches}!`;
+      } else if (matches === 3) {
+        line = `TRIPLE ${sym.name}!`;
+      } else {
+        line = `Pair of ${sym.name}.`;
+      }
+    }
+  }
+  if (bestBase <= 0) {
+    const sum = result.reduce((acc, s) => acc + s.value, 0);
+    if (sum > 10.5) {
+      bestBase = bet * 1.35;
+      line = "High-value mixed line bonus.";
+    }
   }
 
-  let payout = getDeterministicPayout(base);
+  let payout = getDeterministicPayout(bestBase);
   let bonusLine = "";
   const effectPower = getContractPower();
   if (gameState.effectLevel >= 1 && payout > 0 && Math.random() < 0.09 * effectPower) {
@@ -498,10 +574,8 @@ function updateDifficultyInfo() {
   el.difficultyInfo.textContent = `${d.label}: Start ${fmt(d.startMoney)}, Base Interest ${Math.round(d.baseInterest * 100)}%, Payout x${d.payoutScale.toFixed(2)}`;
 }
 
-function setBet(value) {
-  gameState.currentBet = clampBet(value);
-  el.betInput.value = String(gameState.currentBet);
-  el.betRange.value = String(gameState.currentBet);
+function applyFixedSpinCost() {
+  gameState.currentBet = SPIN_COST;
   const key = el.spinBtn.getAttribute("data-keybind");
   el.spinBtn.innerHTML = `<span class="btn-label">Spin (${fmt(gameState.currentBet)})</span>`;
   if (key) {
@@ -521,26 +595,8 @@ function checkLossConditions(reason) {
   return false;
 }
 
-function getDisplayedSymbolForReel(reelIndex) {
-  const reel = reels[reelIndex];
-  const title = reel.getAttribute("title");
-  if (title) {
-    if (title === WILD_SYMBOL.name) {
-      return WILD_SYMBOL;
-    }
-    return SYMBOLS.find((s) => s.name === title) || chooseSymbol();
-  }
-  return chooseSymbol();
-}
-
 function buildSpinResult() {
-  const result = [chooseSymbol(), chooseSymbol(), chooseSymbol()];
-  if (gameState.symbolLockArmed && gameState.symbolLockLevel > 0) {
-    const idx = Math.min(2, Math.max(0, gameState.symbolLockReel));
-    result[idx] = getDisplayedSymbolForReel(idx);
-    gameState.symbolLockArmed = false;
-  }
-
+  const result = Array.from({ length: gameState.reelSlots }, () => chooseSymbol());
   if (gameState.wildGeneratorLevel > 0) {
     const wildChance = Math.min(0.45, gameState.wildGeneratorLevel * 0.05);
     if (Math.random() < wildChance) {
@@ -558,6 +614,7 @@ function updateUI() {
   el.interest.textContent = `${Math.round(getDebtInterestRate() * 100)}%`;
   el.best.textContent = fmt(gameState.bestNetWorth);
   el.spinsLeft.textContent = String(spinsLeftInBlock());
+  el.reelSlots.textContent = String(gameState.reelSlots);
   el.tableFee.textContent = gameState.needsFeePayment ? fmt(getTableFee()) : "$0";
   updateDifficultyInfo();
 
@@ -591,9 +648,6 @@ function updateUI() {
   el.greedCost.textContent = fmt(greedCost());
   el.greedPayoutBonus.textContent = String(gameState.greedLevel * 8);
   el.greedRiskPenalty.textContent = (gameState.greedLevel * 0.8).toFixed(1);
-  el.lockLevel.textContent = String(gameState.symbolLockLevel);
-  el.lockCost.textContent = fmt(symbolLockCost());
-  el.lockStatus.textContent = gameState.symbolLockArmed ? `Armed on Slot ${gameState.symbolLockReel + 1}` : "Not armed";
   el.wildLevel.textContent = String(gameState.wildGeneratorLevel);
   el.wildCost.textContent = fmt(wildCost());
   el.wildChanceValue.textContent = (Math.min(45, gameState.wildGeneratorLevel * 5)).toFixed(1);
@@ -604,6 +658,12 @@ function updateUI() {
   el.bloodCost.textContent = fmt(bloodCost());
   el.bloodLuckBonus.textContent = (gameState.bloodDebtLevel * 7).toFixed(1);
   el.bloodDrainValue.textContent = (gameState.bloodDebtLevel * 6).toFixed(1);
+  if (el.reelExpandLevel) {
+    el.reelExpandLevel.textContent = String(gameState.reelExpansionLevel);
+  }
+  if (el.reelExpandCost) {
+    el.reelExpandCost.textContent = gameState.reelSlots >= MAX_REEL_SLOTS ? "MAX" : fmt(reelExpandCost());
+  }
 
   const overlayActive = gameState.devilActive || !el.difficultyModal.classList.contains("hidden") || !el.loseModal.classList.contains("hidden") || !el.winModal.classList.contains("hidden");
   const lockedByState = !gameState.runStarted || gameState.isGameOver || gameState.isSpinning || overlayActive;
@@ -618,11 +678,12 @@ function updateUI() {
   el.buySecondChanceBtn.disabled = lockedByState;
   el.useSecondChanceBtn.disabled = lockedByState || gameState.secondChanceTokens <= 0;
   el.buyGreedBtn.disabled = lockedByState;
-  el.armLockBtn.disabled = lockedByState || gameState.symbolLockLevel <= 0;
-  el.buyLockBtn.disabled = lockedByState;
   el.buyWildBtn.disabled = lockedByState;
   el.buyRestructureBtn.disabled = lockedByState;
   el.buyBloodBtn.disabled = lockedByState;
+  if (el.buyReelBtn) {
+    el.buyReelBtn.disabled = lockedByState || gameState.reelSlots >= MAX_REEL_SLOTS;
+  }
   el.openInventoryBtn.disabled = !gameState.runStarted || gameState.isSpinning || gameState.devilActive;
 
   const shieldUnlocked = isShieldUnlocked();
@@ -718,7 +779,7 @@ function startRun(resetMessage) {
   gameState.money = d.startMoney;
   gameState.debt = 0;
   gameState.debtLimitBase = d.debtLimit;
-  gameState.currentBet = 10;
+  gameState.currentBet = SPIN_COST;
   gameState.luckLevel = 0;
   gameState.multLevel = 0;
   gameState.effectLevel = 0;
@@ -729,13 +790,12 @@ function startRun(resetMessage) {
   gameState.secondChanceTokens = 0;
   gameState.secondChanceArmed = false;
   gameState.greedLevel = 0;
-  gameState.symbolLockLevel = 0;
-  gameState.symbolLockArmed = false;
-  gameState.symbolLockReel = 0;
   gameState.wildGeneratorLevel = 0;
   gameState.debtRestructureLevel = 0;
   gameState.restructureSpinsLeft = 0;
   gameState.bloodDebtLevel = 0;
+  gameState.reelExpansionLevel = 0;
+  gameState.reelSlots = BASE_REEL_SLOTS;
   gameState.spins = 0;
   gameState.peakDebt = 0;
   gameState.spinsInBlock = 0;
@@ -749,12 +809,13 @@ function startRun(resetMessage) {
   gameState.runStarted = true;
   gameState.wonAt100 = false;
 
-  reels.forEach((reel) => {
+  ensureReelSlots();
+  getReels().forEach((reel) => {
     reel.textContent = "?";
     reel.removeAttribute("title");
   });
   hideAllOverlays();
-  setBet(10);
+  applyFixedSpinCost();
   renderPayoutTable();
   el.log.textContent = resetMessage || `Run started on ${d.label}.`;
   updateUI();
@@ -936,12 +997,16 @@ function buyShopItem(kind) {
     cost = secondChanceCost();
   } else if (kind === "greed") {
     cost = greedCost();
-  } else if (kind === "lock") {
-    cost = symbolLockCost();
   } else if (kind === "wild") {
     cost = wildCost();
   } else if (kind === "restructure") {
     cost = restructureCost();
+  } else if (kind === "reelExpand") {
+    if (gameState.reelSlots >= MAX_REEL_SLOTS) {
+      el.log.textContent = "Reel slots are already maxed.";
+      return;
+    }
+    cost = reelExpandCost();
   } else {
     cost = bloodCost();
   }
@@ -958,9 +1023,6 @@ function buyShopItem(kind) {
   } else if (kind === "greed") {
     gameState.greedLevel += 1;
     el.log.textContent = "Greed Engine upgraded. Payouts up, risk up.";
-  } else if (kind === "lock") {
-    gameState.symbolLockLevel += 1;
-    el.log.textContent = "Symbol Lock upgraded. You can arm slot lock.";
   } else if (kind === "wild") {
     gameState.wildGeneratorLevel += 1;
     el.log.textContent = "Wild Generator upgraded.";
@@ -970,26 +1032,17 @@ function buyShopItem(kind) {
     gameState.debt = Math.max(0, gameState.debt - debtCut);
     gameState.restructureSpinsLeft += 3;
     el.log.textContent = `Debt Restructuring activated. Debt reduced by ${fmt(debtCut)}.`;
+  } else if (kind === "reelExpand") {
+    gameState.reelExpansionLevel += 1;
+    gameState.reelSlots = Math.min(MAX_REEL_SLOTS, BASE_REEL_SLOTS + gameState.reelExpansionLevel);
+    ensureReelSlots();
+    el.log.textContent = `Reel Expansion purchased. You now have ${gameState.reelSlots} slots.`;
   } else {
     gameState.bloodDebtLevel += 1;
     el.log.textContent = "Blood Debt upgraded. Luck rises, spin drain rises.";
   }
 
   renderPayoutTable();
-  updateUI();
-}
-
-function armSymbolLock() {
-  if (!gameState.runStarted || gameState.isGameOver || gameState.isSpinning || gameState.devilActive) {
-    return;
-  }
-  if (gameState.symbolLockLevel <= 0) {
-    el.log.textContent = "Buy Symbol Lock first.";
-    return;
-  }
-  gameState.symbolLockReel = Number(el.lockReelSelect.value);
-  gameState.symbolLockArmed = true;
-  el.log.textContent = `Symbol Lock armed on Slot ${gameState.symbolLockReel + 1}.`;
   updateUI();
 }
 
@@ -1043,11 +1096,10 @@ if (el.spinBtn) {
   el.buySecondChanceBtn.addEventListener("click", () => buyShopItem("secondChance"));
   el.useSecondChanceBtn.addEventListener("click", useSecondChanceToken);
   el.buyGreedBtn.addEventListener("click", () => buyShopItem("greed"));
-  el.buyLockBtn.addEventListener("click", () => buyShopItem("lock"));
-  el.armLockBtn.addEventListener("click", armSymbolLock);
   el.buyWildBtn.addEventListener("click", () => buyShopItem("wild"));
   el.buyRestructureBtn.addEventListener("click", () => buyShopItem("restructure"));
   el.buyBloodBtn.addEventListener("click", () => buyShopItem("blood"));
+  el.buyReelBtn?.addEventListener("click", () => buyShopItem("reelExpand"));
   el.openInventoryBtn.addEventListener("click", () => {
     if (!gameState.runStarted || gameState.isSpinning || gameState.devilActive) {
       return;
@@ -1083,14 +1135,12 @@ if (el.spinBtn) {
   });
   el.winDifficultyBtn.addEventListener("click", () => showDifficultyModal());
 
-  el.betInput.addEventListener("input", () => setBet(Number(el.betInput.value)));
-  el.betRange.addEventListener("input", () => setBet(Number(el.betRange.value)));
   el.showKeybindsCheck.addEventListener("change", () => setShowKeybinds(el.showKeybindsCheck.checked));
   document.addEventListener("keydown", (event) => {
     const key = event.key;
     const upper = key.length === 1 ? key.toUpperCase() : key;
 
-    if (upper === "ESCAPE" && !el.inventoryModal.classList.contains("hidden")) {
+    if (!el.inventoryModal.classList.contains("hidden") && (upper === "ESCAPE" || upper === "I")) {
       event.preventDefault();
       el.closeInventoryBtn.click();
       return;
@@ -1148,12 +1198,11 @@ if (el.spinBtn) {
         "6": el.buyRoyalBtn,
         "7": el.buySecondChanceBtn,
         "8": el.buyGreedBtn,
-        "9": el.buyLockBtn,
         "0": el.buyWildBtn,
         "-": el.buyRestructureBtn,
         "=": el.buyBloodBtn,
+        "]": el.buyReelBtn,
         "C": el.useSecondChanceBtn,
-        "L": el.armLockBtn,
         "I": el.closeInventoryBtn,
       };
       const btn = invMap[upper];
@@ -1184,7 +1233,8 @@ if (el.spinBtn) {
 
   addKeybindChips();
   setShowKeybinds(false);
-  setBet(10);
+  ensureReelSlots();
+  applyFixedSpinCost();
   renderPayoutTable();
   showDifficultyModal();
   updateUI();
