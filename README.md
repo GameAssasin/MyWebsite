@@ -2,9 +2,6 @@
 
 Personal website project with browser mini-games.
 
-## Project Path
-`C:\Users\paul\Documents\MyWebsite`
-
 ## Pages
 - `index.html` - Home
 - `about.html` - About
