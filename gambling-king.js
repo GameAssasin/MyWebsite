@@ -32,6 +32,7 @@ const gameState = {
   devilActive: false,
   runStarted: false,
   wonAt100: false,
+  showFullUpgradeInfo: false,
 };
 
 const SYMBOLS = [
@@ -48,21 +49,24 @@ const WILD_SYMBOL = { name: "Wild", icon: "🃏", value: 6.2, weight: 0, isWild:
 const BASE_REEL_SLOTS = 3;
 const MAX_REEL_SLOTS = 8;
 const SPIN_COST = 115;
+const GLOBAL_PAYOUT_EASE_MULTIPLIER = 2;
+const HELL_PAYOUT_FACTOR = 0.7;
 
 const DIFFICULTIES = [
   { key: "noob", label: "Noob", startMoney: 1169, debtLimit: 2763, baseInterest: 0.0345, feeBase: 24, feeGrowth: 1.138, payoutScale: 1.4025, devilChance: 0.0437 },
   { key: "easy", label: "Easy", startMoney: 956, debtLimit: 2338, baseInterest: 0.0437, feeBase: 31, feeGrowth: 1.182, payoutScale: 1.2963, devilChance: 0.0518 },
   { key: "casual", label: "Casual", startMoney: 808, debtLimit: 2019, baseInterest: 0.0564, feeBase: 41, feeGrowth: 1.233, payoutScale: 1.19, devilChance: 0.069 },
   { key: "normal", label: "Normal", startMoney: 808, debtLimit: 2019, baseInterest: 0.0587, feeBase: 45, feeGrowth: 1.241, payoutScale: 1.1688, devilChance: 0.069 },
-  { key: "hard", label: "Hard", startMoney: 553, debtLimit: 1381, baseInterest: 0.0863, feeBase: 69, feeGrowth: 1.389, payoutScale: 1.0311, devilChance: 0.1035 },
-  { key: "expert", label: "Expert", startMoney: 479, debtLimit: 1190, baseInterest: 0.0989, feeBase: 85, feeGrowth: 1.475, payoutScale: 0.9775, devilChance: 0.1207 },
-  { key: "master", label: "Master", startMoney: 291, debtLimit: 750, baseInterest: 0.1645, feeBase: 152, feeGrowth: 1.848, payoutScale: 0.6656, devilChance: 0.2024 },
-  { key: "nightmare", label: "Nightmare", startMoney: 245, debtLimit: 643, baseInterest: 0.1897, feeBase: 184, feeGrowth: 2.037, payoutScale: 0.6196, devilChance: 0.2277 },
-  { key: "insane", label: "Insane", startMoney: 199, debtLimit: 536, baseInterest: 0.215, feeBase: 222, feeGrowth: 2.24, payoutScale: 0.5661, devilChance: 0.253 },
-  { key: "hell", label: "Hell", startMoney: 168, debtLimit: 428, baseInterest: 0.2404, feeBase: 266, feeGrowth: 2.417, payoutScale: 0.5202, devilChance: 0.2783 },
+  { key: "hard", label: "Hard", startMoney: 760, debtLimit: 1600, baseInterest: 0.07, feeBase: 58, feeGrowth: 1.24, payoutScale: 1.2, devilChance: 0.1 },
+  { key: "expert", label: "Expert", startMoney: 730, debtLimit: 1450, baseInterest: 0.074, feeBase: 62, feeGrowth: 1.25, payoutScale: 1.18, devilChance: 0.11 },
+  { key: "master", label: "Master", startMoney: 700, debtLimit: 1300, baseInterest: 0.078, feeBase: 66, feeGrowth: 1.26, payoutScale: 1.16, devilChance: 0.12 },
+  { key: "nightmare", label: "Nightmare", startMoney: 670, debtLimit: 1180, baseInterest: 0.082, feeBase: 70, feeGrowth: 1.27, payoutScale: 1.14, devilChance: 0.125 },
+  { key: "insane", label: "Insane", startMoney: 640, debtLimit: 1060, baseInterest: 0.086, feeBase: 74, feeGrowth: 1.28, payoutScale: 1.12, devilChance: 0.13 },
+  { key: "hell", label: "Hell", startMoney: 610, debtLimit: 428, baseInterest: 0.09, feeBase: 78, feeGrowth: 1.31, payoutScale: 1.1, devilChance: 0.12 },
 ];
 
 const DIFFICULTY_MAP = Object.fromEntries(DIFFICULTIES.map((d) => [d.key, d]));
+const BASE_WIN_SPINS = 100;
 
 const el = {
   reelsContainer: document.querySelector(".reels"),
@@ -82,6 +86,7 @@ const el = {
   restartBtn: document.getElementById("restartBtn"),
   autoSkipCheck: document.getElementById("autoSkipCheck"),
   showKeybindsCheck: document.getElementById("showKeybindsCheck"),
+  showFullInfoCheck: document.getElementById("showFullInfoCheck"),
   difficultyBadge: document.getElementById("difficultyBadge"),
   difficultyInfo: document.getElementById("difficultyInfo"),
   difficultyModal: document.getElementById("difficultyModal"),
@@ -132,6 +137,8 @@ const el = {
   loseRestartBtn: document.getElementById("loseRestartBtn"),
   loseDifficultyBtn: document.getElementById("loseDifficultyBtn"),
   winModal: document.getElementById("winModal"),
+  winModalHead: document.getElementById("winModalHead"),
+  winModalBody: document.getElementById("winModalBody"),
   continueAfterWinBtn: document.getElementById("continueAfterWinBtn"),
   winDifficultyBtn: document.getElementById("winDifficultyBtn"),
   inventoryModal: document.getElementById("inventoryModal"),
@@ -215,6 +222,19 @@ function setShowKeybinds(show) {
   document.body.classList.toggle("show-keybinds", !!show);
 }
 
+function setUpgradeInfoMode(showFull) {
+  gameState.showFullUpgradeInfo = !!showFull;
+  document.body.classList.toggle("full-upgrade-info", gameState.showFullUpgradeInfo);
+  document.querySelectorAll(".upgrade-desc").forEach((desc) => {
+    const shortText = desc.dataset.short || desc.textContent.trim();
+    const fullText = desc.dataset.full || shortText;
+    desc.textContent = gameState.showFullUpgradeInfo ? fullText : shortText;
+  });
+  if (el.showFullInfoCheck) {
+    el.showFullInfoCheck.checked = gameState.showFullUpgradeInfo;
+  }
+}
+
 function clickIfEnabled(button) {
   if (button && !button.disabled) {
     button.click();
@@ -231,6 +251,10 @@ function isTextInputTarget(target) {
 
 function currentDifficulty() {
   return DIFFICULTY_MAP[gameState.difficultyKey] || DIFFICULTY_MAP.normal;
+}
+
+function getWinSpinTarget() {
+  return BASE_WIN_SPINS;
 }
 
 function randomSymbol() {
@@ -369,7 +393,8 @@ function getDeterministicPayout(baseAmount) {
   const greedMult = 1 + gameState.greedLevel * 0.08;
   const extraSlots = Math.max(0, gameState.reelSlots - BASE_REEL_SLOTS);
   const slotPenalty = 1 / (1 + extraSlots * 0.3);
-  let payout = baseAmount * getBaseMultPower() * currentDifficulty().payoutScale * greedMult * 0.65 * slotPenalty;
+  const hellFactor = currentDifficulty().key === "hell" ? HELL_PAYOUT_FACTOR : 1;
+  let payout = baseAmount * getBaseMultPower() * currentDifficulty().payoutScale * greedMult * 0.65 * slotPenalty * GLOBAL_PAYOUT_EASE_MULTIPLIER * hellFactor;
   if (gameState.royalLevel > 0 && payout > 0) {
     payout *= 1 + gameState.royalLevel * 0.18;
   }
@@ -553,7 +578,7 @@ function showDifficultyModal() {
   hideAllOverlays();
   el.difficultySelectModal.value = gameState.difficultyKey;
   const d = currentDifficulty();
-  el.difficultyModalInfo.textContent = `${d.label}: Start ${fmt(d.startMoney)}, Interest ${Math.round(d.baseInterest * 100)}%, Payout x${d.payoutScale.toFixed(2)}`;
+  el.difficultyModalInfo.textContent = `${d.label}: Start ${fmt(d.startMoney)}, Interest ${Math.round(d.baseInterest * 100)}%, Payout x${d.payoutScale.toFixed(2)}, Win ${getWinSpinTarget()} spins`;
   el.difficultyModal.classList.remove("hidden");
 }
 
@@ -564,14 +589,26 @@ function showLoseModal(reason) {
 }
 
 function showWinModal() {
+  const targetSpins = getWinSpinTarget();
+  if (el.winModalHead) {
+    el.winModalHead.textContent = `${targetSpins} Spins Cleared`;
+  }
+  if (el.winModalBody) {
+    el.winModalBody.textContent = `You survived ${targetSpins} spins on ${currentDifficulty().label}. This run is considered a win.`;
+  }
+  if (el.continueAfterWinBtn) {
+    el.continueAfterWinBtn.textContent = `Continue Beyond ${targetSpins}`;
+  }
   hideAllOverlays();
   el.winModal.classList.remove("hidden");
 }
 
 function updateDifficultyInfo() {
   const d = currentDifficulty();
-  el.difficultyBadge.textContent = d.label;
-  el.difficultyInfo.textContent = `${d.label}: Start ${fmt(d.startMoney)}, Base Interest ${Math.round(d.baseInterest * 100)}%, Payout x${d.payoutScale.toFixed(2)}`;
+  if (el.difficultyBadge) {
+    el.difficultyBadge.textContent = d.label;
+  }
+  el.difficultyInfo.textContent = `${d.label}: Start ${fmt(d.startMoney)}, Base Interest ${Math.round(d.baseInterest * 100)}%, Payout x${d.payoutScale.toFixed(2)}, Win ${getWinSpinTarget()} spins`;
 }
 
 function applyFixedSpinCost() {
@@ -901,7 +938,8 @@ async function spin() {
   el.log.textContent = `${resultText}. ${outcome.line} ${payoutLine}${interestLine}${feeLine}`;
   updateUI();
 
-  if (!gameState.wonAt100 && gameState.spins >= 100) {
+  const targetSpins = getWinSpinTarget();
+  if (!gameState.wonAt100 && gameState.spins >= targetSpins) {
     gameState.wonAt100 = true;
     showWinModal();
     updateUI();
@@ -1123,19 +1161,20 @@ if (el.spinBtn) {
   el.difficultySelectModal.addEventListener("change", () => {
     gameState.difficultyKey = el.difficultySelectModal.value;
     const d = currentDifficulty();
-    el.difficultyModalInfo.textContent = `${d.label}: Start ${fmt(d.startMoney)}, Interest ${Math.round(d.baseInterest * 100)}%, Payout x${d.payoutScale.toFixed(2)}`;
+    el.difficultyModalInfo.textContent = `${d.label}: Start ${fmt(d.startMoney)}, Interest ${Math.round(d.baseInterest * 100)}%, Payout x${d.payoutScale.toFixed(2)}, Win ${getWinSpinTarget()} spins`;
   });
 
   el.loseRestartBtn.addEventListener("click", () => startRun(`Run restarted on ${currentDifficulty().label}.`));
   el.loseDifficultyBtn.addEventListener("click", () => showDifficultyModal());
   el.continueAfterWinBtn.addEventListener("click", () => {
     hideAllOverlays();
-    el.log.textContent = "You chose to continue beyond 100 spins.";
+    el.log.textContent = `You chose to continue beyond ${getWinSpinTarget()} spins.`;
     updateUI();
   });
   el.winDifficultyBtn.addEventListener("click", () => showDifficultyModal());
 
   el.showKeybindsCheck.addEventListener("change", () => setShowKeybinds(el.showKeybindsCheck.checked));
+  el.showFullInfoCheck?.addEventListener("change", () => setUpgradeInfoMode(el.showFullInfoCheck.checked));
   document.addEventListener("keydown", (event) => {
     const key = event.key;
     const upper = key.length === 1 ? key.toUpperCase() : key;
@@ -1233,6 +1272,7 @@ if (el.spinBtn) {
 
   addKeybindChips();
   setShowKeybinds(false);
+  setUpgradeInfoMode(false);
   ensureReelSlots();
   applyFixedSpinCost();
   renderPayoutTable();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GameAssasins Web | Balance Changes</title>
+  <title>GameAssasins Web | Updates</title>
   <meta name="description" content="Balance history and current values for all games.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,29 +22,70 @@
       <a class="nav-link" href="./rules.html">Help & Rules</a>
       <a class="nav-link" href="./gambling-king.html">Gambling King</a>
       <a class="nav-link" href="./death-wheel.html">Death Wheel</a>
-      <a class="nav-link active" href="./balance-changes.html">Balance</a>
+      <a class="nav-link active" href="./balance-changes.html">Updates</a>
     </div>
   </nav>
 
   <header class="hero section reveal">
     <p class="eyebrow">Game Balance</p>
-    <h1>Balance Changes</h1>
-    <p class="lead">This page tracks balance values for all games. For now, Gambling King v0.1 is documented.</p>
+    <h1>Updates</h1>
+    <p class="lead">This page tracks website version updates. Website v0.2 is now live; v0.1 is preserved below.</p>
   </header>
 
   <main>
     <section class="section card reveal">
       <h2>Current Scope</h2>
       <ul class="simple-list">
-        <li>Gambling King: v0.1 baseline available now.</li>
-        <li>Death Wheel: coming soon.</li>
+        <li>Website version: v0.2 current.</li>
+        <li>Website version: v0.1 preserved below as baseline reference.</li>
+        <li>Death Wheel: live in v0.2 (detailed notes in Balance notes file).</li>
       </ul>
-      <p><a href="./balance changes.md">Open source balance notes file</a></p>
+      <p><a href="./balance changes.md">Balance notes</a></p>
+    </section>
+
+    <section class="section card reveal" id="death-wheel-v02">
+      <h2>Website v0.2 - Death Wheel</h2>
+      <ul class="simple-list">
+        <li>Death Wheel was added in website v0.2.</li>
+        <li>Core systems (shop, effects, triple spin, and wheel events) are live.</li>
+        <li>Detailed balance numbers and tuning notes are in the Balance notes file.</li>
+      </ul>
+    </section>
+
+    <section class="section card reveal" id="gambling-king-v02">
+      <h2>Website v0.2 - Gambling King Changes</h2>
+      <p class="note">Format below shows exactly what changed from website v0.1 to website v0.2.</p>
+
+      <h3>Core Economy Changes (v0.1 -&gt; v0.2)</h3>
+      <ul class="simple-list">
+        <li>Global payout ease multiplier: <strong>1.00 -&gt; 2.00</strong>.</li>
+        <li>Hell-only payout factor: <strong>1.00 -&gt; 0.70</strong>.</li>
+        <li>Effective Hell payout multiplier vs pre-v0.2 formula: <strong>1.00 -&gt; 1.40</strong>.</li>
+        <li>Fixed spin cost: <strong>$115 -&gt; $115</strong> (unchanged after testing).</li>
+      </ul>
+
+      <h3>Difficulty Start Cash Changes (v0.1 -&gt; v0.2)</h3>
+      <ul class="simple-list">
+        <li>Hard: <strong>$553 -&gt; $760</strong>.</li>
+        <li>Expert: <strong>$479 -&gt; $730</strong>.</li>
+        <li>Master: <strong>$291 -&gt; $700</strong>.</li>
+        <li>Nightmare: <strong>$245 -&gt; $670</strong>.</li>
+        <li>Insane: <strong>$199 -&gt; $640</strong>.</li>
+        <li>Hell: <strong>$168 -&gt; $610</strong>.</li>
+      </ul>
+      <p class="note">Hard+ difficulties were fully retuned in v0.2 (cash, debt limits, interest, fee curves, payout scales, devil rates).</p>
+
+      <h3>Why This Changed</h3>
+      <ul class="simple-list">
+        <li>Make all difficulties easier overall.</li>
+        <li>Keep Hell challenging instead of free after the global buff.</li>
+      </ul>
+
     </section>
 
     <section class="section card reveal" id="gambling-king-v01">
-      <h2>Gambling King - v0.1</h2>
-      <p class="note">Values below match current live settings in <code>gambling-king.js</code>.</p>
+      <h2>Website v0.1 Baseline - Gambling King</h2>
+      <p class="note">Historical reference values from before website v0.2 tuning.</p>
       <div class="balance-table-wrap">
         <table class="payout-table balance-table">
           <thead>
@@ -91,3 +132,5 @@
   <script src="./script.js"></script>
 </body>
 </html>
+
+

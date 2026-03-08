@@ -22,7 +22,7 @@
       <a class="nav-link" href="./rules.html">Help & Rules</a>
       <a class="nav-link active" href="./gambling-king.html">Gambling King</a>
       <a class="nav-link" href="./death-wheel.html">Death Wheel</a>
-      <a class="nav-link" href="./balance-changes.html">Balance</a>
+      <a class="nav-link" href="./balance-changes.html">Updates</a>
     </div>
   </nav>
 
@@ -37,11 +37,11 @@
   <main>
     <section class="section card reveal">
       <h2>Objective</h2>
-      <p>Earn as much money as possible before you go completely bankrupt.</p>
+      <p>Survive until the win target and avoid debt collapse.</p>
       <ul class="simple-list">
-        <li>Every run starts with small money and no saved progress.</li>
-        <li>Spin to win or lose, then invest into upgrades.</li>
-        <li>Debt can keep your run alive, but reaching debt of 10000 ends the run instantly.</li>
+        <li>You win the run after surviving <strong>100 spins</strong> on your selected difficulty.</li>
+        <li>Every run starts fresh with no saved run progress.</li>
+        <li>Debt can keep you alive, but reaching <strong>10000 debt</strong> ends the run instantly.</li>
       </ul>
     </section>
 
@@ -90,11 +90,10 @@
 
         <div class="bet-panel">
           <label class="stat-label">Difficulty</label>
-          <div class="bet-row">
-            <div class="difficulty-pill" id="difficultyBadge">Normal</div>
-            <div class="difficulty-note" id="difficultyInfo"></div>
+          <div class="bet-row difficulty-row">
+            <div class="difficulty-note" id="difficultyInfo">Normal</div>
           </div>
-          <p class="lock-note">Spin cost is fixed at <strong>$100</strong> for all runs.</p>
+          <p class="lock-note">Spin cost is fixed at <strong>$115</strong> for all runs.</p>
         </div>
 
         <div class="reels" aria-live="polite">
@@ -114,7 +113,7 @@
 
         <div class="controls">
           <button class="btn btn-primary game-btn" id="spinBtn" data-keybind="S">Spin ($10)</button>
-          <button class="btn btn-outline game-btn" id="openInventoryBtn" data-keybind="I">Inventory</button>
+          <button class="btn btn-outline game-btn" id="openInventoryBtn" data-keybind="I">Upgrades</button>
           <button class="btn btn-outline game-btn" id="skipAnimBtn" data-keybind="K">Skip Current Spin</button>
           <button class="btn btn-outline game-btn" id="payFeeBtn" data-keybind="F">Pay Table Fee</button>
           <button class="btn btn-outline game-btn" id="repayBtn" data-keybind="P">Repay $50 Debt</button>
@@ -124,10 +123,16 @@
           <input type="checkbox" id="autoSkipCheck">
           Always skip spin animation
         </label>
-        <label class="skip-toggle" for="showKeybindsCheck">
-          <input type="checkbox" id="showKeybindsCheck">
-          Show keybinds
-        </label>
+        <div class="quick-toggle-row">
+          <label class="skip-toggle" for="showKeybindsCheck">
+            <input type="checkbox" id="showKeybindsCheck">
+            Show keybinds
+          </label>
+          <label class="skip-toggle" for="showFullInfoCheck">
+            <input type="checkbox" id="showFullInfoCheck">
+            Show full info
+          </label>
+        </div>
 
         <p class="event-log" id="eventLog">Run started. Push your luck.</p>
       </div>
@@ -151,7 +156,7 @@
 
     <div class="devil-event hidden" id="inventoryModal" aria-live="polite">
       <div class="devil-card inventory-card">
-        <div class="devil-head">Inventory</div>
+        <div class="devil-head">Upgrades</div>
         <p>Upgrade and shop systems in one place.</p>
         <div class="controls">
           <button class="btn btn-outline game-btn" id="closeInventoryBtn" data-keybind="I">Close</button>
@@ -160,35 +165,35 @@
         <div class="upgrade-grid">
         <article class="upgrade-card">
           <h3>Lucky Charm</h3>
-          <p>Increase luck to make high-value symbols appear more often.</p>
+          <p class="upgrade-desc" data-short="Boost high-value symbol odds." data-full="Increase luck to make high-value symbols appear more often.">Boost high-value symbol odds.</p>
           <p class="upgrade-meta">Level: <span id="luckLevel">0</span> | Cost: <span id="luckCost">$60</span></p>
           <p class="upgrade-meta">Bonus: +<span id="luckBonusValue">0</span>% high-symbol odds</p>
           <button class="btn btn-outline game-btn" id="buyLuckBtn" data-keybind="1">Buy Luck</button>
         </article>
         <article class="upgrade-card">
           <h3>High Roller</h3>
-          <p>Boost payout multiplier for bigger wins on every successful spin.</p>
+          <p class="upgrade-desc" data-short="Increase payout power." data-full="Boost payout multiplier for bigger wins on every successful spin.">Increase payout power.</p>
           <p class="upgrade-meta">Level: <span id="multLevel">0</span> | Cost: <span id="multCost">$90</span></p>
           <p class="upgrade-meta">Bonus: x<span id="multBonusValue">1.00</span> payout power</p>
           <button class="btn btn-outline game-btn" id="buyMultBtn" data-keybind="2">Buy Multiplier</button>
         </article>
         <article class="upgrade-card">
           <h3>Chaos Engine</h3>
-          <p>Unlock stronger gambling effects: double wins, jackpot surge, and free spin chance.</p>
+          <p class="upgrade-desc" data-short="Adds random bonus procs." data-full="Unlock stronger gambling effects: double wins, jackpot surge, and free spin chance.">Adds random bonus procs.</p>
           <p class="upgrade-meta">Level: <span id="effectLevel">0</span> | Cost: <span id="effectCost">$140</span></p>
           <p class="upgrade-meta">Bonus: Double <span id="effectDoubleChance">0.0%</span>, Surge <span id="effectSurgeChance">0.0%</span>, Refund <span id="effectRefundChance">0.0%</span></p>
           <button class="btn btn-outline game-btn" id="buyEffectBtn" data-keybind="3">Buy Effect</button>
         </article>
         <article class="upgrade-card danger-upgrade">
           <h3>Devil's Contract</h3>
-          <p>Buffs all upgrade power. Negative: higher debt interest and stronger house pressure.</p>
+          <p class="upgrade-desc" data-short="More upgrade power, more risk." data-full="Buffs all upgrade power. Negative: higher debt interest and stronger house pressure.">More upgrade power, more risk.</p>
           <p class="upgrade-meta">Level: <span id="contractLevel">0</span> | Cost: <span id="contractCost">$180</span></p>
           <p class="upgrade-meta">Effect: +<span id="contractPowerBonus">0</span>% upgrade power, +<span id="contractInterestPenalty">0</span>% debt interest</p>
           <button class="btn btn-outline game-btn" id="buyContractBtn" data-keybind="4">Sign Contract</button>
         </article>
         <article class="upgrade-card locked-upgrade" id="shieldCard">
           <h3>Debt Shield</h3>
-          <p>Raises debt limit and reduces interest. Unlock when debt reaches $400 or after 18 spins.</p>
+          <p class="upgrade-desc" data-short="More debt limit, less interest." data-full="Raises debt limit and reduces interest. Unlock when debt reaches $400 or after 18 spins.">More debt limit, less interest.</p>
           <p class="upgrade-meta">Level: <span id="shieldLevel">0</span> | Cost: <span id="shieldCost">$220</span></p>
           <p class="upgrade-meta">Bonus: +<span id="shieldLimitBonus">0</span> debt limit, -<span id="shieldInterestReduction">0</span>% interest</p>
           <p class="lock-note" id="shieldReq">Locked</p>
@@ -196,7 +201,7 @@
         </article>
         <article class="upgrade-card locked-upgrade" id="royalCard">
           <h3>Royal Permit</h3>
-          <p>Unlocks high-end payouts and bonus jackpot chance. Unlock at net worth $2500 or Luck 3 + Mult 3.</p>
+          <p class="upgrade-desc" data-short="Unlocks premium payout bonuses." data-full="Unlocks high-end payouts and bonus jackpot chance. Unlock at net worth $2500 or Luck 3 + Mult 3.">Unlocks premium payout bonuses.</p>
           <p class="upgrade-meta">Level: <span id="royalLevel">0</span> | Cost: <span id="royalCost">$300</span></p>
           <p class="upgrade-meta">Bonus: +<span id="royalPayoutBonus">0</span>% payout, +<span id="royalJackpotChance">0.0</span>% royal burst chance</p>
           <p class="lock-note" id="royalReq">Locked</p>
@@ -207,7 +212,7 @@
         <div class="upgrade-grid">
         <article class="upgrade-card">
           <h3>Second Chance</h3>
-          <p>Gain reroll tokens every 10 spins. Spend token to force reroll if next spin whiffs.</p>
+          <p class="upgrade-desc" data-short="Reroll failed spins with tokens." data-full="Gain reroll tokens every 10 spins. Spend token to force reroll if next spin whiffs.">Reroll failed spins with tokens.</p>
           <p class="upgrade-meta">Level: <span id="secondChanceLevel">0</span> | Cost: <span id="secondChanceCost">$110</span></p>
           <p class="upgrade-meta">Tokens: <span id="secondChanceTokens">0</span></p>
           <div class="controls">
@@ -217,35 +222,35 @@
         </article>
         <article class="upgrade-card">
           <h3>Greed Engine</h3>
-          <p>Higher payouts, but higher interest and faster table fee scaling.</p>
+          <p class="upgrade-desc" data-short="More payout, more pressure." data-full="Higher payouts, but higher interest and faster table fee scaling.">More payout, more pressure.</p>
           <p class="upgrade-meta">Level: <span id="greedLevel">0</span> | Cost: <span id="greedCost">$140</span></p>
           <p class="upgrade-meta">Effect: +<span id="greedPayoutBonus">0</span>% payout, +<span id="greedRiskPenalty">0</span>% risk pressure</p>
           <button class="btn btn-outline game-btn" id="buyGreedBtn" data-keybind="8">Buy Greed Engine</button>
         </article>
         <article class="upgrade-card">
           <h3>Wild Generator</h3>
-          <p>Small chance each spin to generate a wild symbol.</p>
+          <p class="upgrade-desc" data-short="Chance to add a wild symbol." data-full="Small chance each spin to generate a wild symbol.">Chance to add a wild symbol.</p>
           <p class="upgrade-meta">Level: <span id="wildLevel">0</span> | Cost: <span id="wildCost">$160</span></p>
           <p class="upgrade-meta">Chance: <span id="wildChanceValue">0.0</span>%</p>
           <button class="btn btn-outline game-btn" id="buyWildBtn" data-keybind="0">Buy Wild Generator</button>
         </article>
         <article class="upgrade-card">
           <h3>Debt Restructuring</h3>
-          <p>Cut debt instantly and temporarily reduce interest for a few spins.</p>
+          <p class="upgrade-desc" data-short="Cuts debt and interest briefly." data-full="Cut debt instantly and temporarily reduce interest for a few spins.">Cuts debt and interest briefly.</p>
           <p class="upgrade-meta">Level: <span id="restructureLevel">0</span> | Cost: <span id="restructureCost">$180</span></p>
           <p class="upgrade-meta">Active Spins Left: <span id="restructureActive">0</span></p>
           <button class="btn btn-outline game-btn" id="buyRestructureBtn" data-keybind="-">Use Debt Restructuring</button>
         </article>
         <article class="upgrade-card danger-upgrade">
           <h3>Blood Debt</h3>
-          <p>Massive luck boost, but drains money every spin.</p>
+          <p class="upgrade-desc" data-short="Big luck boost, constant drain." data-full="Massive luck boost, but drains money every spin.">Big luck boost, constant drain.</p>
           <p class="upgrade-meta">Level: <span id="bloodLevel">0</span> | Cost: <span id="bloodCost">$170</span></p>
           <p class="upgrade-meta">Effect: +<span id="bloodLuckBonus">0</span>% luck, -<span id="bloodDrainValue">0</span>% bet/spin</p>
           <button class="btn btn-outline game-btn" id="buyBloodBtn" data-keybind="=">Buy Blood Debt</button>
         </article>
         <article class="upgrade-card">
           <h3>Reel Expansion</h3>
-          <p>Buy more slot reels. Bigger matches (4x, 5x, 6x+) now pay much higher.</p>
+          <p class="upgrade-desc" data-short="Adds reels for bigger combos." data-full="Buy more slot reels. Bigger matches (4x, 5x, 6x+) now pay much higher.">Adds reels for bigger combos.</p>
           <p class="upgrade-meta">Level: <span id="reelExpandLevel">0</span> | Cost: <span id="reelExpandCost">$320</span></p>
           <button class="btn btn-outline game-btn" id="buyReelBtn" data-keybind="]">Buy Extra Slot</button>
         </article>
@@ -308,8 +313,8 @@
 
     <div class="devil-event hidden" id="winModal" aria-live="polite">
       <div class="devil-card win-card">
-        <div class="devil-head">100 Spins Cleared</div>
-        <p>You survived 100 spins. This run is considered a win.</p>
+        <div class="devil-head" id="winModalHead">100 Spins Cleared</div>
+        <p id="winModalBody">You survived 100 spins. This run is considered a win.</p>
         <p class="lock-note">Keep pushing this run or start a new one with another difficulty.</p>
         <div class="controls">
           <button class="btn btn-primary game-btn" id="continueAfterWinBtn" data-keybind="C">Continue Beyond 100</button>
@@ -327,4 +332,5 @@
   <script src="./gambling-king.js"></script>
 </body>
 </html>
+
 

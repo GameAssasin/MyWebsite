@@ -319,6 +319,10 @@ h2 {
   gap: 0.8rem;
 }
 
+.casino-page:not(.death-wheel-page) .machine-layout {
+  grid-template-columns: 1fr;
+}
+
 .marquee-lights {
   display: grid;
   grid-template-columns: repeat(16, minmax(0, 1fr));
@@ -366,6 +370,38 @@ h2 {
   font-weight: 900;
 }
 
+.casino-page:not(.death-wheel-page) .stats-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: stretch;
+  padding-bottom: 0.1rem;
+}
+
+.casino-page:not(.death-wheel-page) .stats-grid .stat-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.28rem 0.4rem;
+  border-radius: 8px;
+  min-height: 0;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.casino-page:not(.death-wheel-page) .stats-grid .stat-label {
+  font-size: 0.62rem;
+  line-height: 1;
+  margin: 0;
+}
+
+.casino-page:not(.death-wheel-page) .stats-grid .stat-value {
+  font-size: 0.76rem;
+  line-height: 1;
+}
+
 .bet-panel {
   margin-top: 0.8rem;
   border: 1px solid var(--border);
@@ -379,6 +415,10 @@ h2 {
   grid-template-columns: 1fr 130px;
   gap: 0.55rem;
   margin-top: 0.45rem;
+}
+
+.difficulty-row {
+  grid-template-columns: 1fr;
 }
 
 .bet-row input[type="number"] {
@@ -481,6 +521,33 @@ h2 {
   accent-color: #f4bd29;
 }
 
+.quick-toggle-row {
+  margin-top: 0.65rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.quick-toggle-row .skip-toggle {
+  margin-top: 0;
+}
+
+body:not(.full-upgrade-info) .inventory-card .upgrade-meta {
+  display: none;
+}
+
+#dwShopModal .shop-meta,
+#dwShopModal .shop-extra-info {
+  margin: 0.22rem 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+body:not(.dw-show-shop-info) #dwShopModal .shop-extra-info {
+  display: none;
+}
+
 .game-btn {
   cursor: pointer;
 }
@@ -514,6 +581,10 @@ h2 {
 
 .upgrade-card h3 {
   margin: 0;
+}
+
+#dwShopOffers {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .upgrade-meta {
@@ -672,6 +743,27 @@ h2 {
   width: min(1050px, 95vw);
   max-height: 88vh;
   overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(244, 189, 41, 0.65) rgba(22, 4, 8, 0.55);
+}
+
+.inventory-card::-webkit-scrollbar {
+  width: 10px;
+}
+
+.inventory-card::-webkit-scrollbar-track {
+  background: rgba(22, 4, 8, 0.55);
+  border-radius: 999px;
+}
+
+.inventory-card::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(244, 189, 41, 0.9), rgba(214, 37, 71, 0.85));
+  border-radius: 999px;
+  border: 2px solid rgba(22, 4, 8, 0.55);
+}
+
+.inventory-card::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(255, 205, 92, 0.95), rgba(231, 60, 95, 0.9));
 }
 
 .lose-card {
@@ -712,6 +804,111 @@ h2 {
   grid-template-columns: 1.45fr 1fr;
   gap: 0.8rem;
 }
+
+.death-wheel-page {
+  background: #0f0f14;
+}
+
+.dw-runbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-bottom: 0.8rem;
+}
+
+.death-main {
+  background: #1a1a22;
+  border: 1px solid rgba(244, 189, 41, 0.25);
+  border-radius: 12px;
+  padding: 0.9rem;
+}
+
+.center-controls {
+  justify-content: center;
+}
+
+.dw-spin-btn {
+  min-width: 180px;
+  font-size: 1.05rem;
+  animation: spinPulse 1.8s ease-in-out infinite;
+}
+
+.dw-spin-btn.risk-low {
+  background: linear-gradient(135deg, #2768d6, #1a3f8a);
+}
+
+.dw-spin-btn.risk-medium {
+  background: linear-gradient(135deg, #d9891f, #9a5f12);
+}
+
+.dw-spin-btn.risk-high {
+  background: linear-gradient(135deg, #d62547, #7c0e26);
+}
+
+.risk-low {
+  color: #5aa8ff;
+}
+
+.risk-medium {
+  color: #ffb347;
+}
+
+.risk-high {
+  color: #ff6e6e;
+}
+
+.death-layout-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.dw-balance-grid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.dw-balance-card {
+  border: 1px solid rgba(244, 189, 41, 0.3);
+  border-radius: 12px;
+  background: #1a1a22;
+  padding: 0.7rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.dw-balance-card h4 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.dw-balance-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.dw-slot-badge {
+  justify-self: start;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 240, 190, 0.35);
+  background: rgba(24, 5, 9, 0.5);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.dw-balance-card.type-normal { border-color: rgba(120, 120, 130, 0.55); }
+.dw-balance-card.type-lucky { border-color: rgba(215, 167, 23, 0.65); }
+.dw-balance-card.type-death { border-color: rgba(126, 15, 32, 0.75); }
+.dw-balance-card.type-chaos { border-color: rgba(107, 63, 168, 0.75); }
+.dw-balance-card.type-multiplier { border-color: rgba(47, 111, 218, 0.75); }
+.dw-balance-card.type-shield { border-color: rgba(39, 168, 180, 0.75); }
+.dw-balance-card.type-curse { border-color: rgba(47, 139, 67, 0.75); }
+.dw-balance-card.type-shop { border-color: rgba(204, 123, 26, 0.75); }
 
 .death-panel .btn.active {
   border-color: rgba(244, 189, 41, 0.9);
@@ -767,7 +964,7 @@ h2 {
 }
 
 .wheel-wrap {
-  width: min(330px, 80vw);
+  width: min(520px, 92vw);
   margin: 0 auto;
   position: relative;
 }
@@ -794,7 +991,7 @@ h2 {
   position: relative;
   overflow: hidden;
   box-shadow: inset 0 0 0 4px rgba(38, 5, 11, 0.6), 0 15px 22px rgba(0, 0, 0, 0.4);
-  transition: transform 1.7s cubic-bezier(.08, .7, .15, 1);
+  transition: transform 2.9s cubic-bezier(.08, .7, .15, 1);
 }
 
 .wheel-numbers {
@@ -804,20 +1001,33 @@ h2 {
 
 .wheel-number {
   position: absolute;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 0.2rem;
+  min-width: 40px;
+  min-height: 28px;
+  padding: 0.08rem 0.2rem;
   border-radius: 999px;
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(255, 240, 190, 0.34);
   color: #fff4cc;
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 900;
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
   transform-origin: center center;
+}
+
+.wheel-num-value {
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.wheel-num-type {
+  font-size: 0.48rem;
+  letter-spacing: 0.02em;
+  opacity: 0.95;
+  text-transform: uppercase;
 }
 
 .wheel-number.red {
@@ -845,8 +1055,8 @@ h2 {
   position: absolute;
   inset: 50%;
   transform: translate(-50%, -50%);
-  width: 92px;
-  height: 92px;
+  width: 108px;
+  height: 108px;
   border-radius: 50%;
   border: 2px solid rgba(244, 189, 41, 0.6);
   background: radial-gradient(circle at 30% 30%, #4d1020, #20050d);
@@ -855,6 +1065,22 @@ h2 {
   font-size: 1.8rem;
   font-weight: 900;
   color: #ffe8a0;
+}
+
+.death-wheel-page.shake {
+  animation: deathShake 0.35s ease-in-out;
+}
+
+@keyframes spinPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+}
+
+@keyframes deathShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-3px); }
 }
 
 .wheel-center.red,
@@ -973,12 +1199,20 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .death-layout {
+  .bet-row {
     grid-template-columns: 1fr;
   }
 
-  .bet-row {
+  .dw-runbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .death-layout-bottom {
     grid-template-columns: 1fr;
+  }
+
+  .dw-balance-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -988,11 +1222,11 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .death-bet-grid {
+  .setup-row {
     grid-template-columns: 1fr;
   }
 
-  .setup-row {
+  .dw-balance-grid {
     grid-template-columns: 1fr;
   }
 }

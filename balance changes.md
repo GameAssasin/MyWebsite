@@ -1,9 +1,68 @@
 # Balance Changes
 
 ## Version
-v0.1 (current baseline)
+Website v0.2 (current)
 
-This file tracks balance values currently active in `gambling-king.js`.
+This file tracks website-version changes and Gambling King balance/content updates.
+
+## Website v0.2 vs Official Live v0.1 (2026-03-08)
+
+### Death Wheel: Added / Changed in v0.2
+- Added full playable Death Wheel page and roulette-ring UI.
+- Added balanced 36-slot type system with live slot labels and type colors.
+- Added run bar (Cash, Spins, Risk, Lives), Effects panel, and Event Log.
+- Added shop system with rotating offers, manual open button, skip-popup toggle, and shop-landing reward mode.
+- Added triple spin unlock at `$3000` (3 spins for `2.5x` cost; spin counter counts triple action as 1 spin).
+- Added `2x speed` mode (faster animation, not skip).
+- Added `Show info` mode and inline owned-effect math in Effects list.
+- Added live-updating slot-count cards in "Balanced 36-Slot Death Wheel" section.
+- Removed debt system from Death Wheel (no debt carry).
+- Run-end rules now include immediate loss at `Money = $0` and immediate loss at `Lives = 0`.
+- Starting cash changed:
+  - `$1000 -> $1200`
+- Death life-loss behavior changed:
+  - `always lose 1 life on unshielded Death -> 45% chance to lose 1 life`
+
+### Changed
+- Global payout easing enabled:
+  - `GLOBAL_PAYOUT_EASE_MULTIPLIER: 1 -> 2`
+- Hell-specific payout correction added:
+  - `HELL_PAYOUT_FACTOR: 1 -> 0.7`
+- Effective Hell payout multiplier vs old baseline formula:
+  - `1.0x -> 1.4x`
+- `SPIN_COST` kept at:
+  - `$115` (unchanged)
+- Gambling King difficulty tuning updated (Hard+ band):
+  - `Hard startMoney: 553 -> 760`
+  - `Expert startMoney: 479 -> 730`
+  - `Master startMoney: 291 -> 700`
+  - `Nightmare startMoney: 245 -> 670`
+  - `Insane startMoney: 199 -> 640`
+  - `Hell startMoney: 168 -> 610`
+  - Hard+ also received updated `debtLimit`, `baseInterest`, `feeBase`, `feeGrowth`, `payoutScale`, and `devilChance` values.
+
+### Renamed
+- Balance page notes link text:
+  - `Open source balance notes file` -> `Balance notes`
+- Balance page status wording:
+  - `Gambling King: v0.1 baseline available now.` -> `Gambling King: v0.2 current live balance.`
+- Gambling King Objective wording rewritten for clarity:
+  - Old focus: "earn as much money as possible"
+  - New focus: explicit win/loss conditions (survive target spins, lose at 10000 debt)
+- Upgrade panel labels:
+  - `Inventory` button wording aligned to `Upgrades`
+  - Long upgrade descriptions -> short default descriptions
+
+### Added
+- New v0.2 section on balance page (from->to summary format).
+- New quick toggle in Gambling King:
+  - `Show full info` checkbox next to `Show keybinds`
+- Upgrade description mode system:
+  - Short mode (default)
+  - Full-info mode (toggle on)
+- Upgrade meta visibility mode:
+  - `Level/Cost/Bonus` lines hidden in short mode, shown in full mode
+- Themed inventory scrollbar styling (replaces default look in modal)
 
 ## Difficulty Stats (v0.1)
 
