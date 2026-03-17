@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameAssasins Web | Death Wheel</title>
+  <meta name="description" content="Death Wheel: roulette survival casino game.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="casino-page death-wheel-page">
+  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+
+  <nav class="site-nav reveal" aria-label="Main navigation">
+    <a class="brand" href="../../index.html">GameAssasins Web</a>
+    <div class="nav-links">
+      <a class="nav-link" href="../../index.html">Home</a>
+      <a class="nav-link" href="../../about.html">About</a>
+      <a class="nav-link" href="../../rules.html">Help & Rules</a>
+      <a class="nav-link" href="../gambling-king/index.html">Gambling King</a>
+      <a class="nav-link active" href="../death-wheel/index.html">Death Wheel</a>
+      <a class="nav-link" href="../death-blackjack/index.html">Death Blackjack Beta</a>
+      <a class="nav-link" href="../../balance-changes.html">Updates</a>
+    </div>
+  </nav>
+
+  <header class="hero section reveal casino-hero game-hero">
+    <div class="game-hero-shell">
+      <div class="game-hero-copy">
+        <p class="eyebrow">Blood Ring</p>
+        <h1>Death Wheel</h1>
+        <p class="lead">
+          Roulette survival mode. Place your bet, spin the wheel, and survive as long as your cash lasts.
+        </p>
+        <div class="game-signal-bar" aria-label="Death Wheel themes">
+          <span>36-Slot Ring</span>
+          <span>Chaos Events</span>
+          <span>Hidden Pressure</span>
+          <span>Shield Economy</span>
+        </div>
+      </div>
+      <aside class="game-hero-panel" aria-label="Death Wheel pit readout">
+        <span class="game-panel-kicker">Pit Readout</span>
+        <div class="game-panel-grid">
+          <div><span>Loop</span><strong>Spin, Shop, Endure</strong></div>
+          <div><span>Threat</span><strong>Death + Debt</strong></div>
+          <div><span>Pacing</span><strong>Critical Scaling</strong></div>
+          <div><span>Style</span><strong>Mechanical Carnage</strong></div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="section card reveal game-brief-card">
+      <h2>How It Works</h2>
+      <ul class="simple-list">
+        <li>Start with $1800, 6 lives, and spin with fixed cost ($20).</li>
+        <li>Shops open on Shop-slot landings and at predictable milestones (spin 4, 8, 12, ...).</li>
+        <li>Every 14 spins difficulty scales: +1 Death slot, +8% rewards, +7% penalties.</li>
+        <li>Run ends if money is $0, lives reach 0, or you leave the page.</li>
+      </ul>
+      <h3>Balanced 36-Slot Death Wheel</h3>
+      <p class="note" id="dwBalanceNote">Wheel is balanced like a roulette-style ring with fixed slot counts by type.</p>
+      <div class="dw-balance-grid">
+        <article class="dw-balance-card type-normal"><h4>Normal</h4><p>Small gain or loss</p><span class="dw-slot-badge" id="dwCountNormal">17 slots</span></article>
+        <article class="dw-balance-card type-lucky"><h4>Lucky</h4><p>Big reward</p><span class="dw-slot-badge" id="dwCountLucky">6 slots</span></article>
+        <article class="dw-balance-card type-death"><h4>Death</h4><p>Heavy penalty</p><span class="dw-slot-badge" id="dwCountDeath">3 slots</span></article>
+        <article class="dw-balance-card type-chaos"><h4>Chaos</h4><p>Random event</p><span class="dw-slot-badge" id="dwCountChaos">3 slots</span></article>
+        <article class="dw-balance-card type-multiplier"><h4>Multiplier</h4><p>Boost next reward</p><span class="dw-slot-badge" id="dwCountMultiplier">3 slots</span></article>
+        <article class="dw-balance-card type-shield"><h4>Shield</h4><p>Protection</p><span class="dw-slot-badge" id="dwCountShield">3 slots</span></article>
+        <article class="dw-balance-card type-curse"><h4>Curse</h4><p>Permanent run debuff</p><span class="dw-slot-badge" id="dwCountCurse">1 slot</span></article>
+        <article class="dw-balance-card type-shop"><h4>Shop</h4><p>Buy upgrades</p><span class="dw-slot-badge" id="dwCountShop">1 slot</span></article>
+      </div>
+    </section>
+
+    <section class="section card reveal game-stage-card death-wheel-stage">
+      <h2 class="centered-title">Wheel</h2>
+      <div class="dw-runbar">
+        <div class="stat-box"><div class="stat-label">Cash</div><div class="stat-value" id="dwMoney">$0</div></div>
+        <div class="stat-box"><div class="stat-label">Spins</div><div class="stat-value" id="dwSpinCount">0</div></div>
+        <div class="stat-box"><div class="stat-label">Risk</div><div class="stat-value" id="dwRisk">Low</div></div>
+        <div class="stat-box"><div class="stat-label">Lives</div><div class="stat-value" id="dwLives">3</div></div>
+      </div>
+
+      <div class="death-main">
+        <div class="wheel-wrap">
+          <div class="wheel-pointer"></div>
+          <div class="roulette-wheel" id="dwWheel">
+            <div class="wheel-numbers" id="dwNumbers"></div>
+          </div>
+          <div class="wheel-center" id="dwCenter">-</div>
+        </div>
+        <div class="controls center-controls">
+          <button class="btn btn-primary game-btn dw-spin-btn" id="dwSpinBtn" data-keybind="S">Spin</button>
+          <button class="btn btn-outline game-btn" id="dwTripleSpinBtn" data-keybind="A">Triple Spin (2.5x)</button>
+          <button class="btn btn-outline game-btn" id="dwOpenShopBtn">Open Shop</button>
+          <button class="btn btn-outline game-btn" id="dwRestartBtn" data-keybind="T">Restart Run</button>
+        </div>
+        <div class="dw-toggle-bank">
+          <label class="skip-toggle" for="dwSkipCheck"><input type="checkbox" id="dwSkipCheck"> 2x speed</label>
+          <label class="skip-toggle" for="dwSkipShopPopupCheck"><input type="checkbox" id="dwSkipShopPopupCheck"> Skip shop popup</label>
+          <label class="skip-toggle" for="dwShowKeybindsCheck"><input type="checkbox" id="dwShowKeybindsCheck"> Show keybinds</label>
+          <label class="skip-toggle" for="dwShowShopInfoCheck"><input type="checkbox" id="dwShowShopInfoCheck"> Show info</label>
+        </div>
+        <aside class="table-advice game-tip-panel game-tip-panel-center" id="dwAdvicePanel" aria-live="polite" aria-label="Death Wheel advice">
+          <span class="table-advice-kicker">Wheel Tip</span>
+          <p class="table-advice-text" id="dwAdviceText">Shields and life recovery make long runs believable. Raw cash alone usually gets eaten by scaling.</p>
+        </aside>
+      </div>
+
+      <div class="death-layout-bottom">
+        <aside class="payout-card death-wheel-card">
+          <h3>Effects</h3>
+          <ul class="simple-list" id="dwEffectsList"></ul>
+        </aside>
+        <aside class="payout-card death-wheel-card">
+          <h3>Event Log</h3>
+          <ul class="simple-list" id="dwEventList"></ul>
+          <p class="event-log" id="dwLog">Welcome to Death Wheel. Pick your side and spin.</p>
+        </aside>
+      </div>
+    </section>
+
+    <div class="devil-event hidden" id="dwLoseModal" aria-live="polite">
+      <div class="devil-card execution-loss">
+        <div class="execution-grid"></div>
+        <div class="execution-noise"></div>
+        <div class="execution-scanlines"></div>
+        <div class="execution-errors" id="dwLoseErrors"></div>
+        <div class="execution-suits" aria-hidden="true">
+          <span style="top:8%; right:10%;">♣</span>
+          <span style="top:28%; right:18%;">♦</span>
+          <span style="top:43%; right:12%;">♠</span>
+          <span style="top:61%; right:20%;">♥</span>
+          <span style="bottom:10%; left:8%;">♦</span>
+          <span style="bottom:18%; right:9%;">♣</span>
+        </div>
+        <div class="execution-flash" id="dwLoseFlash"></div>
+        <div class="execution-loss-body">
+          <p class="execution-line" id="dwLoseAccount">ACCOUNT: 6479A7</p>
+          <p class="execution-line">STATUS: TERMINATED</p>
+          <div class="execution-divider"></div>
+          <p class="execution-line" id="dwLoseDebt">BANKROLL: DRAINED</p>
+          <p class="execution-line" id="dwLoseHand">WHEEL: COLLAPSED</p>
+          <p class="execution-line" id="dwLoseLuck">LUCK: EXHAUSTED</p>
+          <div class="execution-gap-sm"></div>
+          <p class="execution-line" id="dwLoseSentence">SENTENCE: EXECUTION</p>
+          <div class="execution-divider"></div>
+          <p class="execution-line" id="dwLoseText">DEATH WHEEL CLAIMED YOU.</p>
+          <p class="execution-line" id="dwLoseMoney">ASSETS: $0</p>
+          <p class="execution-line" id="dwLoseLives">LIVES: 0</p>
+          <p class="execution-line" id="dwLoseScore">SCORE: 0</p>
+          <div class="execution-gap-md"></div>
+          <p class="execution-line execution-glitch" id="dwLoseGlitchA" data-text="ACCOUNT RECORD: PURGED">ACCOUNT RECORD: PURGED</p>
+          <p class="execution-line execution-glitch" id="dwLoseGlitchB" data-text="ARCHIVE ERROR: 0xDEAD">ARCHIVE ERROR: 0xDEAD</p>
+          <p class="execution-line execution-glitch" id="dwLoseGlitchC" data-text="DATA INTEGRITY: FAILED">DATA INTEGRITY: FAILED</p>
+        </div>
+        <div class="execution-actions">
+          <button class="btn btn-primary game-btn" id="dwLoseRestart" data-keybind="Enter">Start New Run</button>
+          <span class="execution-note">The wheel wiped the run. Start over and choose a new lucky/death spread.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="devil-event hidden" id="dwSetupModal" aria-live="polite">
+      <div class="devil-card">
+        <div class="devil-head">Run Setup</div>
+        <p>Pick your Lucky Number and Death Number. They stay locked for this run.</p>
+        <div class="setup-row">
+          <div>
+            <label class="stat-label" for="dwLuckySelect">Lucky Number</label>
+            <select id="dwLuckySelect"></select>
+          </div>
+          <div>
+            <label class="stat-label" for="dwDeathSelect">Death Number</label>
+            <select id="dwDeathSelect"></select>
+          </div>
+        </div>
+        <p class="lock-note" id="dwSetupNote"></p>
+        <div class="controls">
+          <button class="btn btn-primary game-btn" id="dwStartRunBtn" data-keybind="Enter">Start Run</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="devil-event hidden" id="dwShopModal" aria-live="polite">
+      <div class="devil-card inventory-card">
+        <div class="devil-head">Shop</div>
+        <p>Buy as many items as you want, then Skip when done (3-6 unique offers).</p>
+        <div class="upgrade-grid" id="dwShopOffers"></div>
+        <p class="lock-note" id="dwShopNote"></p>
+        <div class="controls">
+          <button class="btn btn-outline game-btn" id="dwShopSkipBtn">Skip</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="section reveal">
+    <p>&copy; <span id="year"></span> GameAssasins</p>
+  </footer>
+
+  <script src="../../script.js"></script>
+  <script src="./game.js"></script>
+</body>
+</html>
+
+
+

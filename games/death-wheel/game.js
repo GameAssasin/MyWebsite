@@ -1,21 +1,85 @@
-const SPIN_COST = 25;
+const SPIN_COST = 20;
 const TRIPLE_UNLOCK_MONEY = 3000;
 const TRIPLE_SPIN_COST_MULT = 2.5;
 const MIN_RUN_MS = 7 * 60 * 1000;
-const START_MONEY = 1200;
-const START_LIVES = 3;
+const START_MONEY = 1800;
+const START_LIVES = 6;
 const PASSIVE_INCOME_PER_SPIN = 0;
-const DEATH_LIFE_LOSS_CHANCE = 0.45;
+const DEATH_LIFE_LOSS_CHANCE = 1;
+const DEATH_INSTANT_CHANCE = 0;
+const DEATH_FLAT_LOSS = 125;
+const DEATH_PERCENT_LOSS = 0.18;
+const CRITICAL_SPIN_CADENCE = 14;
+const CRITICAL_REWARD_STEP = 1.05;
+const CRITICAL_PENALTY_STEP = 1.09;
+const SCHEDULED_SHOP_CADENCE = 6;
+const SHIELD_CAP = 2;
+const LAST_BREATH_TRIGGER_CHANCE = 0.12;
+const LAST_BREATH_CASH = 25;
+const TREASURE_POCKET_CHANCE = 0.05;
+const SHOP_ITEM_CAPS = {
+  heartBoost: 3,
+  luckyCharm: 4,
+  riskInvestor: 3,
+  interestEngine: 3,
+  emergencyCash: 2,
+  deathDefuse: 2,
+  jackpotToken: 2,
+  wheelHack: 2,
+  luckyInfusion: 3,
+  chaosInjection: 2,
+  shieldBattery: 3,
+};
+const DW_ADVICE_LINES = [
+  "Shields and life recovery make long runs believable. Raw cash alone usually gets eaten by scaling.",
+  "A shop skip is safest when the wheel is calm. High-risk wheels want protection first, greed second.",
+  "Lucky slots feel great, but Death slots decide whether a run survives long enough to matter.",
+  "Wheel edits are strongest when they remove Death pressure or add recovery, not when they only chase more chaos.",
+  "Use cash to survive the next pressure spike, not just the next spin.",
+  "A long run usually needs both money recovery and life recovery, not just one of them.",
+  "Removing one Death slot early can matter more than adding one extra Lucky slot.",
+  "Curse control is tempo. A curse that stays too long can quietly ruin an otherwise good wheel.",
+  "Multiplier slots are best when the wheel already has enough safe outcomes to reach them often.",
+  "Wheel Hack is strongest when Death pressure has already started climbing.",
+  "Heart Boost is not flashy, but it gives scaling time to happen in your favor.",
+  "A rich run can still die if it has no shields when Death clusters appear.",
+  "Triple Spin is power and risk together. Use it when the wheel state is stable enough to absorb variance.",
+  "Lucky Charm helps long runs more than short bursts because it keeps paying over many spins.",
+  "Interest Engine is slow value. It works best when the run is already safe enough to last.",
+  "Risk Investor wants a wheel that can reliably survive until Lucky rewards show up.",
+  "If the wheel has multiple added Death slots, survival buys usually beat greed buys.",
+  "Chaos is strongest when your run can survive bad chaos as well as good chaos.",
+  "Prediction Chip and Slot Lock are better as rescue tools than routine greed tools.",
+  "Reroll Token is most valuable when the wheel has become hostile, not when things are already safe.",
+  "Wheel Nudge turns disaster into survivable pain. That makes it better than it first looks.",
+  "Wheel God is strongest when Death slots are numerous enough to matter every few spins.",
+  "Golden Wheel does nothing if the run dies before cashing in on it.",
+  "Curse Cleanse can be stronger than a direct money item when curses are stacking.",
+  "Shop landings are part of survival, not a side bonus. Plan around them.",
+  "If cash is high but lives are low, the run is not actually healthy.",
+  "If lives are high but cash is gone, scaling will still end the run soon.",
+  "A balanced wheel survives longer than an exciting wheel.",
+  "The safest long-run edits are the ones that lower how often Death decides the run.",
+  "Protecting the next ten spins is usually stronger than maximizing the next one.",
+  "When pressure rises, reliable defense is worth more than jackpot fantasy.",
+  "Dead Heat boosts both reward and danger. Treat it like a volatility event, not a free lucky window.",
+  "Crooked Dealer adds risk and reward together. It is strongest when the wheel already has shields or life buffer.",
+  "Flash Market is a tempo shop, not a discount shop. Buy what fixes the next crisis first.",
+  "Last Breath is emergency recovery. If it appears, your run was already close to collapse.",
+  "Treasure Pocket is best when your wheel needs tools more than raw cash.",
+  "The hidden pressure system punishes low-buy or passive runs. Hoarding too long can quietly make Death hits worse.",
+  "Shield stockpiling is capped now. Critical pressure also burns one shield, so long runs cannot bank endless safety.",
+];
 
 const wheelOrder = ["28", "9", "26", "30", "11", "7", "20", "32", "17", "5", "22", "34", "15", "3", "24", "36", "13", "1", "27", "10", "25", "29", "12", "8", "19", "31", "18", "6", "21", "33", "16", "4", "23", "35", "14", "2"];
 
 const SLOT_TYPES_BY_INDEX = [
   "normal", "multiplier", "lucky", "normal", "normal", "death",
   "normal", "shield", "lucky", "normal", "chaos", "normal",
-  "normal", "multiplier", "lucky", "death", "normal", "curse",
+  "normal", "multiplier", "lucky", "shield", "normal", "curse",
   "normal", "normal", "lucky", "normal", "chaos", "normal",
   "death", "normal", "lucky", "shield", "normal", "multiplier",
-  "chaos", "normal", "lucky", "shop", "normal", "death",
+  "chaos", "normal", "lucky", "shop", "normal", "normal",
 ];
 
 const SLOT_TYPE_META = {
@@ -52,6 +116,12 @@ const state = {
   riggedNoDeathNext: false,
   predictedNextResult: null,
   deathSwapSpins: 0,
+  deadHeatSpins: 0,
+  crookedDealerSpins: 0,
+  flashMarketActive: false,
+  flashMarketCostFactor: 1,
+  flashMarketOfferCount: null,
+  lastBreathTriggered: false,
 
   rewardScale: 1,
   penaltyScale: 1,
@@ -71,6 +141,12 @@ const state = {
   tripleUnlockAnnounced: false,
   activeShopOffers: [],
   purchasedShopItemKeys: [],
+  purchasedShopCounts: {},
+  totalPaidPurchases: 0,
+  currentShopPurchases: 0,
+  emptyHandPressure: 0,
+  totalShopOffersSeen: 0,
+  totalShopsSeen: 0,
   shopGrantMode: false,
   pendingShopGrant: false,
   interestEngineLevel: 0,
@@ -108,7 +184,20 @@ const el = {
   showShopInfoCheck: document.getElementById("dwShowShopInfoCheck"),
   log: document.getElementById("dwLog"),
   loseModal: document.getElementById("dwLoseModal"),
+  loseAccount: document.getElementById("dwLoseAccount"),
+  loseDebt: document.getElementById("dwLoseDebt"),
+  loseHand: document.getElementById("dwLoseHand"),
+  loseLuck: document.getElementById("dwLoseLuck"),
+  loseSentence: document.getElementById("dwLoseSentence"),
   loseText: document.getElementById("dwLoseText"),
+  loseMoney: document.getElementById("dwLoseMoney"),
+  loseLivesLine: document.getElementById("dwLoseLives"),
+  loseScore: document.getElementById("dwLoseScore"),
+  loseErrors: document.getElementById("dwLoseErrors"),
+  loseFlash: document.getElementById("dwLoseFlash"),
+  loseGlitchA: document.getElementById("dwLoseGlitchA"),
+  loseGlitchB: document.getElementById("dwLoseGlitchB"),
+  loseGlitchC: document.getElementById("dwLoseGlitchC"),
   loseRestart: document.getElementById("dwLoseRestart"),
   setupModal: document.getElementById("dwSetupModal"),
   shopModal: document.getElementById("dwShopModal"),
@@ -128,10 +217,180 @@ const el = {
   countShield: document.getElementById("dwCountShield"),
   countCurse: document.getElementById("dwCountCurse"),
   countShop: document.getElementById("dwCountShop"),
+  adviceText: document.getElementById("dwAdviceText"),
 };
+
+let dwAdviceIndex = 0;
+let dwAdviceTimer = null;
+let dwAdviceSwapTimer = null;
+const EXECUTION_ERROR_POOL = [
+  "MEMORY LEAK DETECTED",
+  "STACK OVERFLOW",
+  "LEDGER DESYNC",
+  "PROCESS KILLED",
+  "SOUL INDEX LOST",
+  "ARCHIVE FAILURE",
+  "KERNEL PANIC",
+  "CASINO CORE ERROR",
+  "RECOVERY DENIED",
+  "DEBT SIGNAL LOST",
+  "0xDEAD",
+  "0xC0FFIN",
+  "0xBAADF00D",
+  "INTEGRITY BREACH",
+  "PURGE CONFIRMED",
+  "COLLATERAL MISMATCH",
+];
+const EXECUTION_TEXT_ALTS = {
+  A: ["4", "@", "Λ"],
+  B: ["8"],
+  E: ["3"],
+  G: ["6"],
+  I: ["1", "!"],
+  O: ["0"],
+  S: ["5", "$"],
+  T: ["7", "+"],
+  Z: ["2"],
+};
+let loseCorruptionTimer = null;
+let loseErrorMutationTimer = null;
+let loseTextCorruptionTimer = null;
 
 function fmt(v) {
   return `$${Math.round(v).toLocaleString()}`;
+}
+
+function setExecutionGlitchLine(node, text) {
+  if (!node) return;
+  node.textContent = text;
+  node.dataset.text = text;
+}
+
+function setExecutionInfoLine(node, text) {
+  if (!node) return;
+  node.textContent = text;
+  node.dataset.text = text;
+}
+
+function stopLoseExecutionEffects() {
+  if (loseCorruptionTimer) {
+    clearTimeout(loseCorruptionTimer);
+    loseCorruptionTimer = null;
+  }
+  if (loseErrorMutationTimer) {
+    clearTimeout(loseErrorMutationTimer);
+    loseErrorMutationTimer = null;
+  }
+  if (loseTextCorruptionTimer) {
+    clearTimeout(loseTextCorruptionTimer);
+    loseTextCorruptionTimer = null;
+  }
+  if (el.loseFlash) {
+    el.loseFlash.style.background = "rgba(255, 40, 40, 0)";
+  }
+  [
+    el.loseAccount,
+    el.loseDebt,
+    el.loseHand,
+    el.loseLuck,
+    el.loseSentence,
+    el.loseText,
+    el.loseMoney,
+    el.loseLivesLine,
+    el.loseScore,
+  ].forEach((node) => {
+    if (!node) return;
+    node.classList.remove("execution-corrupt");
+    const stable = node.dataset.text;
+    if (stable) node.textContent = stable;
+  });
+}
+
+function corruptExecutionText(text) {
+  if (!text) return text;
+  const candidates = [...text].map((char, index) => ({ char, index }))
+    .filter(({ char }) => /[A-Z0-9$]/.test(char));
+  if (!candidates.length) return text;
+  const { char, index } = candidates[Math.floor(Math.random() * candidates.length)];
+  const replacements = EXECUTION_TEXT_ALTS[char] || ["#", "%", "?", "*"];
+  const nextChar = replacements[Math.floor(Math.random() * replacements.length)];
+  return `${text.slice(0, index)}${nextChar}${text.slice(index + 1)}`;
+}
+
+function pulseLoseExecutionText() {
+  if (!el.loseModal || el.loseModal.classList.contains("hidden")) return;
+  const nodes = [
+    el.loseAccount,
+    el.loseDebt,
+    el.loseHand,
+    el.loseLuck,
+    el.loseSentence,
+    el.loseText,
+    el.loseMoney,
+    el.loseLivesLine,
+    el.loseScore,
+  ].filter(Boolean);
+  if (nodes.length) {
+    const node = nodes[Math.floor(Math.random() * nodes.length)];
+    const stable = node.dataset.text || node.textContent;
+    node.classList.add("execution-corrupt");
+    node.textContent = corruptExecutionText(stable);
+    setTimeout(() => {
+      node.textContent = stable;
+      node.classList.remove("execution-corrupt");
+    }, 140 + Math.random() * 220);
+  }
+  loseTextCorruptionTimer = setTimeout(pulseLoseExecutionText, 850 + Math.random() * 1700);
+}
+
+function mutateLoseExecutionErrors() {
+  if (!el.loseErrors || el.loseModal.classList.contains("hidden")) {
+    return;
+  }
+  const items = el.loseErrors.querySelectorAll("span");
+  items.forEach((item) => {
+    if (Math.random() < 0.28) {
+      item.textContent = EXECUTION_ERROR_POOL[Math.floor(Math.random() * EXECUTION_ERROR_POOL.length)];
+    }
+    if (Math.random() < 0.18) {
+      item.style.top = `${Math.random() * 100}%`;
+      item.style.left = `${Math.random() * 100}%`;
+    }
+  });
+  loseErrorMutationTimer = setTimeout(mutateLoseExecutionErrors, 700 + Math.random() * 1400);
+}
+
+function triggerLoseExecutionCorruption() {
+  if (!el.loseModal || el.loseModal.classList.contains("hidden")) {
+    return;
+  }
+  if (el.loseFlash) {
+    el.loseFlash.style.background = "rgba(255, 40, 40, 0.12)";
+    setTimeout(() => {
+      if (el.loseFlash) {
+        el.loseFlash.style.background = "rgba(255, 40, 40, 0)";
+      }
+    }, 120);
+  }
+  loseCorruptionTimer = setTimeout(triggerLoseExecutionCorruption, 2500 + Math.random() * 4000);
+}
+
+function initLoseExecutionEffects() {
+  stopLoseExecutionEffects();
+  if (!el.loseErrors) return;
+  el.loseErrors.innerHTML = "";
+  for (let i = 0; i < 26; i += 1) {
+    const item = document.createElement("span");
+    item.textContent = EXECUTION_ERROR_POOL[Math.floor(Math.random() * EXECUTION_ERROR_POOL.length)];
+    item.style.top = `${Math.random() * 100}%`;
+    item.style.left = `${Math.random() * 100}%`;
+    item.style.animationDuration = `${8 + Math.random() * 8}s`;
+    item.style.animationDelay = `${-Math.random() * 10}s`;
+    el.loseErrors.appendChild(item);
+  }
+  mutateLoseExecutionErrors();
+  loseCorruptionTimer = setTimeout(triggerLoseExecutionCorruption, 1800);
+  loseTextCorruptionTimer = setTimeout(pulseLoseExecutionText, 900);
 }
 
 function randomDistinctPair() {
@@ -162,6 +421,11 @@ function takeFunds(amount) {
 
 function addFunds(amount) {
   if (amount > 0) state.money += amount;
+}
+
+function addShields(amount) {
+  if (amount <= 0) return;
+  state.shields = Math.min(SHIELD_CAP, state.shields + amount);
 }
 
 function pushEvent(line) {
@@ -199,8 +463,8 @@ function renderBalanceCounts() {
   if (el.countCurse) el.countCurse.textContent = `${counts.curse} slots`;
   if (el.countShop) el.countShop.textContent = `${counts.shop} slots`;
 
-  const isBase = counts.normal === 16 && counts.lucky === 6 && counts.death === 4 && counts.chaos === 3
-    && counts.multiplier === 3 && counts.shield === 2 && counts.curse === 1 && counts.shop === 1;
+  const isBase = counts.normal === 17 && counts.lucky === 6 && counts.death === 3 && counts.chaos === 3
+    && counts.multiplier === 3 && counts.shield === 3 && counts.curse === 1 && counts.shop === 1;
   if (el.balanceNote) {
     el.balanceNote.textContent = isBase
       ? "Wheel is balanced like a roulette-style ring with fixed slot counts by type."
@@ -213,6 +477,58 @@ function getRiskLevel() {
   if (score >= 5) return "High";
   if (score >= 2.5) return "Medium";
   return "Low";
+}
+
+function deathWheelAdviceLine() {
+  if (!state.active) {
+    return "Pick lucky and death numbers first. Stable runs are built around reducing risk before scaling rewards.";
+  }
+  if (!el.loseModal.classList.contains("hidden")) {
+    return "If the run collapsed fast, check whether it lacked shields, hearts, or enough shop value before scaling kicked in.";
+  }
+  if (!el.shopModal.classList.contains("hidden")) {
+    return state.shopGrantMode
+      ? "Free shop rewards should usually patch your weakest survival stat first."
+      : "Paid shops are where long runs are made. Buying nothing leaves the wheel in control.";
+  }
+  if (state.lives <= 2) {
+    return "Low lives. Hearts, shields, and curse control matter more than another reward multiplier.";
+  }
+  if (activeCurseCount() >= 2) {
+    return "Multiple curses are active. Cleanse or protection is worth more than one greedy spike.";
+  }
+  if (state.addedDeathSlots >= 2) {
+    return "The wheel has picked up extra Death slots. Safe edits matter more than raw reward chasing.";
+  }
+  return DW_ADVICE_LINES[dwAdviceIndex % DW_ADVICE_LINES.length];
+}
+
+function updateDeathWheelAdvice(advance = false) {
+  if (!el.adviceText) return;
+  if (advance) {
+    dwAdviceIndex = (dwAdviceIndex + 1) % DW_ADVICE_LINES.length;
+  }
+  const nextText = deathWheelAdviceLine();
+  if (el.adviceText.textContent === nextText) {
+    return;
+  }
+  if (dwAdviceSwapTimer) {
+    window.clearTimeout(dwAdviceSwapTimer);
+  }
+  el.adviceText.classList.remove("tip-entered");
+  void el.adviceText.offsetWidth;
+  el.adviceText.classList.add("tip-switching");
+  dwAdviceSwapTimer = window.setTimeout(() => {
+    el.adviceText.textContent = nextText;
+    el.adviceText.classList.remove("tip-switching");
+    el.adviceText.classList.add("tip-entered");
+  }, 130);
+}
+
+function startDeathWheelAdviceRotation() {
+  if (!el.adviceText || dwAdviceTimer) return;
+  updateDeathWheelAdvice(false);
+  dwAdviceTimer = window.setInterval(() => updateDeathWheelAdvice(true), 7000);
 }
 
 function renderEffects() {
@@ -238,12 +554,16 @@ function renderEffects() {
   if (state.riggedNoDeathNext) out.push("Rigged Spin: no Death next spin");
   if (state.predictedNextResult) out.push(`Predictor: ${state.predictedNextResult}`);
   if (state.deathSwapSpins > 0) out.push("Death Swap active (Death -> Lucky)");
+  if (state.deadHeatSpins > 0) out.push(showInfo ? `Dead Heat: Lucky rewards and Death penalties +25% (${state.deadHeatSpins} spins)` : `Dead Heat ${state.deadHeatSpins} spins`);
+  if (state.crookedDealerSpins > 0) out.push(showInfo ? `Crooked Dealer: +1 Lucky weight and +1 Death weight (${state.crookedDealerSpins} spins)` : `Crooked Dealer ${state.crookedDealerSpins} spins`);
+  if (state.flashMarketActive) out.push(showInfo ? `Flash Market: current shop prices x${state.flashMarketCostFactor.toFixed(2)}` : "Flash Market active");
   if (state.curses.greed) out.push("Curse: Greed (Lucky -30%)");
   if (state.curses.fragile) out.push("Curse: Fragile (Death x2)");
   if (state.curses.debt) out.push("Curse: Bleed ($25 every 3 spins)");
   if (state.curses.chaosMagnet) out.push("Curse: Chaos Magnet");
   if (out.length === 0) out.push("No active effects");
   el.effectsList.innerHTML = out.map((x) => `<li>${x}</li>`).join("");
+  updateDeathWheelAdvice(false);
 }
 
 function calculateScore() {
@@ -300,9 +620,22 @@ function endRun(reason) {
   state.inTripleSpinSequence = false;
   clearSpinAnimTimers();
   const score = calculateScore();
+  const accountCode = `W${String(Math.max(0, Math.round(state.money))).padStart(4, "0")}-${String(state.spinCount).padStart(4, "0")}`;
   const line = `${reason} Final Score: ${score}.`;
-  el.loseText.textContent = line;
+  setExecutionInfoLine(el.loseAccount, `ACCOUNT: ${accountCode}`);
+  setExecutionInfoLine(el.loseDebt, "DEBT: UNPAID");
+  setExecutionInfoLine(el.loseHand, "HAND: WHEEL COLLAPSED");
+  setExecutionInfoLine(el.loseLuck, "LUCK: EXHAUSTED");
+  setExecutionInfoLine(el.loseSentence, "SENTENCE: EXECUTION");
+  setExecutionInfoLine(el.loseText, `STATUS: ${String(reason).toUpperCase()}`);
+  setExecutionInfoLine(el.loseMoney, `ASSETS: ${fmt(state.money)} REMAINING`);
+  setExecutionInfoLine(el.loseLivesLine, `LIVES: ${state.lives}`);
+  setExecutionInfoLine(el.loseScore, `FINAL SCORE: ${score}`);
+  setExecutionGlitchLine(el.loseGlitchA, "ACCOUNT RECORD: PURGED");
+  setExecutionGlitchLine(el.loseGlitchB, "ARCHIVE ERROR: 0xDEAD");
+  setExecutionGlitchLine(el.loseGlitchC, "DATA INTEGRITY: FAILED");
   el.loseModal.classList.remove("hidden");
+  initLoseExecutionEffects();
   el.log.textContent = line;
   pushEvent(line);
   renderEvents();
@@ -394,6 +727,16 @@ function chooseResult() {
   if (state.riggedNoDeathNext) {
     pool = pool.filter((x) => slotTypeOf(x) !== "death");
   }
+  if (state.crookedDealerSpins > 0) {
+    const luckySlots = pool.filter((x) => slotTypeOf(x) === "lucky");
+    const deathSlots = pool.filter((x) => slotTypeOf(x) === "death");
+    if (luckySlots.length > 0) {
+      pool = pool.concat(luckySlots[Math.floor(Math.random() * luckySlots.length)]);
+    }
+    if (deathSlots.length > 0) {
+      pool = pool.concat(deathSlots[Math.floor(Math.random() * deathSlots.length)]);
+    }
+  }
   if (pool.length === 0) pool = wheelOrder;
   return pool[Math.floor(Math.random() * pool.length)];
 }
@@ -453,14 +796,16 @@ function addSlotType(targetType) {
 
 function getShopItemPool() {
   return [
-    { key: "insurance", title: "Insurance", cost: 200, type: "safe", category: "protection", desc: "Ignore next Death.", info: "Adds +1 shield. Shields fully block one Death hit." },
-    { key: "shieldBattery", title: "Shield Battery", cost: 120, type: "safe", category: "protection", desc: "Gain 2 shields.", info: "Instantly grants +2 protection charges." },
+    { key: "insurance", title: "Insurance", cost: 200, type: "safe", category: "protection", desc: "Ignore next Death.", info: `Adds +1 shield. Shield stockpile is capped at ${SHIELD_CAP}.` },
+    { key: "shieldBattery", title: "Shield Battery", cost: 120, type: "safe", category: "protection", desc: "Gain 1 shield.", info: `Instantly grants +1 protection charge. Shield stockpile is capped at ${SHIELD_CAP}.` },
+    { key: "heartBoost", title: "Heart Boost", cost: 220, type: "safe", category: "protection", desc: "Gain 1 life.", info: "Restores 1 life up to the run maximum." },
     { key: "emergencyCash", title: "Emergency Cash", cost: 150, type: "safe", category: "protection", desc: "If money hits 0, restore $200 once.", info: "Triggers automatically before run-end check." },
     { key: "deathDefuse", title: "Death Defuse", cost: 180, type: "safe", category: "protection", desc: "Next Death penalty -75%.", info: "After trigger, one charge is consumed." },
+    { key: "curseCleanse", title: "Curse Cleanse", cost: 170, type: "safe", category: "protection", desc: "Remove 1 curse.", info: "If no curse is active, gain +1 shield instead." },
     { key: "wheelHack", title: "Wheel Hack", cost: 250, type: "safe", category: "wheel", desc: "Remove 1 Death slot.", info: "Removes added Death first, then base Death." },
     { key: "luckyInfusion", title: "Lucky Infusion", cost: 200, type: "safe", category: "wheel", desc: "Add 1 Lucky slot.", info: "Permanently changes one wheel slot to Lucky." },
     { key: "chaosInjection", title: "Chaos Injection", cost: 150, type: "risky", category: "wheel", desc: "Add 1 Chaos slot.", info: "Permanently changes one wheel slot to Chaos." },
-    { key: "slotFreeze", title: "Slot Freeze", cost: 100, type: "safe", category: "wheel", desc: "Freeze one slot for next spin.", info: "Forces the exact next result to a random slot." },
+    { key: "luckyCharm", title: "Lucky Charm", cost: 140, type: "safe", category: "economy", desc: "Lucky chance +5%.", info: "Each level adds +5% forced Lucky chance." },
     { key: "goldMultiplier", title: "Gold Multiplier", cost: 200, type: "safe", category: "economy", desc: "Next 3 wins x2.", info: "Stacks with other reward multipliers." },
     { key: "riskInvestor", title: "Risk Investor", cost: 150, type: "safe", category: "economy", desc: "Lucky rewards +50%.", info: "Permanent and stackable for the run." },
     { key: "interestEngine", title: "Interest Engine", cost: 120, type: "safe", category: "economy", desc: "Gain $20 every spin.", info: "Each level adds +$20 per completed spin." },
@@ -478,6 +823,14 @@ function getShopItemPool() {
     { key: "deathReversal", title: "Death Reversal", cost: 350, type: "legendary", category: "legendary", desc: "Next Death becomes Lucky.", info: "One charge, consumed on conversion." },
     { key: "realityBreak", title: "Reality Break", cost: 400, type: "legendary", category: "legendary", desc: "Shuffle entire wheel.", info: "Randomizes all slot types immediately." },
   ];
+}
+
+function getShopItemCap(itemKey) {
+  return SHOP_ITEM_CAPS[itemKey] ?? null;
+}
+
+function getShopItemCount(itemKey) {
+  return state.purchasedShopCounts[itemKey] || 0;
 }
 
 function chooseShopOffers(count = null, enforceCategoryVariety = false) {
@@ -519,25 +872,30 @@ function chooseShopOffers(count = null, enforceCategoryVariety = false) {
 }
 
 function applyCriticalScaling(events) {
-  if (state.spinCount > 0 && state.spinCount % 10 === 0) {
+  if (state.spinCount > 0 && state.spinCount % CRITICAL_SPIN_CADENCE === 0) {
     addDeathSlot();
-    state.rewardScale = Math.round((state.rewardScale * 1.1) * 1000) / 1000;
-    state.penaltyScale = Math.round((state.penaltyScale * 1.1) * 1000) / 1000;
-    events.push(`Critical Improvement: +1 Death slot, rewards x${state.rewardScale.toFixed(2)}, penalties x${state.penaltyScale.toFixed(2)}`);
+    state.rewardScale = Math.round((state.rewardScale * CRITICAL_REWARD_STEP) * 1000) / 1000;
+    state.penaltyScale = Math.round((state.penaltyScale * CRITICAL_PENALTY_STEP) * 1000) / 1000;
+    let note = "";
+    if (state.shields > 0) {
+      state.shields -= 1;
+      note = ", -1 shield";
+    }
+    events.push(`Critical Improvement: +1 Death slot, rewards x${state.rewardScale.toFixed(2)}, penalties x${state.penaltyScale.toFixed(2)}${note}`);
   }
 }
 
 function luckyPayoutTier() {
   const r = Math.random();
-  if (r < 0.5) return 75;
-  if (r < 0.8) return 125;
-  return 200;
+  if (r < 0.5) return 90;
+  if (r < 0.8) return 145;
+  return 225;
 }
 
 function applyChaosEvent(events) {
-  const chaosPool = ["cash_rain", "tax", "shuffle", "double_spin", "death_swap"];
+  const chaosPool = ["cash_rain", "tax", "shuffle", "double_spin", "death_swap", "dead_heat", "crooked_dealer", "flash_market"];
   if (state.curses.chaosMagnet) {
-    chaosPool.push("shuffle", "double_spin");
+    chaosPool.push("shuffle", "double_spin", "dead_heat");
   }
   const pick = chaosPool[Math.floor(Math.random() * chaosPool.length)];
 
@@ -563,6 +921,24 @@ function applyChaosEvent(events) {
     events.push("Chaos: Double Spin (2 instant spins queued)");
     return;
   }
+  if (pick === "dead_heat") {
+    state.deadHeatSpins += 4;
+    events.push("Chaos: Dead Heat (Lucky rewards and Death penalties +25% for 4 spins)");
+    return;
+  }
+  if (pick === "crooked_dealer") {
+    state.crookedDealerSpins += 6;
+    events.push("Chaos: Crooked Dealer (+1 Lucky weight and +1 Death weight for 6 spins)");
+    return;
+  }
+  if (pick === "flash_market") {
+    state.flashMarketActive = true;
+    state.flashMarketCostFactor = 1.35;
+    state.flashMarketOfferCount = 4;
+    events.push("Chaos: Flash Market (shop opens now with higher prices)");
+    triggerShop("Chaos: Flash Market opened.", false);
+    return;
+  }
   state.deathSwapSpins = 1;
   events.push("Chaos: Death Swap (Death -> Lucky for 1 spin)");
 }
@@ -585,32 +961,43 @@ function renderShopOffers() {
   if (!el.shopOffers) return;
   el.shopOffers.innerHTML = state.activeShopOffers.map((item) => {
     const alreadyBought = state.purchasedShopItemKeys.includes(item.key);
-    const disabled = (!state.shopGrantMode && state.money < item.cost) || alreadyBought ? "disabled" : "";
+    const cap = getShopItemCap(item.key);
+    const count = getShopItemCount(item.key);
+    const atCap = cap !== null && count >= cap;
+    const displayCost = state.shopGrantMode ? 0 : Math.round(item.cost * state.flashMarketCostFactor);
+    const disabled = (!state.shopGrantMode && state.money < displayCost) || alreadyBought || atCap ? "disabled" : "";
     const tag = item.type === "legendary" ? "Legendary" : (item.type === "risky" ? "Risk" : "Safe");
     return `<article class="upgrade-card">
       <h3>${item.title}</h3>
       <p class="shop-meta">Type: ${tag}</p>
-      <p class="shop-meta">Cost: ${state.shopGrantMode ? "FREE (Shop pickup)" : fmt(item.cost)}</p>
-      <p class="shop-extra-info">${item.desc}</p>
+      <p class="shop-meta">Cost: ${state.shopGrantMode ? "FREE (Shop pickup)" : fmt(displayCost)}</p>
+      <p class="shop-meta">${cap !== null ? `Owned: ${count}/${cap}` : `Owned: ${count}`}</p>
+      <p class="shop-desc">${item.desc}</p>
       <p class="shop-extra-info">${item.info || ""}</p>
-      <button class="btn btn-outline game-btn" data-shop-item="${item.key}" ${disabled}>${alreadyBought ? "Taken" : (state.shopGrantMode ? "Take" : "Buy")}</button>
+      <button class="btn btn-outline game-btn" data-shop-item="${item.key}" ${disabled}>${atCap ? "MAX" : (alreadyBought ? "Taken" : (state.shopGrantMode ? "Take" : "Buy"))}</button>
     </article>`;
   }).join("");
   if (el.shopNote) {
     el.shopNote.textContent = state.shopGrantMode
       ? "Shop landing reward: choose 1 item from 6 options."
-      : `Cash: ${fmt(state.money)}. Buy multiple items, then press Skip.`;
+      : state.flashMarketActive
+        ? `Flash Market active: Cash ${fmt(state.money)}. Prices are x${state.flashMarketCostFactor.toFixed(2)} in this shop.`
+        : `Cash: ${fmt(state.money)}. Buy multiple items, then press Skip.`;
   }
 }
 
 function applyShopItem(itemKey) {
   if (itemKey === "insurance") {
-    state.shields += 1;
+    addShields(1);
     return "Shop: Insurance bought (ignore next Death).";
   }
   if (itemKey === "shieldBattery") {
-    state.shields += 2;
-    return "Shop: Shield Battery bought (+2 shields).";
+    addShields(1);
+    return "Shop: Shield Battery bought (+1 shield).";
+  }
+  if (itemKey === "heartBoost") {
+    state.lives = Math.min(START_LIVES, state.lives + 1);
+    return "Shop: Heart Boost restored 1 life.";
   }
   if (itemKey === "emergencyCash") {
     state.emergencyCashCharges += 1;
@@ -619,6 +1006,22 @@ function applyShopItem(itemKey) {
   if (itemKey === "deathDefuse") {
     state.deathDefuseCharges += 1;
     return "Shop: Death Defuse armed.";
+  }
+  if (itemKey === "curseCleanse") {
+    const active = Object.keys(state.curses).filter((key) => state.curses[key]);
+    if (active.length > 0) {
+      const pick = active[Math.floor(Math.random() * active.length)];
+      const curseNames = {
+        greed: "Greed",
+        fragile: "Fragile",
+        debt: "Bleed",
+        chaosMagnet: "Chaos Magnet",
+      };
+      state.curses[pick] = false;
+      return `Shop: Curse Cleanse removed ${curseNames[pick] || pick}.`;
+    }
+    addShields(1);
+    return "Shop: Curse Cleanse found no curse, gained +1 shield.";
   }
   if (itemKey === "wheelHack") {
     return `Shop: ${removeDeathSlot()}.`;
@@ -631,10 +1034,9 @@ function applyShopItem(itemKey) {
     const slot = addSlotType("chaos");
     return slot ? `Shop: Chaos Injection added Chaos slot ${slot}.` : "Shop: Chaos Injection had no effect.";
   }
-  if (itemKey === "slotFreeze") {
-    state.forcedNextResult = wheelOrder[Math.floor(Math.random() * wheelOrder.length)];
-    state.predictedNextResult = state.forcedNextResult;
-    return `Shop: Slot Freeze locked ${state.forcedNextResult} for next spin.`;
+  if (itemKey === "luckyCharm") {
+    state.luckyCharmLevel += 1;
+    return "Shop: Lucky Charm bought (+5% Lucky chance).";
   }
   if (itemKey === "goldMultiplier") {
     state.tempDoubleCashWins += 3;
@@ -711,8 +1113,13 @@ function applyShopItem(itemKey) {
 function openShopModal(reason = "", refreshOffers = true, grantMode = false) {
   state.shopGrantMode = grantMode;
   state.pendingShopGrant = grantMode;
+  state.currentShopPurchases = 0;
   if (refreshOffers || state.activeShopOffers.length === 0 || grantMode) {
-    chooseShopOffers(grantMode ? 6 : null, grantMode);
+    chooseShopOffers(grantMode ? 6 : (state.flashMarketOfferCount ?? null), grantMode);
+  }
+  if (!grantMode) {
+    state.totalShopsSeen += 1;
+    state.totalShopOffersSeen += state.activeShopOffers.length;
   }
   el.shopModal.classList.remove("hidden");
   renderShopOffers();
@@ -721,8 +1128,21 @@ function openShopModal(reason = "", refreshOffers = true, grantMode = false) {
 }
 
 function closeShopModal(msg) {
+  const wasGrantMode = state.shopGrantMode;
   el.shopModal.classList.add("hidden");
   state.shopGrantMode = false;
+  state.flashMarketActive = false;
+  state.flashMarketCostFactor = 1;
+  state.flashMarketOfferCount = null;
+  if (!wasGrantMode && state.active) {
+    const engagement = state.totalShopOffersSeen > 0 ? (state.totalPaidPurchases / state.totalShopOffersSeen) : 1;
+    const lowBuyPerShop = state.totalShopsSeen > 0 ? (state.totalPaidPurchases / state.totalShopsSeen) <= 1 : false;
+    if (engagement < 0.34 || lowBuyPerShop) {
+      state.emptyHandPressure += 2;
+    } else {
+      state.emptyHandPressure = 0;
+    }
+  }
   if (msg) {
     el.log.textContent = msg;
     pushEvent(msg);
@@ -750,11 +1170,21 @@ function buyFromShop(itemKey) {
   const item = state.activeShopOffers.find((x) => x.key === itemKey);
   if (!item) return;
   if (state.purchasedShopItemKeys.includes(itemKey)) return;
-  if (!state.shopGrantMode && state.money < item.cost) return;
-  if (!state.shopGrantMode) takeFunds(item.cost);
+  const cap = getShopItemCap(itemKey);
+  if (cap !== null && getShopItemCount(itemKey) >= cap) return;
+  const actualCost = state.shopGrantMode ? 0 : Math.round(item.cost * state.flashMarketCostFactor);
+  if (!state.shopGrantMode && state.money < actualCost) return;
+  if (!state.shopGrantMode) takeFunds(actualCost);
   const msg = applyShopItem(itemKey);
   state.purchasedShopItemKeys.push(itemKey);
+  state.purchasedShopCounts[itemKey] = getShopItemCount(itemKey) + 1;
+  state.totalPaidPurchases += 1;
+  if (!state.shopGrantMode) {
+    state.currentShopPurchases += 1;
+    state.emptyHandPressure = 0;
+  }
   if (state.shopGrantMode) {
+    state.emptyHandPressure = 0;
     state.pendingShopGrant = false;
     state.activeShopOffers = [];
     closeShopModal(`Shop pickup: ${msg}`);
@@ -813,20 +1243,30 @@ function resolveSlotEffect(result, stakeAmount, events) {
   }
 
   if (type === "lucky") {
-    gain = state.jackpotTokenCharges > 0 ? 200 : luckyPayoutTier();
+    gain = state.jackpotTokenCharges > 0 ? 225 : luckyPayoutTier();
     if (state.jackpotTokenCharges > 0) {
       state.jackpotTokenCharges -= 1;
       events.push("Jackpot Token triggered");
     }
     if (state.riskInvestorLevel > 0) gain = Math.round(gain * (1 + (state.riskInvestorLevel * 0.5)));
     if (state.curses.greed) gain = Math.round(gain * 0.7);
+    if (state.deadHeatSpins > 0) gain = Math.round(gain * 1.25);
     gain = Math.round(gain * state.rewardScale);
     gain *= gamblerCoinMode;
+    if (!state.lastBreathTriggered && (state.money <= 260 || state.lives <= 2) && Math.random() < LAST_BREATH_TRIGGER_CHANCE) {
+      state.lastBreathTriggered = true;
+      state.lives = Math.min(START_LIVES, state.lives + 1);
+      gain += LAST_BREATH_CASH;
+      events.push(`Lucky: Last Breath triggered (+1 life, +${fmt(LAST_BREATH_CASH)})`);
+    } else if (Math.random() < TREASURE_POCKET_CHANCE) {
+      events.push("Lucky: Treasure Pocket opened (free shop pickup)");
+      triggerShop("Treasure Pocket: choose 1 free item from 6.", true);
+    }
     events.push(`Lucky: +${fmt(gain)}`);
   }
 
   if (type === "death") {
-    if (Math.random() < 0.05) {
+    if (Math.random() < DEATH_INSTANT_CHANCE) {
       const ended = endRun("Instant death event triggered.");
       if (ended) return { ended: true, type };
       events.push("Run protection blocked instant death");
@@ -835,8 +1275,9 @@ function resolveSlotEffect(result, stakeAmount, events) {
       state.shields -= 1;
       events.push("Death: shield blocked penalty");
     } else {
-      const byFlat = 150;
-      const byPercent = Math.round((state.money + stakeAmount) * 0.25);
+      const byFlat = DEATH_FLAT_LOSS;
+      const pressureDeathPercent = DEATH_PERCENT_LOSS + (state.emptyHandPressure * 0.04);
+      const byPercent = Math.round((state.money + stakeAmount) * pressureDeathPercent);
       loss = Math.max(byFlat, byPercent);
       if (state.curses.fragile) loss *= 2;
       if (state.deathDefuseCharges > 0) {
@@ -844,18 +1285,15 @@ function resolveSlotEffect(result, stakeAmount, events) {
         loss = Math.round(loss * 0.25);
         events.push("Death Defuse triggered");
       }
+      if (state.deadHeatSpins > 0) {
+        loss = Math.round(loss * 1.25);
+      }
       loss = Math.round(loss * state.penaltyScale);
       loss *= gamblerCoinMode;
       takeFunds(loss);
-      let lostLife = false;
-      if (Math.random() < DEATH_LIFE_LOSS_CHANCE) {
-        state.lives -= 1;
-        lostLife = true;
-      } else {
-        events.push("Death: life spared");
-      }
+      state.lives -= 1;
       triggerScreenShake();
-      events.push(lostLife ? `Death: -${fmt(loss)} and -1 life` : `Death: -${fmt(loss)}`);
+      events.push(`Death: -${fmt(loss)} and -1 life`);
     }
   }
 
@@ -865,7 +1303,7 @@ function resolveSlotEffect(result, stakeAmount, events) {
     events.push("Multiplier: next reward x2");
   }
   if (type === "shield") {
-    state.shields += 1;
+    addShields(1);
     events.push("Shield: +1 protection");
   }
   if (type === "curse") applyRandomCurse(events);
@@ -892,6 +1330,11 @@ function resolveSlotEffect(result, stakeAmount, events) {
   }
 
   if (gain > 0) addFunds(gain);
+
+  if (state.emptyHandPressure > 0) {
+    const hiddenBleed = state.emptyHandPressure * 40;
+    takeFunds(hiddenBleed);
+  }
 
   if (state.curses.debt && state.spinCount > 0 && state.spinCount % 3 === 0) {
     const tax = Math.round(25 * state.penaltyScale);
@@ -984,6 +1427,8 @@ function settleSpin(result, stakeAmount, countSpin = true) {
 
   if (countSpin) state.spinCount += 1;
   if (state.deathSwapSpins > 0) state.deathSwapSpins -= 1;
+  if (state.deadHeatSpins > 0) state.deadHeatSpins -= 1;
+  if (state.crookedDealerSpins > 0) state.crookedDealerSpins -= 1;
   if (state.luckyStormSpins > 0) state.luckyStormSpins -= 1;
   if (state.wheelGodSpins > 0) state.wheelGodSpins -= 1;
   if (state.goldenWheelSpins > 0) state.goldenWheelSpins -= 1;
@@ -994,7 +1439,7 @@ function settleSpin(result, stakeAmount, countSpin = true) {
   }
   if (countSpin) applyCriticalScaling(events);
 
-  const isForcedShopSpin = countSpin && state.spinCount > 0 && state.spinCount % 6 === 0;
+  const isForcedShopSpin = countSpin && state.spinCount > 0 && state.spinCount % SCHEDULED_SHOP_CADENCE === 0;
   if (isForcedShopSpin && state.active) {
     events.push(`Scheduled Shop at spin ${state.spinCount}`);
   }
@@ -1142,6 +1587,7 @@ function startRunFromSetup() {
 }
 
 function restart() {
+  stopLoseExecutionEffects();
   state.money = START_MONEY;
   state.lives = START_LIVES;
   state.spinCount = 0;
@@ -1171,6 +1617,12 @@ function restart() {
   state.tripleUnlockAnnounced = false;
   state.activeShopOffers = [];
   state.purchasedShopItemKeys = [];
+  state.purchasedShopCounts = {};
+  state.totalPaidPurchases = 0;
+  state.currentShopPurchases = 0;
+  state.emptyHandPressure = 0;
+  state.totalShopOffersSeen = 0;
+  state.totalShopsSeen = 0;
   state.shopGrantMode = false;
   state.pendingShopGrant = false;
   state.interestEngineLevel = 0;
@@ -1186,6 +1638,12 @@ function restart() {
   state.goldenWheelSpins = 0;
   state.deathReversalCharges = 0;
   state.forcedNextResult = null;
+  state.deadHeatSpins = 0;
+  state.crookedDealerSpins = 0;
+  state.flashMarketActive = false;
+  state.flashMarketCostFactor = 1;
+  state.flashMarketOfferCount = null;
+  state.lastBreathTriggered = false;
 
   el.loseModal.classList.add("hidden");
   el.shopModal.classList.add("hidden");
@@ -1314,6 +1772,7 @@ document.addEventListener("keydown", (event) => {
 populateSetupSelects();
 initWheel();
 initKeybindHints();
+startDeathWheelAdviceRotation();
 restart();
 window.addEventListener("resize", layoutWheelNumbers);
 window.addEventListener("beforeunload", () => {

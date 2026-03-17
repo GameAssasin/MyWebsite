@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameAssasins Web | Death Blackjack Beta</title>
+  <meta name="description" content="Death Blackjack play page, live table rules, and current World 1 encounters.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="casino-page death-blackjack-page">
+  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+
+  <nav class="site-nav reveal" aria-label="Main navigation">
+    <a class="brand" href="../../index.html">GameAssasins Web</a>
+    <div class="nav-links">
+      <a class="nav-link" href="../../index.html">Home</a>
+      <a class="nav-link" href="../../about.html">About</a>
+      <a class="nav-link" href="../../rules.html">Help & Rules</a>
+      <a class="nav-link" href="../gambling-king/index.html">Gambling King</a>
+      <a class="nav-link" href="../death-wheel/index.html">Death Wheel</a>
+      <a class="nav-link active" href="../death-blackjack/index.html">Death Blackjack Beta</a>
+      <a class="nav-link" href="../../balance-changes.html">Updates</a>
+    </div>
+  </nav>
+
+  <header class="hero section reveal casino-hero game-hero">
+    <div class="game-hero-shell">
+      <div class="game-hero-copy">
+        <p class="eyebrow">World 1 Table</p>
+        <h1>Death Blackjack</h1>
+        <p class="lead">
+          A high-risk blackjack roguelite where every round includes special cards, curses, and casino events that change the rules.
+        </p>
+        <p class="lead" style="margin-top:0.6rem;">
+          Read the dealer, route the floor, and survive the House long enough to reach the World 1 finish.
+        </p>
+        <div class="game-signal-bar" aria-label="Death Blackjack table themes">
+          <span>5 Hands</span>
+          <span>Boss Rounds</span>
+          <span>Special Cards</span>
+          <span>Dealer Intel</span>
+        </div>
+      </div>
+      <aside class="game-hero-panel" aria-label="Death Blackjack table readout">
+        <span class="game-panel-kicker">Table Readout</span>
+        <div class="game-panel-grid">
+          <div><span>Loop</span><strong>Build, Read, Survive</strong></div>
+          <div><span>Threat</span><strong>House Execution</strong></div>
+          <div><span>Pacing</span><strong>Maps + Bosses</strong></div>
+          <div><span>Style</span><strong>Infernal High Stakes</strong></div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="section card reveal game-stage-card blackjack-stage-card">
+      <h2>Table Floor</h2>
+      <div class="blackjack-screen" aria-label="Death Blackjack table preview">
+        <div class="inferno-veil" aria-hidden="true"></div>
+        <div class="inferno-marquee" aria-hidden="true">
+          <span class="inferno-marquee-main">Devil's Casino</span>
+          <span class="inferno-marquee-sub">World 1: Welcome to the Rigged Floor</span>
+        </div>
+        <section class="loss-overlay hidden" id="bjLossOverlay" aria-live="polite" aria-label="Run over">
+          <div class="loss-grid" aria-hidden="true"></div>
+          <div class="loss-noise" aria-hidden="true"></div>
+          <div class="loss-scanlines" aria-hidden="true"></div>
+          <div class="loss-bg-errors" id="bjLossErrors" aria-hidden="true"></div>
+          <div class="loss-suits" aria-hidden="true">
+            <span style="top:8%; right:10%;">♣</span>
+            <span style="top:28%; right:18%;">♦</span>
+            <span style="top:43%; right:12%;">♠</span>
+            <span style="top:61%; right:20%;">♥</span>
+            <span style="bottom:10%; left:8%;">♦</span>
+            <span style="bottom:18%; right:9%;">♣</span>
+          </div>
+          <div class="loss-flash" id="bjLossFlash" aria-hidden="true"></div>
+          <div class="loss-overlay-card">
+            <div class="loss-terminal">
+              <p class="loss-line" id="bjLossAccount">ACCOUNT: 6479A7</p>
+              <p class="loss-line" id="bjLossStatus">STATUS: TERMINATED</p>
+              <div class="loss-divider"></div>
+              <p class="loss-line" id="bjLossDebt">DEBT: UNPAID</p>
+              <p class="loss-line" id="bjLossHand">HAND: BUST</p>
+              <p class="loss-line" id="bjLossLuck">LUCK: EXHAUSTED</p>
+              <div class="loss-gap-sm"></div>
+              <p class="loss-line" id="bjLossTitle">SENTENCE: EXECUTION</p>
+              <div class="loss-divider"></div>
+              <p class="loss-line" id="bjLossReason">SOUL COLLATERAL: CLAIMED</p>
+              <p class="loss-line" id="bjLossCash">ASSETS: $0</p>
+              <p class="loss-line" id="bjLossLives">LIVES: 0</p>
+              <p class="loss-line" id="bjLossMap">MAP: 1/5</p>
+              <div class="loss-gap-md"></div>
+              <p class="loss-line glitch-line" id="bjLossGlitchA" data-text="ACCOUNT RECORD: PURGED">ACCOUNT RECORD: PURGED</p>
+              <p class="loss-line glitch-line" id="bjLossGlitchB" data-text="ARCHIVE ERROR: 0xDEAD">ARCHIVE ERROR: 0xDEAD</p>
+              <p class="loss-line glitch-line" id="bjLossGlitchC" data-text="DATA INTEGRITY: FAILED">DATA INTEGRITY: FAILED</p>
+            </div>
+            <div class="loss-actions">
+              <button class="btn btn-primary game-btn" type="button" id="bjRestartRunBtn">Restart Run</button>
+              <span class="loss-note">Original Blackjack toggle still works if you want to swap modes instead.</span>
+            </div>
+          </div>
+        </section>
+        <div class="table-rail"></div>
+        <div class="table-inner">
+          <div class="hand-row dealer-row">
+            <div class="hand-meta">
+              <span class="hand-title">Dealer</span>
+              <span class="hand-total" id="bjDealerTotal">Total: ?</span>
+            </div>
+            <img class="dealer-impact hidden" id="bjDealerImpact" alt="" aria-hidden="true">
+            <div class="deck-box" id="bjDeckBox" aria-label="Dealer deck">Deck</div>
+            <div class="dealer-face" id="bjDealerFace" aria-hidden="true">🎩</div>
+            <div class="playing-cards" id="bjDealerCards">
+              <article class="playing-card">
+                <span class="rank">K</span>
+                <span class="suit">&hearts;</span>
+              </article>
+              <article class="playing-card facedown" aria-label="Hidden dealer card">
+                <span class="card-back-mark">?</span>
+              </article>
+            </div>
+          </div>
+          <div class="dealer-pool" id="bjDealerPool" aria-label="Enemy dealer hands"></div>
+
+          <div class="danger-badge" id="bjEventBadge">Event: Normal Table</div>
+          <div class="table-summary-strip" aria-label="Current table summary">
+            <article class="table-summary-card">
+              <span class="table-summary-label">Run</span>
+              <strong class="table-summary-value" id="bjSummaryRun">Cash: $0 · Lives: 0</strong>
+            </article>
+            <article class="table-summary-card">
+              <span class="table-summary-label">Dealer</span>
+              <strong class="table-summary-value" id="bjSummaryDealer">Dealer: Table Host</strong>
+            </article>
+            <article class="table-summary-card">
+              <span class="table-summary-label">Progress</span>
+              <strong class="table-summary-value" id="bjSummaryProgress">Hand 1/5 · 0 complete</strong>
+            </article>
+            <article class="table-summary-card">
+              <span class="table-summary-label">Stakes</span>
+              <strong class="table-summary-value" id="bjSummaryStake">Bet: $100 · Net: $0</strong>
+            </article>
+          </div>
+          <p class="note" id="bjTableStatus">Table Start - Bet locked: $100. Hand 1/5.</p>
+          <div class="table-hand-board" id="bjHandBoard" aria-label="Five hand table board">
+            <article class="table-hand-tile" data-hand-index="1"><h3>Hand 1</h3><p>Pending</p><div class="hand-mini-total">Total: 0</div><div class="playing-cards mini-cards"></div><button class="btn btn-outline hand-select-btn" type="button" data-select-hand="1">Play Hand 1</button></article>
+            <article class="table-hand-tile" data-hand-index="2"><h3>Hand 2</h3><p>Pending</p><div class="hand-mini-total">Total: 0</div><div class="playing-cards mini-cards"></div><button class="btn btn-outline hand-select-btn" type="button" data-select-hand="2">Play Hand 2</button></article>
+            <article class="table-hand-tile" data-hand-index="3"><h3>Hand 3</h3><p>Pending</p><div class="hand-mini-total">Total: 0</div><div class="playing-cards mini-cards"></div><button class="btn btn-outline hand-select-btn" type="button" data-select-hand="3">Play Hand 3</button></article>
+            <article class="table-hand-tile" data-hand-index="4"><h3>Hand 4</h3><p>Pending</p><div class="hand-mini-total">Total: 0</div><div class="playing-cards mini-cards"></div><button class="btn btn-outline hand-select-btn" type="button" data-select-hand="4">Play Hand 4</button></article>
+            <article class="table-hand-tile" data-hand-index="5"><h3>Hand 5</h3><p>Pending</p><div class="hand-mini-total">Total: 0</div><div class="playing-cards mini-cards"></div><button class="btn btn-outline hand-select-btn" type="button" data-select-hand="5">Play Hand 5</button></article>
+          </div>
+
+          <div class="chip-zone" aria-label="Bet chip stacks">
+            <span class="chip-zone-label">Table Chips</span>
+            <div class="chip-stack" id="bjChipStack"></div>
+          </div>
+
+          <section class="command-deck" aria-label="Table controls">
+            <div class="command-main">
+              <div class="table-controls">
+                <button class="btn btn-primary game-btn" type="button" data-bj-action="hit" data-keybind="H / Enter">Hit</button>
+                <button class="btn btn-outline game-btn" type="button" data-bj-action="stand" data-keybind="S">Stand</button>
+                <button class="btn btn-outline game-btn" type="button" data-bj-action="double" data-keybind="D">Double Down</button>
+                <button class="btn btn-outline game-btn" type="button" data-bj-action="split" data-keybind="P">Split</button>
+              </div>
+              <div class="utility-controls">
+                <button class="btn btn-outline game-btn" type="button" id="bjOriginalModeBtn">Play Original Blackjack</button>
+                <button class="btn btn-outline game-btn" type="button" id="bjCountHelperBtn">Count Helper</button>
+                <button class="btn btn-outline game-btn" type="button" id="bjMapBtn" data-keybind="M">Map</button>
+              </div>
+              <div class="command-subtools">
+                <label class="skip-toggle" for="bjShowKeybindsCheck"><input type="checkbox" id="bjShowKeybindsCheck"> Show keybinds</label>
+                <button class="btn btn-outline game-btn" type="button" id="bjHomeBtn">Home</button>
+                <button class="btn btn-outline game-btn" type="button" id="bjSettingsBtn">Settings</button>
+                <div class="count-helper hidden" id="bjCountHelperPanel">
+                  <p class="note">Card Counting (Hi-Lo): 2-6: +1, 7-9: 0, 10-Ace: -1</p>
+                  <p class="note">Running Count: <strong id="bjRunningCount">0</strong></p>
+                </div>
+              </div>
+            </div>
+            <aside class="table-advice" id="bjAdvicePanel" aria-live="polite" aria-label="Strategy advice">
+              <span class="table-advice-kicker">Table Advice</span>
+              <p class="table-advice-text" id="bjAdviceText">Split hands keep their first move, so you can split again or double down if the new pair allows it.</p>
+            </aside>
+          </section>
+          <section class="run-info-panel hidden" id="bjSettingsPanel" aria-label="Settings">
+            <div class="run-info-head">
+              <h3>Settings</h3>
+            </div>
+            <div class="settings-grid">
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <h4>Title</h4>
+                </div>
+                <p class="note" id="bjTitleStatus">Titles stay between runs and unlock from progression.</p>
+                <div class="title-settings-grid" id="bjTitleSettings"></div>
+              </section>
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <h4>Keybinds</h4>
+                  <button class="btn btn-outline game-btn" type="button" id="bjResetKeybindsBtn">Reset Defaults</button>
+                </div>
+                <p class="note" id="bjKeybindStatus">Click a bind, then press a key.</p>
+                <div class="keybind-settings-grid" id="bjKeybindSettings"></div>
+              </section>
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <h4>Save Data</h4>
+                  <div class="run-info-actions">
+                    <button class="btn btn-outline game-btn" type="button" id="bjExportSaveBtn">Export Save</button>
+                    <button class="btn btn-outline game-btn" type="button" id="bjImportSaveBtn">Import Save</button>
+                    <button class="btn btn-outline game-btn danger-btn" type="button" id="bjDeleteSaveBtn">Delete Save Data</button>
+                  </div>
+                </div>
+                <div class="save-code-panel hidden" id="bjSaveCodePanel">
+                  <p class="note" id="bjSaveCodeStatus">Create a save code to move this run to another device, or paste one here to load it.</p>
+                  <textarea id="bjSaveCodeInput" rows="4" spellcheck="false" placeholder="DBJ1-..."></textarea>
+                  <div class="save-code-actions">
+                    <button class="btn btn-outline game-btn" type="button" id="bjCopySaveBtn">Copy Code</button>
+                    <button class="btn btn-primary game-btn" type="button" id="bjApplySaveBtn">Load Code</button>
+                  </div>
+                </div>
+              </section>
+              <section class="settings-card hidden" id="bjRunDevToolsCard">
+                <div class="settings-card-head">
+                  <h4>Developer Tools</h4>
+                </div>
+                <p class="note" id="bjRunDevToolsStatus">Dev-only testing tools appear here on the protected developer account.</p>
+                <div class="dev-tool-grid">
+                  <button class="btn btn-outline game-btn" type="button" id="bjDevAddCashBtn">+ $1,000</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjDevAddLivesBtn">+ 3 Lives</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjDevOpenCampBtn">Open Camp</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjDevOpenForgeBtn">Open Forge</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjDevOpenVaultBtn">Trigger Vault</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjDevGrantLoadoutBtn">Give Test Loadout</button>
+                </div>
+              </section>
+            </div>
+          </section>
+          <section class="table-intel-grid" aria-label="Table log and dealer intel">
+            <article class="table-panel combat-log-panel">
+              <div class="table-panel-head">
+                <span class="table-panel-kicker">Combat Log</span>
+                <span class="table-panel-meta">Latest table events</span>
+              </div>
+              <div class="combat-log-list" id="bjCombatLog"></div>
+            </article>
+            <article class="table-panel dealer-intel-panel">
+              <div class="table-panel-head">
+                <span class="table-panel-kicker">Dealer Intel</span>
+                <span class="table-panel-meta">Special cards in this table</span>
+              </div>
+              <div class="dealer-intel-list" id="bjDealerIntel"></div>
+            </article>
+          </section>
+          <section class="run-info-panel" aria-label="Owned cards and passives">
+            <div class="run-info-head">
+              <h3>Run Info</h3>
+              <div class="run-info-actions">
+                <button class="btn btn-outline game-btn" type="button" id="bjExplainToggleBtn">Long Explanations</button>
+              </div>
+            </div>
+            <div class="run-info-grid">
+              <div class="run-info-column">
+                <h4>Your Cards</h4>
+                <div class="run-info-list" id="bjOwnedCardsList"></div>
+              </div>
+              <div class="run-info-column">
+                <h4>Your Passives</h4>
+                <div class="run-info-list" id="bjPassiveList"></div>
+              </div>
+            </div>
+          </section>
+          <section class="status-rail" aria-label="Run status">
+            <p class="note status-pill" id="bjStreakStatus">Streak: 0 wins. Bonus x1.0.</p>
+            <p class="note status-pill status-pill-primary" id="bjStatus">Round ready. Choose an action.</p>
+          </section>
+          <div class="deck-upgrade hidden" id="bjDeckUpgrade">
+            <div class="deck-upgrade-card">
+              <h3>Card Shop</h3>
+              <p class="note" id="bjDeckStatus">Choose cards to add to the shop pool for future draws.</p>
+              <div class="free-draw-panel hidden" id="bjCampUpgradePanel">
+                <h4>Forge Actions</h4>
+                <p class="note" id="bjCampUpgradeStatus">Choose how the forge will alter one of your run cards.</p>
+                <div class="forge-mode-row">
+                  <button class="btn btn-outline game-btn" type="button" id="bjTrainingBtn">Training</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjFusionBtn">Card Fusion</button>
+                </div>
+                <div class="forge-target-block">
+                  <h5>Forge Target</h5>
+                  <div class="forge-target-grid" id="bjForgeTargetList"></div>
+                </div>
+                <p class="note forge-action-hint" id="bjForgeActionHint">Select a card target, then apply a forge action.</p>
+                <button class="btn btn-primary game-btn" type="button" id="bjForgeApplyBtn">Apply Training</button>
+              </div>
+              <div class="card-market shop-market" aria-label="Card shop">
+                <div class="market-right">
+                  <h4 class="market-title">Free Slot</h4>
+                  <div class="market-row">
+                    <div class="market-row-four" id="bjFreeOffer"></div>
+                  </div>
+                  <h4 class="market-title">Card Slots</h4>
+                  <div class="market-row market-row-four" id="bjCardOfferGrid"></div>
+                  <h4 class="market-title">Support Slots</h4>
+                  <div class="market-row market-row-four" id="bjOtherOfferGrid"></div>
+                  <div class="hidden" id="bjShopPools">
+                  <h4 class="market-title">Passives</h4>
+                  <div class="market-row market-row-four">
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="card-counter"><span class="card-name">Card Counter</span><span class="card-desc">Show deck size and 10-value card odds.</span></label>
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="deck-polish"><span class="card-name">Deck Polish</span><span class="card-desc">Scrub one risky injected card effect each table.</span></label>
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="thin-deck"><span class="card-name">Thin Deck</span><span class="card-desc">Remove 5 random normal cards from each fresh deck.</span></label>
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="sharp-eye"><span class="card-name">Sharp Eye</span><span class="card-desc">10% chance to draw two cards and choose one.</span></label>
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="lucky-seat"><span class="card-name">Lucky Seat</span><span class="card-desc">Blackjack payout increased.</span></label>
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="cold-dealer"><span class="card-name">Cold Dealer</span><span class="card-desc">Dealer pushes for one extra card before standing.</span></label>
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="high-roller"><span class="card-name">High Roller</span><span class="card-desc">Win streaks pay an extra cash bonus.</span></label>
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="table-reputation"><span class="card-name">Table Reputation</span><span class="card-desc">Shop prices are reduced. Stacks with diminishing returns.</span></label>
+                    <label class="market-card"><input type="checkbox" data-passive-upgrade="casino-credit"><span class="card-name">Casino Credit</span><span class="card-desc">Start each table with +$50 credit.</span></label>
+                  </div>
+                  <h4 class="market-title">Tactical Items</h4>
+                  <div class="market-row market-row-four">
+                    <label class="market-card"><input type="checkbox" data-tactical-item="rigged-shuffle"><span class="card-name">Rigged Shuffle</span><span class="card-desc">Seed one selected shop card into the top 10 cards next table.</span></label>
+                    <label class="market-card"><input type="checkbox" data-tactical-item="dealer-distract"><span class="card-name">Dealer Distract</span><span class="card-desc">Dealer redraws the last card once next table.</span></label>
+                    <label class="market-card"><input type="checkbox" data-tactical-item="chip-shield"><span class="card-name">Chip Shield</span><span class="card-desc">Next losing hand only loses half bet.</span></label>
+                    <label class="market-card"><input type="checkbox" data-tactical-item="lucky-draw"><span class="card-name">Lucky Draw</span><span class="card-desc">Once next table, draw two cards and choose one.</span></label>
+                  </div>
+                  <h4 class="market-title">Risk / Reward</h4>
+                  <div class="market-row market-row-five">
+                    <label class="market-card"><input type="checkbox" data-shop-card="blood-card"><span class="card-name">Blood Card</span><span class="card-desc">Value 10. Win +$50. Lose extra $50.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="dealer-bait"><span class="card-name">Dealer Bait</span><span class="card-desc">Value 6. Dealer draws one extra card for this hand.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="loaded-card"><span class="card-name">Loaded Card</span><span class="card-desc">Value 9. Next drawn card gets +2.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="stack-card"><span class="card-name">Stack Card</span><span class="card-desc">Value 5. Two Stack Cards combine into 15.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="pressure-card"><span class="card-name">Pressure Card</span><span class="card-desc">Value 8. Dealer must stand at current value for this hand.</span></label>
+                  </div>
+                  <h4 class="market-title">Utility</h4>
+                  <div class="market-row market-row-four">
+                    <label class="market-card"><input type="checkbox" data-shop-card="peek-card"><span class="card-name">Peek Card</span><span class="card-desc">Value 4. Reveal dealer hidden card.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="swap-card"><span class="card-name">Swap Card</span><span class="card-desc">Value 7. Swap your newest card with the dealer's newest card.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="delay-card"><span class="card-name">Delay Card</span><span class="card-desc">Value 3. Ignore bust once this hand.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="control-card"><span class="card-name">Control Card</span><span class="card-desc">Value 2. Next drawn card becomes plus or minus 2.</span></label>
+                  </div>
+                  <h4 class="market-title">Risk</h4>
+                  <div class="market-row market-row-four">
+                    <label class="market-card"><input type="checkbox" data-shop-card="volatile-card"><span class="card-name">Volatile Card</span><span class="card-desc">Random value from 1 to 11.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="debt-card"><span class="card-name">Debt Card</span><span class="card-desc">Value 10. Lose extra $100 if the hand loses.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="heavy-card"><span class="card-name">Heavy Card</span><span class="card-desc">Value 12. Strong but risky.</span></label>
+                    <label class="market-card"><input type="checkbox" data-shop-card="split-card"><span class="card-name">Split Card</span><span class="card-desc">Value 8. If drawn as your second card, split automatically.</span></label>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary game-btn" type="button" id="bjStartNextTableBtn" data-keybind="Enter">Done</button>
+            </div>
+          </div>
+          <div class="special-popup hidden" id="bjChoicePopup" role="dialog" aria-live="polite">
+            <div class="special-popup-card">
+              <h3 id="bjChoiceTitle">Choose a Card</h3>
+              <p id="bjChoiceText">Pick one of the two drawn cards.</p>
+              <div class="route-options" id="bjChoiceOptions"></div>
+            </div>
+          </div>
+          <div class="battle-map hidden" id="bjBattleMap">
+            <div class="battle-map-card">
+              <div class="battle-map-head">
+                <div class="battle-map-head-copy">
+                  <p class="battle-map-kicker">Devil's Casino Routing Table</p>
+                  <h4 class="market-title">Progress Map</h4>
+                </div>
+                <div class="battle-map-head-status">
+                  <p class="note battle-map-status" id="bjRouteStatus">Win the first table to unlock the battle map.</p>
+                  <p class="note battle-map-preview" id="bjFuturePreview">Future encounters will be shown here.</p>
+                </div>
+              </div>
+              <div class="battle-map-grid" id="bjRouteChoices" aria-label="Battle route choices"></div>
+              <div class="battle-map-controls">
+                <button class="btn btn-primary game-btn" type="button" id="bjConfirmRouteBtn" data-keybind="Enter">Confirm Direction</button>
+                <button class="btn btn-outline game-btn" type="button" id="bjCloseMapBtn" data-keybind="Esc">Close Map</button>
+              </div>
+              <div class="map-legend" aria-label="Encounter legend">
+                <span><strong>⚔</strong> Fight</span>
+                <span><strong>☠</strong> Elite</span>
+                <span><strong>👑</strong> Boss</span>
+                <span><strong>🔥</strong> Camp</span>
+                <span><strong>⚒</strong> Forge</span>
+                <span><strong>♠</strong> Risk Table</span>
+                <span><strong>💰</strong> Casino Vault</span>
+                <span><strong>★</strong> Skill Trial</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="section reveal">
+    <p>&copy; <span id="year"></span> GameAssasins</p>
+  </footer>
+
+  <script src="../../script.js"></script>
+</body>
+</html>

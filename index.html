@@ -7,12 +7,15 @@
   <meta name="description" content="Official home page of Paul (GameAssasins Web).">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 </head>
-<body>
-  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
-  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+<body class="site-page home-page">
+  <div class="page-grid" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="page-glow page-glow-a" aria-hidden="true"></div>
+  <div class="page-glow page-glow-b" aria-hidden="true"></div>
 
   <nav class="site-nav reveal" aria-label="Main navigation">
     <a class="brand" href="./index.html">GameAssasins Web</a>
@@ -20,79 +23,118 @@
       <a class="nav-link active" href="./index.html">Home</a>
       <a class="nav-link" href="./about.html">About</a>
       <a class="nav-link" href="./rules.html">Help & Rules</a>
-      <a class="nav-link" href="./gambling-king.html">Gambling King</a>
-      <a class="nav-link" href="./death-wheel.html">Death Wheel</a>
+      <a class="nav-link" href="./games/gambling-king/index.html">Gambling King</a>
+      <a class="nav-link" href="./games/death-wheel/index.html">Death Wheel</a>
+      <a class="nav-link" href="./games/death-blackjack/index.html">Death Blackjack Beta</a>
       <a class="nav-link" href="./balance-changes.html">Updates</a>
     </div>
   </nav>
 
-  <header class="hero section reveal">
-    <p class="eyebrow">Official Website</p>
-    <h1>Paul</h1>
-    <p class="lead">
-      I build through routine, discipline, and long-term process. This website is a structured overview of my mindset, my direction, and my operating boundaries.
-    </p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="./about.html">Read Full About</a>
-      <a class="btn btn-outline" href="./rules.html">Read Help & Rules</a>
+  <header class="hero section reveal cyber-hero home-hero">
+    <div class="hero-split">
+      <div class="hero-copy">
+        <p class="eyebrow">Signal Hub</p>
+        <h1 class="glitch-title" data-glitch="GameAssasins Web">GameAssasins Web</h1>
+        <p class="lead">
+          I build through routine, discipline, and long-term process. This site is a redline control hub for mindset, standards, current work, and the games running inside the system.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="./about.html">Open Profile</a>
+          <a class="btn btn-outline" href="./rules.html">Read Protocols</a>
+        </div>
+        <div class="signal-ribbon" aria-label="Core traits">
+          <span>Routine Driven</span>
+          <span>System Focused</span>
+          <span>Iteration First</span>
+          <span>Long-Term Build</span>
+        </div>
+      </div>
+      <aside class="hero-panel">
+        <span class="panel-kicker">Live Feed</span>
+        <div class="status-stack">
+          <div><span>Status</span><strong>Online</strong></div>
+          <div><span>Mode</span><strong>Structured</strong></div>
+          <div><span>Primary Vector</span><strong>Execution</strong></div>
+          <div><span>Theme</span><strong>Redline Cybernetics</strong></div>
+        </div>
+        <p class="note">
+          This is not a social feed. It is a stable operating surface for how I work, what I build, and how people should approach the work.
+        </p>
+      </aside>
     </div>
   </header>
 
   <main>
-    <section class="section card reveal">
-      <h2>What This Site Is</h2>
-      <p>
-        This is not a social profile and not a temporary trend page. It is a stable reference point for how I work, what I value, and how I expect people to interact with my content.
-      </p>
-      <p>
-        The core direction is simple: train focus, execute consistently, and improve over time. That applies to creative work, communication, and collaboration.
-      </p>
+    <section class="section reveal">
+      <div class="launch-grid">
+        <a class="launch-card" href="./about.html">
+          <span class="launch-label">Profile</span>
+          <h2>About</h2>
+          <p>Detailed mindset, work philosophy, standards, and creative direction.</p>
+        </a>
+        <a class="launch-card" href="./rules.html">
+          <span class="launch-label">Protocol</span>
+          <h2>Help & Rules</h2>
+          <p>Contact policy, boundaries, usage rights, enforcement, and privacy rules.</p>
+        </a>
+        <a class="launch-card" href="./balance-changes.html">
+          <span class="launch-label">Patch Feed</span>
+          <h2>Updates</h2>
+          <p>Public-facing balance changes, live version notes, and current active patches.</p>
+        </a>
+        <a class="launch-card" href="./games/gambling-king/index.html">
+          <span class="launch-label">Game 01</span>
+          <h2>Gambling King</h2>
+          <p>Late-run slot survival with debt pressure, cash sinks, and difficulty ladders.</p>
+        </a>
+        <a class="launch-card" href="./games/death-wheel/index.html">
+          <span class="launch-label">Game 02</span>
+          <h2>Death Wheel</h2>
+          <p>Rigged roulette survival with chaos events, hidden pressure, and shop recovery.</p>
+        </a>
+        <a class="launch-card" href="./games/death-blackjack/index.html">
+          <span class="launch-label">Game 03 Beta</span>
+          <h2>Death Blackjack</h2>
+          <p>Experimental blackjack roguelite beta with bosses, titles, map progression, and cursed deck tech.</p>
+        </a>
+      </div>
     </section>
 
-    <section class="section split reveal">
-      <article class="card">
-        <h2>Quick Profile</h2>
-        <ul class="simple-list">
-          <li>Creator focused on systems, music, and interactive concepts.</li>
-          <li>Strong emphasis on routine over short-term motivation.</li>
-          <li>Builds through iteration and practical execution.</li>
-          <li>Values clarity, boundaries, and professional communication.</li>
-        </ul>
+    <section class="section reveal dual-grid">
+      <article class="neon-card">
+        <span class="card-kicker">Core Brief</span>
+        <h2>What This Site Is</h2>
+        <p>
+          This is not a temporary trend page. It is a stable reference point for how I work, what I value, and how I expect people to interact with my content.
+        </p>
+        <p>
+          The direction is simple: train focus, execute consistently, and improve over time. That applies to creative work, communication, collaboration, and systems design.
+        </p>
       </article>
-      <article class="card">
-        <h2>Core Principle</h2>
+      <article class="neon-card accent-card">
+        <span class="card-kicker">Core Principle</span>
+        <h2>Current State, Not Final Form</h2>
         <p class="quote">"What you see is not the finished product."</p>
-        <p class="note">This page represents a single moment in an ongoing process.</p>
+        <p class="note">This system records a live process, not a polished ending.</p>
       </article>
     </section>
 
-    <section class="section card reveal">
-      <h2>Where To Go Next</h2>
-      <div class="policy-grid">
-        <article class="project">
-          <h3>About Page</h3>
-          <p>Detailed mindset, work philosophy, personal standards, and creative direction.</p>
-          <p><a href="./about.html">Open About</a></p>
+    <section class="section reveal">
+      <div class="vector-grid">
+        <article class="vector-card">
+          <span class="vector-index">01</span>
+          <h3>Discipline</h3>
+          <p>Routine beats short-term motivation. Stability is built through repeatable standards.</p>
         </article>
-        <article class="project">
-          <h3>Help & Rules</h3>
-          <p>Full policies for contact, usage rights, behavior, privacy, and enforcement.</p>
-          <p><a href="./rules.html">Open Help & Rules</a></p>
+        <article class="vector-card">
+          <span class="vector-index">02</span>
+          <h3>Execution</h3>
+          <p>Ideas matter only after they survive testing, iteration, and actual implementation.</p>
         </article>
-        <article class="project">
-          <h3>Updates</h3>
-          <p>Rules and content may change at any time. Current published version always applies.</p>
-          <p><a href="./rules.html#changes">See Terms</a></p>
-        </article>
-        <article class="project">
-          <h3>Play The Game</h3>
-          <p>Roguelite slot machine run. No saves, no safety net, pure risk management.</p>
-          <p><a href="./gambling-king.html">Open Gambling King</a></p>
-        </article>
-        <article class="project">
-          <h3>Death Wheel</h3>
-          <p>Roulette survival mode. Pick your side, spin, and avoid max debt.</p>
-          <p><a href="./death-wheel.html">Open Death Wheel</a></p>
+        <article class="vector-card">
+          <span class="vector-index">03</span>
+          <h3>Boundaries</h3>
+          <p>Clarity, professional communication, and explicit rules protect momentum.</p>
         </article>
       </div>
     </section>

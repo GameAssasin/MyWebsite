@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="GameAssasins Web icon">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ff3b57"/>
+      <stop offset="1" stop-color="#ff9a3d"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="26" fill="#090104"/>
+  <rect x="10" y="10" width="108" height="108" rx="22" fill="none" stroke="rgba(255,96,96,0.35)" stroke-width="2"/>
+  <path d="M64 18 L106 40 L106 78 C106 99 88 112 64 118 C40 112 22 99 22 78 L22 40 Z"
+        fill="url(#g)" opacity="0.95" filter="url(#glow)"/>
+  <path d="M44 62 C50 52 58 46 64 44 C70 46 78 52 84 62 C78 78 70 88 64 92 C58 88 50 78 44 62Z"
+        fill="#090104" opacity="0.92"/>
+  <path d="M64 48 C70 50 76 56 80 64 C76 74 70 80 64 83 C58 80 52 74 48 64 C52 56 58 50 64 48Z"
+        fill="rgba(255,240,234,0.92)"/>
+  <path d="M64 52 L68 62 L78 62 L70 68 L74 78 L64 72 L54 78 L58 68 L50 62 L60 62 Z"
+        fill="#090104" opacity="0.9"/>
+</svg>
+

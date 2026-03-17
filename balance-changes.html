@@ -7,12 +7,15 @@
   <meta name="description" content="Balance history and current values for all games.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 </head>
-<body>
-  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
-  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+<body class="site-page updates-page">
+  <div class="page-grid" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="page-glow page-glow-a" aria-hidden="true"></div>
+  <div class="page-glow page-glow-b" aria-hidden="true"></div>
 
   <nav class="site-nav reveal" aria-label="Main navigation">
     <a class="brand" href="./index.html">GameAssasins Web</a>
@@ -20,108 +23,255 @@
       <a class="nav-link" href="./index.html">Home</a>
       <a class="nav-link" href="./about.html">About</a>
       <a class="nav-link" href="./rules.html">Help & Rules</a>
-      <a class="nav-link" href="./gambling-king.html">Gambling King</a>
-      <a class="nav-link" href="./death-wheel.html">Death Wheel</a>
+      <a class="nav-link" href="./games/gambling-king/index.html">Gambling King</a>
+      <a class="nav-link" href="./games/death-wheel/index.html">Death Wheel</a>
+      <a class="nav-link" href="./games/death-blackjack/index.html">Death Blackjack Beta</a>
       <a class="nav-link active" href="./balance-changes.html">Updates</a>
     </div>
   </nav>
 
-  <header class="hero section reveal">
-    <p class="eyebrow">Game Balance</p>
-    <h1>Updates</h1>
-    <p class="lead">This page tracks website version updates. Website v0.2 is now live; v0.1 is preserved below.</p>
+  <header class="hero section reveal cyber-hero updates-hero">
+    <div class="hero-split">
+      <div class="hero-copy">
+        <p class="eyebrow">Patch Feed</p>
+        <h1 class="glitch-title" data-glitch="Updates">Updates</h1>
+        <p class="lead">This page tracks player-facing balance changes. Website v0.3.3 is live for the official released games, while Death Blackjack is still tracked separately as a public beta track.</p>
+      </div>
+      <aside class="hero-panel">
+        <span class="panel-kicker">Current Scope</span>
+        <div class="status-stack">
+          <div><span>Website Version</span><strong>v0.3.3</strong></div>
+          <div><span>Public Coverage</span><strong>GK + DW official · DBJ beta</strong></div>
+          <div><span>Format</span><strong>Live Patch Log</strong></div>
+        </div>
+        <p class="note">This page is the public-facing patch log for the live website and game pages.</p>
+      </aside>
+    </div>
   </header>
 
   <main>
-    <section class="section card reveal">
-      <h2>Current Scope</h2>
-      <ul class="simple-list">
-        <li>Website version: v0.2 current.</li>
-        <li>Website version: v0.1 preserved below as baseline reference.</li>
-        <li>Death Wheel: live in v0.2 (detailed notes in Balance notes file).</li>
-      </ul>
-      <p><a href="./balance changes.md">Balance notes</a></p>
-    </section>
-
-    <section class="section card reveal" id="death-wheel-v02">
-      <h2>Website v0.2 - Death Wheel</h2>
-      <ul class="simple-list">
-        <li>Death Wheel was added in website v0.2.</li>
-        <li>Core systems (shop, effects, triple spin, and wheel events) are live.</li>
-        <li>Detailed balance numbers and tuning notes are in the Balance notes file.</li>
-      </ul>
-    </section>
-
-    <section class="section card reveal" id="gambling-king-v02">
-      <h2>Website v0.2 - Gambling King Changes</h2>
-      <p class="note">Format below shows exactly what changed from website v0.1 to website v0.2.</p>
-
-      <h3>Core Economy Changes (v0.1 -&gt; v0.2)</h3>
-      <ul class="simple-list">
-        <li>Global payout ease multiplier: <strong>1.00 -&gt; 2.00</strong>.</li>
-        <li>Hell-only payout factor: <strong>1.00 -&gt; 0.70</strong>.</li>
-        <li>Effective Hell payout multiplier vs pre-v0.2 formula: <strong>1.00 -&gt; 1.40</strong>.</li>
-        <li>Fixed spin cost: <strong>$115 -&gt; $115</strong> (unchanged after testing).</li>
-      </ul>
-
-      <h3>Difficulty Start Cash Changes (v0.1 -&gt; v0.2)</h3>
-      <ul class="simple-list">
-        <li>Hard: <strong>$553 -&gt; $760</strong>.</li>
-        <li>Expert: <strong>$479 -&gt; $730</strong>.</li>
-        <li>Master: <strong>$291 -&gt; $700</strong>.</li>
-        <li>Nightmare: <strong>$245 -&gt; $670</strong>.</li>
-        <li>Insane: <strong>$199 -&gt; $640</strong>.</li>
-        <li>Hell: <strong>$168 -&gt; $610</strong>.</li>
-      </ul>
-      <p class="note">Hard+ difficulties were fully retuned in v0.2 (cash, debt limits, interest, fee curves, payout scales, devil rates).</p>
-
-      <h3>Why This Changed</h3>
-      <ul class="simple-list">
-        <li>Make all difficulties easier overall.</li>
-        <li>Keep Hell challenging instead of free after the global buff.</li>
-      </ul>
-
-    </section>
-
-    <section class="section card reveal" id="gambling-king-v01">
-      <h2>Website v0.1 Baseline - Gambling King</h2>
-      <p class="note">Historical reference values from before website v0.2 tuning.</p>
-      <div class="balance-table-wrap">
-        <table class="payout-table balance-table">
-          <thead>
-            <tr>
-              <th>Difficulty</th>
-              <th>Start</th>
-              <th>Debt Limit</th>
-              <th>Interest</th>
-              <th>Fee Base</th>
-              <th>Fee Growth</th>
-              <th>Payout Scale</th>
-              <th>Devil Chance</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Noob</td><td>$1169</td><td>$2763</td><td>0.0345</td><td>24</td><td>1.138</td><td>1.4025</td><td>0.0437</td></tr>
-            <tr><td>Easy</td><td>$956</td><td>$2338</td><td>0.0437</td><td>31</td><td>1.182</td><td>1.2963</td><td>0.0518</td></tr>
-            <tr><td>Casual</td><td>$808</td><td>$2019</td><td>0.0564</td><td>41</td><td>1.233</td><td>1.19</td><td>0.069</td></tr>
-            <tr><td>Normal</td><td>$808</td><td>$2019</td><td>0.0587</td><td>45</td><td>1.241</td><td>1.1688</td><td>0.069</td></tr>
-            <tr><td>Hard</td><td>$553</td><td>$1381</td><td>0.0863</td><td>69</td><td>1.389</td><td>1.0311</td><td>0.1035</td></tr>
-            <tr><td>Expert</td><td>$479</td><td>$1190</td><td>0.0989</td><td>85</td><td>1.475</td><td>0.9775</td><td>0.1207</td></tr>
-            <tr><td>Master</td><td>$291</td><td>$750</td><td>0.1645</td><td>152</td><td>1.848</td><td>0.6656</td><td>0.2024</td></tr>
-            <tr><td>Nightmare</td><td>$245</td><td>$643</td><td>0.1897</td><td>184</td><td>2.037</td><td>0.6196</td><td>0.2277</td></tr>
-            <tr><td>Insane</td><td>$199</td><td>$536</td><td>0.215</td><td>222</td><td>2.24</td><td>0.5661</td><td>0.253</td></tr>
-            <tr><td>Hell</td><td>$168</td><td>$428</td><td>0.2404</td><td>266</td><td>2.417</td><td>0.5202</td><td>0.2783</td></tr>
-          </tbody>
-        </table>
+    <section class="section reveal">
+      <div class="patch-dashboard">
+        <article class="patch-metric">
+          <span>Current Version</span>
+          <strong>v0.3.3</strong>
+        </article>
+        <article class="patch-metric">
+          <span>Games Covered</span>
+          <strong>2 Official + 1 Beta</strong>
+        </article>
+        <article class="patch-metric">
+          <span>Focus</span>
+          <strong>Balance + Systems</strong>
+        </article>
       </div>
+    </section>
 
-      <h3>Core v0.1 Rules</h3>
-      <ul class="simple-list">
-        <li>Fixed spin cost: <strong>$115</strong>.</li>
-        <li>Combo multipliers: x2 1.05, x3 2.7, x4 2.8, x5 3.2, x6 3.6, x7 4.0, x8 4.5.</li>
-        <li>Base reels: 3, max reels: 8.</li>
-        <li>Reel Expansion cost scales aggressively per extra slot.</li>
-      </ul>
+    <section class="section reveal">
+      <article class="patch-block" id="summary-v033">
+        <div class="patch-head">
+          <span class="patch-chip">Summary</span>
+          <h2>v0.3.3</h2>
+        </div>
+        <ul class="simple-list">
+          <li>Public version is now aligned to <strong>v0.3.3</strong>.</li>
+          <li>This is a jump ahead from the previously published public baseline (<strong>v0.2</strong>).</li>
+          <li>The main site pages were rebuilt with distinct red cyberpunk layouts, animated backgrounds, glitch effects, and a cleaner shared navigation shell.</li>
+          <li><strong>Official stable coverage</strong> in this release remains <strong>Gambling King + Death Wheel</strong>, while <strong>Death Blackjack</strong> stays available as a separate public beta track.</li>
+          <li>Game pages now live under dedicated folders with updated public navigation and cleaner page structure across the site.</li>
+          <li>Recent UI bug fixes cleaned up sticky-nav overlap, stale rule text, and mismatched labels on live pages before this release.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section reveal">
+      <article class="patch-block" id="death-blackjack-beta">
+        <div class="patch-head">
+          <span class="patch-chip">Beta</span>
+          <h2>Death Blackjack Beta Notes</h2>
+        </div>
+
+        <p class="note">Death Blackjack is still in beta. These notes cover the current public beta build and are not counted as part of the official stable v0.3.3 release coverage.</p>
+
+        <div class="patch-columns">
+          <div class="patch-panel">
+            <h3>Between-Run Home</h3>
+            <ul class="simple-list">
+              <li><strong>New: Home page</strong> now acts as the between-runs hub with Continue/New Run flow, titles, curses, achievements, run logs, keybinds, and account/save utilities.</li>
+              <li><strong>New: Progress Route</strong> now presents visible level rewards and unlock pacing through a longer House progression ladder.</li>
+              <li><strong>New:</strong> title loadout supports up to <strong>3</strong> equipped titles at once.</li>
+              <li><strong>New:</strong> achievements and title goals now show clearer visible progress on the home screen.</li>
+            </ul>
+
+            <h3>New Cards</h3>
+            <ul class="simple-list">
+              <li><strong>Ace Anchor</strong>: Ace hands win more and lose less.</li>
+              <li><strong>Grim Chip</strong>: strong win payout with added loss pressure.</li>
+              <li><strong>Dealer Trap</strong>: rewards dealer busts harder.</li>
+              <li><strong>Finisher Card</strong>: pays extra on <strong>20</strong> or <strong>21</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="patch-panel">
+            <h3>New Passives</h3>
+            <ul class="simple-list">
+              <li><strong>Boss Dividend</strong>: boss round wins pay extra cash.</li>
+              <li><strong>Vault Interest</strong>: Casino Vault nodes pay extra cash.</li>
+              <li><strong>Trial Script</strong>: Skill Trial wins pay extra cash.</li>
+              <li><strong>Croupier Stash</strong>: start each table with Lucky Draw charges.</li>
+            </ul>
+
+            <h3>Meta Additions</h3>
+            <ul class="simple-list">
+              <li><strong>New:</strong> titles now carry rarities and deck-shaping effects.</li>
+              <li><strong>New:</strong> House curses can be equipped after a clear to make future runs harder in exchange for more progression score.</li>
+              <li><strong>New:</strong> save/account tools now support export, join, leave, and between-device transfer from the home page.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="patch-panel">
+          <h3>Table and Route Updates</h3>
+          <ul class="simple-list">
+            <li><strong>New:</strong> the World 1 play page now uses a separate table page with cleaner startup flow and less chance of getting trapped in bad saved states.</li>
+            <li><strong>Updated:</strong> the map overlay, forge flow, dealer summaries, and route panels were rebuilt to read more clearly during a run.</li>
+            <li><strong>Updated:</strong> more cards, passives, progression rewards, and title unlocks are now visible in the beta build.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <section class="section reveal">
+      <article class="patch-block" id="gambling-king-live">
+        <div class="patch-head">
+          <span class="patch-chip">Game 01</span>
+          <h2>Gambling King Live Details</h2>
+        </div>
+
+        <div class="patch-columns">
+          <div class="patch-panel">
+            <h3>Upgrade Additions</h3>
+            <ul class="simple-list">
+              <li><strong>New: Fee Broker</strong>: <strong>0 -&gt; 12% -&gt; 24% -&gt; 36%</strong> fee reduction across levels 0 to 3.</li>
+              <li><strong>New: Safety Net</strong>: <strong>0% -&gt; 12% -&gt; 24% -&gt; 36%</strong> dead-spin refund across levels 0 to 3.</li>
+              <li><strong>New: Purchase caps</strong>: repeated buying of strong Gambling King upgrades now stops at fixed limits.</li>
+              <li><strong>New: House Bribe</strong>: buys <strong>10</strong> spins of lower fee and debt-interest pressure for rich late-game runs.</li>
+              <li><strong>New: Overclock Spin</strong>: stores one premium spin with stronger payout, wild odds, and proc chances.</li>
+              <li><strong>New: Emergency Buyout</strong>: expensive bailout that cuts debt and can erase a currently due table fee.</li>
+              <li><strong>New: VIP Table Pass</strong>: stores future <strong>half-price</strong> table fee payments.</li>
+            </ul>
+          </div>
+
+          <div class="patch-panel">
+            <h3>Late-Run Access</h3>
+            <ul class="simple-list">
+              <li>These cash sinks are locked until the run is clearly in late-game territory.</li>
+              <li>Current unlock paths: max <strong>4</strong> capped purchases, reach best net worth <strong>$4500</strong>, or survive <strong>60</strong> spins with <strong>5+</strong> reels.</li>
+              <li>Reason: late-run money sinks should help rich survival-focused runs without flattening the early game.</li>
+            </ul>
+
+            <h3>Hell Target</h3>
+            <ul class="simple-list">
+              <li>Hell is meant to be the hardest core difficulty before Gods Will.</li>
+              <li>The goal was to keep it brutal without making it feel impossible.</li>
+            </ul>
+
+            <h3>Hell Exclusive Rules</h3>
+            <ul class="simple-list">
+              <li><strong>New: Hell payout factor</strong>: <strong>1.00 -&gt; 0.70</strong> on the Hell-only multiplier layer.</li>
+              <li><strong>New:</strong> even after the global payout easing, Hell keeps a harsher reward rule than other difficulties.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="patch-columns">
+          <div class="patch-panel">
+            <h3>Gods Will</h3>
+            <ul class="simple-list">
+              <li><strong>New: Gods Will</strong> difficulty added above Hell.</li>
+              <li>It is intended to be the hardest mode in the game.</li>
+            </ul>
+
+            <h3>Gods Will Exclusive Rules</h3>
+            <ul class="simple-list">
+              <li><strong>New: Gods Will payout factor</strong>: uses <strong>x0.50</strong> on the Gods Will-only multiplier layer.</li>
+              <li><strong>New: Gods Will fee factor</strong>: uses <strong>x1.18</strong> on table fees.</li>
+              <li><strong>New: Gods Will interest rule</strong>: adds <strong>+1.8%</strong> debt interest.</li>
+              <li><strong>New: Gods Will win target</strong>: needs <strong>135</strong> spins to clear.</li>
+              <li><strong>New: Gods Will debt limit rule</strong>: reduces effective debt limit by <strong>250</strong>.</li>
+              <li><strong>New: Gods Will wild rule</strong>: cuts wild generation to <strong>x0.5</strong>.</li>
+              <li><strong>New: Gods Will reel expansion rule</strong>: uses <strong>0.45</strong> extra-slot payout penalty per slot.</li>
+            </ul>
+          </div>
+
+          <div class="patch-panel">
+            <h3>Gods Will Difficulty Data</h3>
+            <ul class="simple-list">
+              <li><strong>Gods Will</strong>: Start money <strong>700</strong>, debt limit <strong>860</strong>, fee base <strong>72</strong>, fee growth <strong>1.28</strong>, payout scale <strong>1.13</strong>, devil chance <strong>12.8%</strong>.</li>
+            </ul>
+
+            <h3>Difficulty Changes</h3>
+            <ul class="simple-list">
+              <li><strong>Hard</strong>: start money <strong>760 -&gt; 670</strong>, debt limit <strong>1600 -&gt; 1080</strong>, fee base <strong>58 -&gt; 69</strong>, payout scale <strong>1.20 -&gt; 1.12</strong>.</li>
+              <li><strong>Expert</strong>: start money <strong>730 -&gt; 640</strong>, debt limit <strong>1450 -&gt; 900</strong>, fee base <strong>62 -&gt; 74</strong>, payout scale <strong>1.18 -&gt; 1.10</strong>.</li>
+              <li><strong>Master</strong>: start money <strong>700 -&gt; 620</strong>, debt limit <strong>1300 -&gt; 820</strong>, fee base <strong>66 -&gt; 77</strong>, payout scale <strong>1.16 -&gt; 1.09</strong>.</li>
+              <li><strong>Nightmare</strong>: start money <strong>670 -&gt; 600</strong>, debt limit <strong>1180 -&gt; 760</strong>, fee base <strong>70 -&gt; 80</strong>, payout scale <strong>1.14 -&gt; 1.08</strong>.</li>
+              <li><strong>Insane</strong>: start money <strong>640 -&gt; 590</strong>, debt limit <strong>1060 -&gt; 700</strong>, fee base <strong>74 -&gt; 82</strong>, payout scale <strong>1.12 -&gt; 1.07</strong>.</li>
+              <li><strong>Hell</strong>: start money <strong>610 -&gt; 700</strong>, debt limit <strong>428 -&gt; 860</strong>, fee base <strong>78 -&gt; 72</strong>, payout scale <strong>1.10 -&gt; 1.13</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section reveal">
+      <article class="patch-block" id="death-wheel-live">
+        <div class="patch-head">
+          <span class="patch-chip">Game 02</span>
+          <h2>Death Wheel Live Details</h2>
+        </div>
+
+        <div class="patch-columns">
+          <div class="patch-panel">
+            <h3>New Systems</h3>
+            <ul class="simple-list">
+              <li><strong>New: Lucky Charm</strong> added to the shop. Increases Lucky slot chance from <strong>0</strong> to <strong>20%</strong> across upgrade levels.</li>
+              <li><strong>New: Curse Cleanse</strong> added to the shop. Removes <strong>1</strong> active curse, or gives <strong>+1 shield</strong> if none are active.</li>
+              <li><strong>New: Heart Boost</strong> added to the shop. Restores <strong>+1 life</strong> up to the run maximum.</li>
+              <li><strong>New:</strong> Purchase caps were added to stronger Death Wheel shop items.</li>
+              <li><strong>New: Dead Heat</strong> chaos event. Next <strong>4</strong> spins use stronger Lucky rewards and stronger Death penalties.</li>
+              <li><strong>New: Crooked Dealer</strong> chaos event. Next <strong>6</strong> spins temporarily increase both Lucky and Death odds.</li>
+              <li><strong>New: Flash Market</strong> chaos event. Opens an immediate high-price shop with fewer offers.</li>
+              <li><strong>New: Last Breath</strong> Lucky event. Low-resource rescue that grants life, shield, and cash.</li>
+              <li><strong>New: Treasure Pocket</strong> Lucky event. Lucky can open a free shop pickup instead of only raw money.</li>
+            </ul>
+          </div>
+
+          <div class="patch-panel">
+            <h3>Removed</h3>
+            <ul class="simple-list">
+              <li><strong>Removed: Slot Freeze</strong> left the shop pool because it overlapped too much with <strong>Prediction Chip</strong> and <strong>Slot Lock</strong>.</li>
+            </ul>
+
+            <h3>Core Changes</h3>
+            <ul class="simple-list">
+              <li><strong>Start money</strong>: <strong>1200 -&gt; 1800</strong>, <strong>spin cost</strong>: <strong>25 -&gt; 20</strong>, <strong>start lives</strong>: <strong>3 -&gt; 6</strong>.</li>
+              <li><strong>Scheduled shop cadence</strong>: <strong>6 spins -&gt; 4 spins</strong>, <strong>critical scaling cadence</strong>: <strong>10 spins -&gt; 14 spins</strong>.</li>
+              <li><strong>Death penalty</strong>: <strong>max(150, 25%) -&gt; max(125, 18%)</strong>, <strong>instant death</strong>: <strong>5% -&gt; 0%</strong>.</li>
+              <li><strong>Lucky rewards</strong>: <strong>75/125/200 -&gt; 90/145/225</strong>.</li>
+            </ul>
+
+            <h3>Wheel Layout</h3>
+            <ul class="simple-list">
+              <li><strong>Normal slots</strong>: <strong>16 -&gt; 17</strong></li>
+              <li><strong>Death slots</strong>: <strong>4 -&gt; 3</strong></li>
+              <li><strong>Shield slots</strong>: <strong>2 -&gt; 3</strong></li>
+              <li>Other slot counts stayed the same.</li>
+            </ul>
+          </div>
+        </div>
+
+      </article>
     </section>
   </main>
 
@@ -132,5 +282,7 @@
   <script src="./script.js"></script>
 </body>
 </html>
+
+
 
 

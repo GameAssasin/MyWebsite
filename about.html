@@ -7,12 +7,15 @@
   <meta name="description" content="Detailed about page for Paul (GameAssasins Web).">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 </head>
-<body>
-  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
-  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+<body class="site-page about-page">
+  <div class="page-grid" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="page-glow page-glow-a" aria-hidden="true"></div>
+  <div class="page-glow page-glow-b" aria-hidden="true"></div>
 
   <nav class="site-nav reveal" aria-label="Main navigation">
     <a class="brand" href="./index.html">GameAssasins Web</a>
@@ -20,95 +23,137 @@
       <a class="nav-link" href="./index.html">Home</a>
       <a class="nav-link active" href="./about.html">About</a>
       <a class="nav-link" href="./rules.html">Help & Rules</a>
-      <a class="nav-link" href="./gambling-king.html">Gambling King</a>
-      <a class="nav-link" href="./death-wheel.html">Death Wheel</a>
+      <a class="nav-link" href="./games/gambling-king/index.html">Gambling King</a>
+      <a class="nav-link" href="./games/death-wheel/index.html">Death Wheel</a>
+      <a class="nav-link" href="./games/death-blackjack/index.html">Death Blackjack Beta</a>
       <a class="nav-link" href="./balance-changes.html">Updates</a>
     </div>
   </nav>
 
-  <header class="hero section reveal">
-    <p class="eyebrow">About Me</p>
-    <h1>Paul</h1>
-    <p class="lead">
-      I am a creator formed by struggle, curiosity, and routine. Progress for me is not a mood. It is a repeatable standard built over time.
-    </p>
+  <header class="hero section reveal cyber-hero about-hero">
+    <div class="hero-split">
+      <div class="hero-copy">
+        <p class="eyebrow">Personal Dossier</p>
+        <h1 class="glitch-title" data-glitch="Paul">Paul</h1>
+        <p class="lead">
+          I am a creator formed by struggle, curiosity, and routine. Progress for me is not a mood. It is a repeatable standard built through pressure, adjustment, and consistency.
+        </p>
+      </div>
+      <aside class="hero-panel">
+        <span class="panel-kicker">Profile Scan</span>
+        <div class="status-stack">
+          <div><span>Primary Mode</span><strong>Iteration</strong></div>
+          <div><span>Method</span><strong>Discipline</strong></div>
+          <div><span>Build Type</span><strong>Solo Systems</strong></div>
+          <div><span>Tolerance</span><strong>High Pressure</strong></div>
+        </div>
+      </aside>
+    </div>
   </header>
 
   <main>
-    <section class="section card reveal">
-      <h2>Identity and Direction</h2>
-      <p>
-        My name is Paul. I focus on building a stable, intentional life around work that has structure and meaning. I do not measure growth by short bursts of motivation. I measure it by habits, repetition, and the ability to execute under imperfect conditions.
-      </p>
-      <p>
-        I prefer consistency over hype. I prefer practical movement over theory without action. A good process is more valuable than temporary excitement, because process keeps moving when emotion changes.
-      </p>
-      <p>
-        This philosophy shapes how I work, how I communicate, and how I decide what deserves my time.
-      </p>
+    <section class="section reveal dossier-grid">
+      <article class="neon-card">
+        <span class="card-kicker">Identity</span>
+        <h2>Direction</h2>
+        <p>
+          My name is Paul. I focus on building a stable, intentional life around work that has structure and meaning. I do not measure growth by short bursts of motivation. I measure it by habits, repetition, and the ability to execute under imperfect conditions.
+        </p>
+        <p>
+          I prefer consistency over hype. I prefer practical movement over theory without action. A good process is more valuable than temporary excitement, because process keeps moving when emotion changes.
+        </p>
+        <p>
+          This philosophy shapes how I work, how I communicate, and how I decide what deserves my time.
+        </p>
+      </article>
+      <article class="neon-card accent-card">
+        <span class="card-kicker">Signal Traits</span>
+        <div class="metric-stack">
+          <div><strong>01</strong><span>Consistency over hype</span></div>
+          <div><strong>02</strong><span>Action before theory lock</span></div>
+          <div><strong>03</strong><span>Strict standards protect quality</span></div>
+          <div><strong>04</strong><span>Process outlasts mood</span></div>
+        </div>
+      </article>
     </section>
 
-    <section class="section card reveal">
-      <h2>How I Work</h2>
-      <p>
-        Most of my work is solo and iterative. I experiment, break ideas apart, test limits, and rebuild until the result is cleaner and stronger than the previous version. I do not wait for ideal timing; I start with what exists and improve it step by step.
-      </p>
-      <p>
-        My daily operating model is built around focus blocks, intentional learning, and controlled output. I use systems to reduce noise and keep attention on work that compounds over time.
-      </p>
-      <div class="pillars">
-        <article class="pillar">
-          <h3>Focus</h3>
-          <p>Protected time, limited distractions, and deep execution.</p>
-        </article>
-        <article class="pillar">
-          <h3>Self-Education</h3>
-          <p>Learn by doing, testing, documenting, and refining.</p>
-        </article>
-        <article class="pillar">
-          <h3>Discipline</h3>
-          <p>Routine beats comfort; consistency beats intensity spikes.</p>
-        </article>
-        <article class="pillar">
-          <h3>Recovery</h3>
-          <p>Accept setbacks quickly, remove drama, continue moving.</p>
-        </article>
+    <section class="section reveal">
+      <div class="neon-card">
+        <span class="card-kicker">Workflow</span>
+        <h2>How I Work</h2>
+        <p>
+          Most of my work is solo and iterative. I experiment, break ideas apart, test limits, and rebuild until the result is cleaner and stronger than the previous version. I do not wait for ideal timing. I start with what exists and improve it step by step.
+        </p>
+        <p>
+          My daily operating model is built around focus blocks, intentional learning, and controlled output. I use systems to reduce noise and keep attention on work that compounds over time.
+        </p>
+        <div class="dossier-pillars">
+          <article class="vector-card">
+            <span class="vector-index">F1</span>
+            <h3>Focus</h3>
+            <p>Protected time, low noise, and deep execution.</p>
+          </article>
+          <article class="vector-card">
+            <span class="vector-index">L2</span>
+            <h3>Self-Education</h3>
+            <p>Learn by doing, testing, documenting, and refining.</p>
+          </article>
+          <article class="vector-card">
+            <span class="vector-index">D3</span>
+            <h3>Discipline</h3>
+            <p>Routine beats comfort; consistency beats intensity spikes.</p>
+          </article>
+          <article class="vector-card">
+            <span class="vector-index">R4</span>
+            <h3>Recovery</h3>
+            <p>Accept setbacks quickly, remove drama, continue moving.</p>
+          </article>
+        </div>
       </div>
     </section>
 
-    <section class="section card reveal">
-      <h2>Creative Fields</h2>
-      <p>
-        My artistic interests include music, interactive projects, and concept-oriented work. I am drawn to contrast: silence and impact, calm and aggression, control and release. These tensions create depth, and depth is where meaningful work appears.
-      </p>
-      <p>
-        Games, systems, and music are not escape tools for me. I use them to sharpen perception, reaction, and decision-making. I treat creative work as both expression and training.
-      </p>
-      <ul class="chips">
-        <li>Music</li>
-        <li>Interactive Concepts</li>
-        <li>Narrative Direction</li>
-        <li>System Design</li>
-        <li>Atmosphere and Contrast</li>
-        <li>Long-Term Iteration</li>
-      </ul>
+    <section class="section reveal dual-grid">
+      <article class="neon-card">
+        <span class="card-kicker">Creative Range</span>
+        <h2>Creative Fields</h2>
+        <p>
+          My artistic interests include music, interactive projects, and concept-oriented work. I am drawn to contrast: silence and impact, calm and aggression, control and release. These tensions create depth, and depth is where meaningful work appears.
+        </p>
+        <p>
+          Games, systems, and music are not escape tools for me. I use them to sharpen perception, reaction, and decision-making. I treat creative work as both expression and training.
+        </p>
+      </article>
+      <article class="neon-card">
+        <span class="card-kicker">Active Fields</span>
+        <ul class="chips cyber-chips">
+          <li>Music</li>
+          <li>Interactive Concepts</li>
+          <li>Narrative Direction</li>
+          <li>System Design</li>
+          <li>Atmosphere and Contrast</li>
+          <li>Long-Term Iteration</li>
+        </ul>
+      </article>
     </section>
 
-    <section class="section card reveal">
-      <h2>Personal Standards</h2>
-      <p>
-        I maintain a straightforward set of standards that guide decisions across work and life. These standards are intentionally strict because they protect momentum and quality.
-      </p>
-      <ul class="simple-list">
-        <li>I learn through action, not through waiting for perfect conditions.</li>
-        <li>I test boundaries, evaluate failure, and adjust quickly.</li>
-        <li>Discipline remains more valuable than comfort.</li>
-        <li>Validation is not a goal; progress is.</li>
-        <li>Stability is built through routine and standards, not luck.</li>
-      </ul>
-      <p class="note">
-        What you see here is not a final state. It is one stage in a longer process of growth and refinement.
-      </p>
+    <section class="section reveal">
+      <article class="neon-card">
+        <span class="card-kicker">Standards</span>
+        <h2>Personal Standards</h2>
+        <p>
+          I maintain a straightforward set of standards that guide decisions across work and life. These standards are intentionally strict because they protect momentum and quality.
+        </p>
+        <div class="standards-ladder">
+          <div><span>01</span><p>I learn through action, not through waiting for perfect conditions.</p></div>
+          <div><span>02</span><p>I test boundaries, evaluate failure, and adjust quickly.</p></div>
+          <div><span>03</span><p>Discipline remains more valuable than comfort.</p></div>
+          <div><span>04</span><p>Validation is not a goal; progress is.</p></div>
+          <div><span>05</span><p>Stability is built through routine and standards, not luck.</p></div>
+        </div>
+        <p class="note">
+          What you see here is not a final state. It is one stage in a longer process of growth and refinement.
+        </p>
+      </article>
     </section>
   </main>
 

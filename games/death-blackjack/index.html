@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameAssasins Web | Death Blackjack Beta</title>
+  <meta name="description" content="Death Blackjack home screen, progression route, titles, curses, and between-run collection.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="casino-page death-blackjack-page death-blackjack-home-page">
+  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+
+  <nav class="site-nav reveal" aria-label="Main navigation">
+    <a class="brand" href="../../index.html">GameAssasins Web</a>
+    <div class="nav-links">
+      <a class="nav-link" href="../../index.html">Home</a>
+      <a class="nav-link" href="../../about.html">About</a>
+      <a class="nav-link" href="../../rules.html">Help & Rules</a>
+      <a class="nav-link" href="../gambling-king/index.html">Gambling King</a>
+      <a class="nav-link" href="../death-wheel/index.html">Death Wheel</a>
+      <a class="nav-link active" href="../death-blackjack/index.html">Death Blackjack Beta</a>
+      <a class="nav-link" href="../../balance-changes.html">Updates</a>
+    </div>
+  </nav>
+
+  <header class="hero section reveal casino-hero game-hero">
+    <div class="game-hero-shell">
+      <div class="game-hero-copy">
+        <p class="eyebrow">World 1 Hub</p>
+        <h1>Death Blackjack</h1>
+        <p class="lead">
+          This is the between-runs home for titles, curses, progression, and the House record of your last attempts.
+        </p>
+        <p class="lead" style="margin-top:0.6rem;">
+          Titles, feat progress, and account state live here, while the actual table route stays on a separate play page.
+        </p>
+        <div class="game-signal-bar" aria-label="Death Blackjack home themes">
+          <span>Titles</span>
+          <span>Route Progression</span>
+          <span>Boss Ladder</span>
+          <span>Infernal Deck Tech</span>
+        </div>
+      </div>
+      <aside class="game-hero-panel" aria-label="Death Blackjack home readout">
+        <span class="game-panel-kicker">House Readout</span>
+        <div class="game-panel-grid">
+          <div><span>Status</span><strong>Experimental</strong></div>
+          <div><span>Focus</span><strong>Meta + Route</strong></div>
+          <div><span>Carryover</span><strong>Titles Only</strong></div>
+          <div><span>Style</span><strong>Infernal Prestige</strong></div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="section card reveal">
+      <div class="home-screen home-screen-standalone" aria-label="Death Blackjack home">
+        <div class="home-screen-backdrop"></div>
+        <div class="home-screen-card">
+          <div class="home-screen-head">
+            <div>
+              <p class="home-kicker">Between Runs</p>
+              <h3>Devil's Ledger</h3>
+              <p class="note hidden" id="bjHomeStatus">Only titles and progression feats are kept between runs.</p>
+            </div>
+            <div class="home-screen-actions">
+              <a class="btn btn-primary game-btn" href="./play.html?resume=1" id="bjContinueRunLink">Continue</a>
+              <button class="btn btn-outline game-btn" type="button" id="bjFreshRunLink">New Run</button>
+            </div>
+          </div>
+          <section class="home-card home-level-card home-level-card-compact home-top-route">
+            <div class="settings-card-head">
+              <h4>Progress Route</h4>
+            </div>
+            <div class="home-level-track" id="bjHomeLevelTrack"></div>
+          </section>
+          <div class="home-screen-grid home-screen-grid-duo home-screen-grid-compact">
+            <section class="home-card home-card-summary">
+              <div class="settings-card-head">
+                <h4>Equipped Titles</h4>
+              </div>
+              <div class="title-settings-grid" id="bjHomeEquippedTitles"></div>
+            </section>
+            <section class="home-card home-card-summary home-run-log-card">
+              <div class="settings-card-head">
+                <h4>Run Logs</h4>
+              </div>
+              <div class="home-run-log" id="bjHomeRunLog"></div>
+            </section>
+          </div>
+          <div class="settings-grid home-settings-grid" style="margin-top:1rem;">
+            <details class="settings-card settings-fold">
+              <summary class="settings-fold-head">
+                <span>Utilities</span>
+                <small>Account and save tools stay here when you need them.</small>
+              </summary>
+              <div class="settings-fold-body">
+                <p class="note hidden" id="bjAccountStatus">Manage your current account, leave it safely, or rejoin with an account code later.</p>
+                <div class="save-code-actions utility-action-grid">
+                  <button class="btn btn-outline game-btn" type="button" id="bjExportAccountBtn">Export Account</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjJoinAccountBtn">Join Account</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjLeaveAccountBtn">Leave Account</button>
+                  <button class="btn btn-outline game-btn danger-btn" type="button" id="bjDeleteSaveBtn">Delete Save Data</button>
+                </div>
+                <div class="save-code-panel hidden" id="bjAccountCodePanel">
+                  <textarea id="bjAccountCodeInput" spellcheck="false" placeholder="Death Blackjack account code"></textarea>
+                  <div class="save-code-actions">
+                    <button class="btn btn-outline game-btn" type="button" id="bjCopyAccountBtn">Copy Code</button>
+                    <button class="btn btn-primary game-btn" type="button" id="bjApplyAccountBtn">Join Account</button>
+                  </div>
+                </div>
+              </div>
+            </details>
+            <details class="settings-card settings-fold hidden" id="bjHomeDevToolsCard">
+              <summary class="settings-fold-head">
+                <span>Developer Tools</span>
+                <small>Protected testing actions for the dev account.</small>
+              </summary>
+              <div class="settings-fold-body">
+                <p class="note" id="bjHomeDevToolsStatus">Dev-only testing tools appear here on the protected developer account.</p>
+                <div class="dev-tool-grid">
+                  <button class="btn btn-outline game-btn" type="button" id="bjHomeDevUnlockTitlesBtn">Unlock All Titles</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjHomeDevMaxProgressBtn">Max Progress Marks</button>
+                  <button class="btn btn-outline game-btn" type="button" id="bjHomeDevClearRunBtn">Clear Run Save</button>
+                </div>
+              </div>
+            </details>
+            <details class="settings-card settings-fold">
+              <summary class="settings-fold-head">
+                <span>Progress Marks</span>
+                <small>Check the permanent feat totals that feed house level.</small>
+              </summary>
+              <div class="settings-fold-body">
+                <div class="home-progress-grid" id="bjHomeProgressStats"></div>
+              </div>
+            </details>
+            <details class="settings-card settings-fold">
+              <summary class="settings-fold-head">
+                <span>House Curses</span>
+                <small>Optional run modifiers that trade difficulty for bonus XP.</small>
+              </summary>
+              <div class="settings-fold-body">
+                <p class="note" id="bjCurseStatus">Clear World 1 once to unlock House Curses.</p>
+                <div class="title-settings-grid" id="bjCurseSettings"></div>
+              </div>
+            </details>
+            <details class="settings-card settings-fold">
+              <summary class="settings-fold-head">
+                <span>Achievements</span>
+                <small>Title unlock goals and House-route milestones live here.</small>
+              </summary>
+              <div class="settings-fold-body">
+                <div class="home-title-collection" id="bjHomeAchievements"></div>
+              </div>
+            </details>
+            <details class="settings-card settings-fold">
+              <summary class="settings-fold-head">
+                <span>Title Loadout</span>
+                <small>Manage unlocked titles and equip up to 3.</small>
+              </summary>
+              <div class="settings-fold-body">
+                <p class="note" id="bjTitleStatus">Titles stay between runs, unlock from feats, and slightly reshape the deck.</p>
+                <div class="title-settings-grid" id="bjTitleSettings"></div>
+              </div>
+            </details>
+            <details class="settings-card settings-fold">
+              <summary class="settings-fold-head">
+                <span>Keybinds</span>
+                <small>Change controls only if you want a custom layout.</small>
+              </summary>
+              <div class="settings-fold-body">
+                <p class="note" id="bjKeybindStatus">Click a bind, then press a key.</p>
+                <div class="keybind-settings-grid" id="bjKeybindSettings"></div>
+                <div class="save-code-actions" style="margin-top:0.55rem;">
+                  <button class="btn btn-outline game-btn" type="button" id="bjResetKeybindsBtn">Reset Defaults</button>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="section reveal">
+    <p>&copy; <span id="year"></span> GameAssasins</p>
+  </footer>
+
+  <script src="../../script.js"></script>
+</body>
+</html>

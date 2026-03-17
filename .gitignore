@@ -1,0 +1,16 @@
+# Temporary extracted Office/XML content
+.tmp_dw_docx/
+.tmp_script_numbered.txt
+
+# Local environment/secrets
+.env
+.env.*
+*.key
+*.pem
+*.p12
+
+# OS/editor noise
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/

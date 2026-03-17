@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameAssasins Web | Gambling King</title>
+  <meta name="description" content="Gambling King: a roguelite slot machine game.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="casino-page gambling-king-page">
+  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+
+  <nav class="site-nav reveal" aria-label="Main navigation">
+    <a class="brand" href="../../index.html">GameAssasins Web</a>
+    <div class="nav-links">
+      <a class="nav-link" href="../../index.html">Home</a>
+      <a class="nav-link" href="../../about.html">About</a>
+      <a class="nav-link" href="../../rules.html">Help & Rules</a>
+      <a class="nav-link active" href="../gambling-king/index.html">Gambling King</a>
+      <a class="nav-link" href="../death-wheel/index.html">Death Wheel</a>
+      <a class="nav-link" href="../death-blackjack/index.html">Death Blackjack Beta</a>
+      <a class="nav-link" href="../../balance-changes.html">Updates</a>
+    </div>
+  </nav>
+
+  <header class="hero section reveal casino-hero game-hero">
+    <div class="game-hero-shell">
+      <div class="game-hero-copy">
+        <p class="eyebrow">High-Roller Floor</p>
+        <h1>Gambling King</h1>
+        <p class="lead">
+          Roguelite slot machine run. Start fresh every time, push your luck, and survive as long as possible before debt destroys your run.
+        </p>
+        <div class="game-signal-bar" aria-label="Gambling King themes">
+          <span>Debt Clock</span>
+          <span>Royal Bursts</span>
+          <span>Late-Run Sinks</span>
+          <span>Fee Pressure</span>
+        </div>
+      </div>
+      <aside class="game-hero-panel" aria-label="Gambling King table readout">
+        <span class="game-panel-kicker">Table Readout</span>
+        <div class="game-panel-grid">
+          <div><span>Loop</span><strong>Spin, Survive, Repay</strong></div>
+          <div><span>Threat</span><strong>Debt Over Limit</strong></div>
+          <div><span>Pacing</span><strong>Block Fees</strong></div>
+          <div><span>Style</span><strong>Velvet High-Risk</strong></div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="section card reveal game-brief-card">
+      <h2>Objective</h2>
+      <p id="objectiveSummary">Survive until the win target and avoid debt collapse.</p>
+      <ul class="simple-list">
+        <li id="objectiveWinLine">You win the run after surviving the required spins for your selected difficulty.</li>
+        <li>Every run starts fresh with no saved run progress.</li>
+        <li id="objectiveDebtLine">Debt can keep you alive, but reaching the debt limit ends the run instantly.</li>
+      </ul>
+    </section>
+
+    <section class="section card reveal game-stage-card gambling-stage-card">
+      <h2 class="centered-title">Slot</h2>
+      <div class="machine-layout">
+      <div class="slot-machine slot-machine--king">
+        <div class="marquee-lights" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">Money</div>
+            <div class="stat-value" id="moneyValue">$0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Debt</div>
+            <div class="stat-value" id="debtValue">$0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Debt Limit</div>
+            <div class="stat-value" id="debtLimitValue">$0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Debt Interest / Roll</div>
+            <div class="stat-value" id="interestValue">10%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Best Net Worth</div>
+            <div class="stat-value" id="bestValue">$0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Spins Left In Block</div>
+            <div class="stat-value" id="spinsLeftValue">10</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Slots</div>
+            <div class="stat-value" id="reelSlotsValue">3</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Table Fee</div>
+            <div class="stat-value" id="tableFeeValue">$0</div>
+          </div>
+        </div>
+
+        <div class="bet-panel">
+          <label class="stat-label">Difficulty</label>
+          <div class="bet-row difficulty-row">
+            <div class="difficulty-pill" id="difficultyBadge">Normal</div>
+            <div class="difficulty-note" id="difficultyInfo">Fixed $115 spin cost · variable debt pressure.</div>
+          </div>
+          <p class="lock-note">Spin cost is fixed at <strong>$115</strong> for all runs.</p>
+        </div>
+
+        <div class="reels" aria-live="polite">
+          <div class="reel-slot">
+            <div class="reel-label">Slot 1</div>
+            <div class="reel" id="reel1">?</div>
+          </div>
+          <div class="reel-slot">
+            <div class="reel-label">Slot 2</div>
+            <div class="reel" id="reel2">?</div>
+          </div>
+          <div class="reel-slot">
+            <div class="reel-label">Slot 3</div>
+            <div class="reel" id="reel3">?</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-primary game-btn" id="spinBtn" data-keybind="S">Spin ($115)</button>
+          <button class="btn btn-outline game-btn" id="openInventoryBtn" data-keybind="I">Upgrades</button>
+          <button class="btn btn-outline game-btn" id="skipAnimBtn" data-keybind="K">Skip Current Spin</button>
+          <button class="btn btn-outline game-btn" id="payFeeBtn" data-keybind="F">Pay Table Fee</button>
+          <button class="btn btn-outline game-btn" id="repayBtn" data-keybind="P">Repay $50 Debt</button>
+          <button class="btn btn-outline game-btn" id="restartBtn" data-keybind="T">Restart Run</button>
+        </div>
+        <label class="skip-toggle" for="autoSkipCheck">
+          <input type="checkbox" id="autoSkipCheck">
+          Always skip spin animation
+        </label>
+        <div class="quick-toggle-row">
+          <label class="skip-toggle" for="showKeybindsCheck">
+            <input type="checkbox" id="showKeybindsCheck">
+            Show keybinds
+          </label>
+          <label class="skip-toggle" for="showFullInfoCheck">
+            <input type="checkbox" id="showFullInfoCheck">
+            Show full info
+          </label>
+        </div>
+
+        <p class="event-log" id="eventLog">Run started. Push your luck.</p>
+        <aside class="table-advice game-tip-panel" id="gkAdvicePanel" aria-live="polite" aria-label="Gambling King advice">
+          <span class="table-advice-kicker">Machine Tip</span>
+          <p class="table-advice-text" id="gkAdviceText">Paying fees on time matters more than one greedy spin. Long runs die from debt snowball, not one miss.</p>
+        </aside>
+      </div>
+      <aside class="payout-card payout-card--king">
+        <h3>Current Payouts</h3>
+        <p class="note">Values update from your bet and upgrades. Random bonus procs are extra.</p>
+        <div class="payout-scroll">
+          <table class="payout-table">
+            <thead>
+              <tr>
+                <th>Combo</th>
+                <th>Payout</th>
+              </tr>
+            </thead>
+            <tbody id="payoutBody"></tbody>
+          </table>
+        </div>
+      </aside>
+      </div>
+    </section>
+
+    <div class="devil-event hidden" id="inventoryModal" aria-live="polite">
+      <div class="devil-card inventory-card">
+        <div class="devil-head">Upgrades</div>
+        <p>Upgrade and shop systems in one place.</p>
+        <div class="controls">
+          <button class="btn btn-outline game-btn" id="closeInventoryBtn" data-keybind="I">Close</button>
+        </div>
+        <h3>Upgrades</h3>
+        <div class="upgrade-grid">
+        <article class="upgrade-card">
+          <h3>Lucky Charm</h3>
+          <p class="upgrade-desc" data-short="Boost high-value symbol odds." data-full="Increase luck to make high-value symbols appear more often.">Boost high-value symbol odds.</p>
+          <p class="upgrade-meta">Level: <span id="luckLevel">0</span> | Cost: <span id="luckCost">$60</span></p>
+          <p class="upgrade-meta">Bonus: +<span id="luckBonusValue">0</span>% high-symbol odds</p>
+          <button class="btn btn-outline game-btn" id="buyLuckBtn" data-keybind="1">Buy Luck</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>High Roller</h3>
+          <p class="upgrade-desc" data-short="Increase payout power." data-full="Boost payout multiplier for bigger wins on every successful spin.">Increase payout power.</p>
+          <p class="upgrade-meta">Level: <span id="multLevel">0</span> | Cost: <span id="multCost">$90</span></p>
+          <p class="upgrade-meta">Bonus: x<span id="multBonusValue">1.00</span> payout power</p>
+          <button class="btn btn-outline game-btn" id="buyMultBtn" data-keybind="2">Buy Multiplier</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Chaos Engine</h3>
+          <p class="upgrade-desc" data-short="Adds random bonus procs." data-full="Unlock stronger gambling effects: double wins, jackpot surge, and free spin chance.">Adds random bonus procs.</p>
+          <p class="upgrade-meta">Level: <span id="effectLevel">0</span> | Cost: <span id="effectCost">$140</span></p>
+          <p class="upgrade-meta">Bonus: Double <span id="effectDoubleChance">0.0%</span>, Surge <span id="effectSurgeChance">0.0%</span>, Refund <span id="effectRefundChance">0.0%</span></p>
+          <button class="btn btn-outline game-btn" id="buyEffectBtn" data-keybind="3">Buy Effect</button>
+        </article>
+        <article class="upgrade-card danger-upgrade">
+          <h3>Devil's Contract</h3>
+          <p class="upgrade-desc" data-short="More upgrade power, more risk." data-full="Buffs all upgrade power. Negative: higher debt interest and stronger house pressure.">More upgrade power, more risk.</p>
+          <p class="upgrade-meta">Level: <span id="contractLevel">0</span> | Cost: <span id="contractCost">$180</span></p>
+          <p class="upgrade-meta">Effect: +<span id="contractPowerBonus">0</span>% upgrade power, +<span id="contractInterestPenalty">0</span>% debt interest</p>
+          <button class="btn btn-outline game-btn" id="buyContractBtn" data-keybind="4">Sign Contract</button>
+        </article>
+        <article class="upgrade-card locked-upgrade" id="shieldCard">
+          <h3>Debt Shield</h3>
+          <p class="upgrade-desc" data-short="More debt limit, less interest." data-full="Raises debt limit and reduces interest. Unlock when debt reaches $400 or after 18 spins.">More debt limit, less interest.</p>
+          <p class="upgrade-meta">Level: <span id="shieldLevel">0</span> | Cost: <span id="shieldCost">$220</span></p>
+          <p class="upgrade-meta">Bonus: +<span id="shieldLimitBonus">0</span> debt limit, -<span id="shieldInterestReduction">0</span>% interest</p>
+          <p class="lock-note" id="shieldReq">Locked</p>
+          <button class="btn btn-outline game-btn" id="buyShieldBtn" data-keybind="5">Buy Debt Shield</button>
+        </article>
+        <article class="upgrade-card locked-upgrade" id="royalCard">
+          <h3>Royal Permit</h3>
+          <p class="upgrade-desc" data-short="Unlocks premium payout bonuses." data-full="Unlocks high-end payouts and bonus jackpot chance. Unlock at net worth $2500 or Luck 3 + Mult 3.">Unlocks premium payout bonuses.</p>
+          <p class="upgrade-meta">Level: <span id="royalLevel">0</span> | Cost: <span id="royalCost">$300</span></p>
+          <p class="upgrade-meta">Bonus: +<span id="royalPayoutBonus">0</span>% payout, +<span id="royalJackpotChance">0.0</span>% royal burst chance</p>
+          <p class="lock-note" id="royalReq">Locked</p>
+          <button class="btn btn-outline game-btn" id="buyRoyalBtn" data-keybind="6">Buy Royal Permit</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Fee Broker</h3>
+          <p class="upgrade-desc" data-short="Cuts table fees." data-full="Reduces table fee payments so long runs stay playable deeper into the run. Limited copies for balance.">Cuts table fees.</p>
+          <p class="upgrade-meta">Level: <span id="feeBrokerLevel">0</span> | Cost: <span id="feeBrokerCost">$150</span></p>
+          <p class="upgrade-meta">Bonus: -<span id="feeBrokerReduction">0</span>% table fee</p>
+          <button class="btn btn-outline game-btn" id="buyFeeBrokerBtn" data-keybind="9">Buy Fee Broker</button>
+        </article>
+        </div>
+        <h3>Shop</h3>
+        <div class="upgrade-grid">
+        <article class="upgrade-card">
+          <h3>Second Chance</h3>
+          <p class="upgrade-desc" data-short="Reroll failed spins with tokens." data-full="Gain reroll tokens every 10 spins. Spend token to force reroll if next spin whiffs.">Reroll failed spins with tokens.</p>
+          <p class="upgrade-meta">Level: <span id="secondChanceLevel">0</span> | Cost: <span id="secondChanceCost">$110</span></p>
+          <p class="upgrade-meta">Tokens: <span id="secondChanceTokens">0</span></p>
+          <div class="controls">
+            <button class="btn btn-outline game-btn" id="buySecondChanceBtn" data-keybind="7">Buy Second Chance</button>
+            <button class="btn btn-outline game-btn" id="useSecondChanceBtn" data-keybind="C">Use Token</button>
+          </div>
+        </article>
+        <article class="upgrade-card">
+          <h3>Greed Engine</h3>
+          <p class="upgrade-desc" data-short="More payout, more pressure." data-full="Higher payouts, but higher interest and faster table fee scaling.">More payout, more pressure.</p>
+          <p class="upgrade-meta">Level: <span id="greedLevel">0</span> | Cost: <span id="greedCost">$140</span></p>
+          <p class="upgrade-meta">Effect: +<span id="greedPayoutBonus">0</span>% payout, +<span id="greedRiskPenalty">0</span>% risk pressure</p>
+          <button class="btn btn-outline game-btn" id="buyGreedBtn" data-keybind="8">Buy Greed Engine</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Wild Generator</h3>
+          <p class="upgrade-desc" data-short="Chance to add a wild symbol." data-full="Small chance each spin to generate a wild symbol.">Chance to add a wild symbol.</p>
+          <p class="upgrade-meta">Level: <span id="wildLevel">0</span> | Cost: <span id="wildCost">$160</span></p>
+          <p class="upgrade-meta">Chance: <span id="wildChanceValue">0.0</span>%</p>
+          <button class="btn btn-outline game-btn" id="buyWildBtn" data-keybind="0">Buy Wild Generator</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Debt Restructuring</h3>
+          <p class="upgrade-desc" data-short="Cuts debt and interest briefly." data-full="Cut debt instantly and temporarily reduce interest for a few spins.">Cuts debt and interest briefly.</p>
+          <p class="upgrade-meta">Level: <span id="restructureLevel">0</span> | Cost: <span id="restructureCost">$180</span></p>
+          <p class="upgrade-meta">Active Spins Left: <span id="restructureActive">0</span></p>
+          <button class="btn btn-outline game-btn" id="buyRestructureBtn" data-keybind="-">Use Debt Restructuring</button>
+        </article>
+        <article class="upgrade-card danger-upgrade">
+          <h3>Blood Debt</h3>
+          <p class="upgrade-desc" data-short="Big luck boost, constant drain." data-full="Massive luck boost, but drains money every spin.">Big luck boost, constant drain.</p>
+          <p class="upgrade-meta">Level: <span id="bloodLevel">0</span> | Cost: <span id="bloodCost">$170</span></p>
+          <p class="upgrade-meta">Effect: +<span id="bloodLuckBonus">0</span>% luck, -<span id="bloodDrainValue">0</span>% bet/spin</p>
+          <button class="btn btn-outline game-btn" id="buyBloodBtn" data-keybind="=">Buy Blood Debt</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Reel Expansion</h3>
+          <p class="upgrade-desc" data-short="Adds reels for bigger combos." data-full="Buy more slot reels. Bigger matches (4x, 5x, 6x+) now pay much higher.">Adds reels for bigger combos.</p>
+          <p class="upgrade-meta">Level: <span id="reelExpandLevel">0</span> | Cost: <span id="reelExpandCost">$320</span></p>
+          <button class="btn btn-outline game-btn" id="buyReelBtn" data-keybind="]">Buy Extra Slot</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Safety Net</h3>
+          <p class="upgrade-desc" data-short="Refund on dead spins." data-full="If a spin ends with no payout, refund part of the spin cost. Limited copies so it softens misses without making failure meaningless.">Refund on dead spins.</p>
+          <p class="upgrade-meta">Level: <span id="safetyNetLevel">0</span> | Cost: <span id="safetyNetCost">$130</span></p>
+          <p class="upgrade-meta">Refund: <span id="safetyNetRefund">0</span>% of spin cost on no-win</p>
+          <button class="btn btn-outline game-btn" id="buySafetyNetBtn" data-keybind="[">Buy Safety Net</button>
+        </article>
+        </div>
+        <h3>Late-Run Cash Sinks</h3>
+        <p class="lock-note" id="lateRunSinkUnlockNote">Locked: survive deeper runs or max more capped upgrades.</p>
+        <div class="upgrade-grid">
+        <article class="upgrade-card">
+          <h3>House Bribe</h3>
+          <p class="upgrade-desc" data-short="Temporary house-pressure reduction." data-full="Pay off the house for the next 10 spins. Temporarily lowers debt interest and table fee pressure. Repeatable and duration stacks.">Temporary house-pressure reduction.</p>
+          <p class="upgrade-meta">Cost: <span id="houseBribeCost">$700</span></p>
+          <p class="upgrade-meta">Status: <span id="houseBribeStatus">Inactive</span></p>
+          <button class="btn btn-outline game-btn" id="buyHouseBribeBtn" data-keybind="H">Buy House Bribe</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Overclock Spin</h3>
+          <p class="upgrade-desc" data-short="Expensive one-spin power spike." data-full="Charge the next spin with extra payout power, higher wild odds, and stronger proc chances. Charges stack until used.">Expensive one-spin power spike.</p>
+          <p class="upgrade-meta">Cost: <span id="overclockCost">$320</span></p>
+          <p class="upgrade-meta">Charges: <span id="overclockStatus">0</span></p>
+          <button class="btn btn-outline game-btn" id="buyOverclockBtn" data-keybind="O">Buy Overclock Spin</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>Emergency Buyout</h3>
+          <p class="upgrade-desc" data-short="Expensive debt-and-fee bailout." data-full="Spend a large amount to cut current debt and erase a currently due table fee if one is waiting. Repeatable panic tool for unstable late runs.">Expensive debt-and-fee bailout.</p>
+          <p class="upgrade-meta">Cost: <span id="emergencyBuyoutCost">$900</span></p>
+          <p class="upgrade-meta">Status: <span id="emergencyBuyoutStatus">No bailout used</span></p>
+          <button class="btn btn-outline game-btn" id="buyEmergencyBuyoutBtn" data-keybind="B">Use Emergency Buyout</button>
+        </article>
+        <article class="upgrade-card">
+          <h3>VIP Table Pass</h3>
+          <p class="upgrade-desc" data-short="Bank fee discounts for later." data-full="Buy premium fee tokens. Each token cuts one future table fee payment in half. Charges stack and are consumed only when paying a fee.">Bank fee discounts for later.</p>
+          <p class="upgrade-meta">Cost: <span id="vipPassCost">$650</span></p>
+          <p class="upgrade-meta">Passes: <span id="vipPassStatus">0</span></p>
+          <button class="btn btn-outline game-btn" id="buyVipPassBtn" data-keybind="V">Buy VIP Table Pass</button>
+        </article>
+        </div>
+        <p class="note">
+          This game is intentionally unsaved. Refreshing or leaving the page resets everything.
+        </p>
+      </div>
+    </div>
+
+    <div class="devil-event hidden" id="devilEvent" aria-live="polite">
+      <div class="devil-card">
+        <div class="devil-head">😈 Devil Deal</div>
+        <p>The devil offers a coin flip: <strong>double your money</strong> or <strong>lose it all</strong>.</p>
+        <div class="coin" id="coinFlip">🪙</div>
+        <p class="lock-note" id="coinResult"></p>
+        <div class="controls">
+          <button class="btn btn-primary game-btn" id="acceptDealBtn" data-keybind="A">Take Deal</button>
+          <button class="btn btn-outline game-btn" id="declineDealBtn" data-keybind="D">Decline</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="devil-event hidden" id="difficultyModal" aria-live="polite">
+      <div class="devil-card">
+        <div class="devil-head">Choose Difficulty</div>
+        <p>Select one of 11 modes. Difficulty is locked during a run.</p>
+        <div class="bet-row">
+          <select id="difficultySelectModal">
+            <option value="noob">Noob</option>
+            <option value="easy">Easy</option>
+            <option value="casual">Casual</option>
+            <option value="normal" selected>Normal</option>
+            <option value="hard">Hard</option>
+            <option value="expert">Expert</option>
+            <option value="master">Master</option>
+            <option value="nightmare">Nightmare</option>
+            <option value="insane">Insane</option>
+            <option value="hell">Hell</option>
+            <option value="gods_will">Gods Will</option>
+          </select>
+        </div>
+        <p class="lock-note" id="difficultyModalInfo"></p>
+        <div class="controls">
+          <button class="btn btn-outline game-btn" id="difficultyMoreBtn">More Info</button>
+          <button class="btn btn-primary game-btn" id="startRunBtn" data-keybind="Enter">Start Run</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="devil-event hidden" id="loseModal" aria-live="polite">
+      <div class="devil-card execution-loss">
+        <div class="execution-grid"></div>
+        <div class="execution-noise"></div>
+        <div class="execution-scanlines"></div>
+        <div class="execution-errors" id="gkLoseErrors"></div>
+        <div class="execution-suits" aria-hidden="true">
+          <span style="top:8%; right:10%;">♣</span>
+          <span style="top:28%; right:18%;">♦</span>
+          <span style="top:43%; right:12%;">♠</span>
+          <span style="top:61%; right:20%;">♥</span>
+          <span style="bottom:10%; left:8%;">♦</span>
+          <span style="bottom:18%; right:9%;">♣</span>
+        </div>
+        <div class="execution-flash" id="gkLoseFlash"></div>
+        <div class="execution-loss-body">
+          <p class="execution-line" id="gkLoseAccount">ACCOUNT: 6479A7</p>
+          <p class="execution-line">STATUS: TERMINATED</p>
+          <div class="execution-divider"></div>
+          <p class="execution-line" id="gkLoseDebt">DEBT: UNPAID</p>
+          <p class="execution-line" id="gkLoseHand">RUN: BANKRUPT</p>
+          <p class="execution-line" id="gkLoseLuck">LUCK: EXHAUSTED</p>
+          <div class="execution-gap-sm"></div>
+          <p class="execution-line" id="gkLoseSentence">SENTENCE: EXECUTION</p>
+          <div class="execution-divider"></div>
+          <p class="execution-line" id="loseReason">SOUL COLLATERAL: CLAIMED</p>
+          <p class="execution-line" id="gkLoseMoney">ASSETS: $0</p>
+          <p class="execution-line" id="gkLoseSpins">SPINS: 0</p>
+          <p class="execution-line" id="gkLoseDifficulty">MODE: NORMAL</p>
+          <div class="execution-gap-md"></div>
+          <p class="execution-line execution-glitch" id="gkLoseGlitchA" data-text="ACCOUNT RECORD: PURGED">ACCOUNT RECORD: PURGED</p>
+          <p class="execution-line execution-glitch" id="gkLoseGlitchB" data-text="ARCHIVE ERROR: 0xDEAD">ARCHIVE ERROR: 0xDEAD</p>
+          <p class="execution-line execution-glitch" id="gkLoseGlitchC" data-text="DATA INTEGRITY: FAILED">DATA INTEGRITY: FAILED</p>
+        </div>
+        <div class="execution-actions">
+          <button class="btn btn-primary game-btn" id="loseRestartBtn" data-keybind="R">Retry Same Difficulty</button>
+          <button class="btn btn-outline game-btn" id="loseDifficultyBtn" data-keybind="N">Choose New Difficulty</button>
+          <span class="execution-note">Your progress is gone. Pick your next move.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="devil-event hidden" id="winModal" aria-live="polite">
+      <div class="devil-card win-card">
+        <div class="devil-head" id="winModalHead">100 Spins Cleared</div>
+        <p id="winModalBody">You survived the required spins. This run is considered a win.</p>
+        <p class="lock-note">Keep pushing this run or start a new one with another difficulty.</p>
+        <div class="controls">
+          <button class="btn btn-primary game-btn" id="continueAfterWinBtn" data-keybind="C">Continue Beyond 100</button>
+          <button class="btn btn-outline game-btn" id="winDifficultyBtn" data-keybind="N">Choose New Difficulty</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="section reveal">
+    <p>&copy; <span id="year"></span> GameAssasins</p>
+  </footer>
+
+  <script src="../../script.js"></script>
+  <script src="./game.js"></script>
+</body>
+</html>
+
+
+
+

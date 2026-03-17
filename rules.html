@@ -7,12 +7,15 @@
   <meta name="description" content="Help, contact policy, and full rules for GameAssasins Web.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 </head>
-<body>
-  <div class="bg-shape bg-shape-a" aria-hidden="true"></div>
-  <div class="bg-shape bg-shape-b" aria-hidden="true"></div>
+<body class="site-page rules-page">
+  <div class="page-grid" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="page-glow page-glow-a" aria-hidden="true"></div>
+  <div class="page-glow page-glow-b" aria-hidden="true"></div>
 
   <nav class="site-nav reveal" aria-label="Main navigation">
     <a class="brand" href="./index.html">GameAssasins Web</a>
@@ -20,147 +23,171 @@
       <a class="nav-link" href="./index.html">Home</a>
       <a class="nav-link" href="./about.html">About</a>
       <a class="nav-link active" href="./rules.html">Help & Rules</a>
-      <a class="nav-link" href="./gambling-king.html">Gambling King</a>
-      <a class="nav-link" href="./death-wheel.html">Death Wheel</a>
+      <a class="nav-link" href="./games/gambling-king/index.html">Gambling King</a>
+      <a class="nav-link" href="./games/death-wheel/index.html">Death Wheel</a>
+      <a class="nav-link" href="./games/death-blackjack/index.html">Death Blackjack Beta</a>
       <a class="nav-link" href="./balance-changes.html">Updates</a>
     </div>
   </nav>
 
-  <header class="hero section reveal">
-    <p class="eyebrow">Help & Rules</p>
-    <h1>Terms of Interaction</h1>
+  <header class="hero section reveal cyber-hero rules-hero">
+    <p class="eyebrow">Protocol Manual</p>
+    <h1 class="glitch-title" data-glitch="Terms of Interaction">Terms of Interaction</h1>
     <p class="lead">
       This page defines communication standards, usage rights, privacy boundaries, and enforcement for this website and related interactions.
     </p>
+    <div class="protocol-index" aria-label="Policy sections">
+      <a href="#contact">Contact</a>
+      <a href="#ownership">Ownership</a>
+      <a href="#collaboration">Collaboration</a>
+      <a href="#conduct">Conduct</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#changes">Enforcement</a>
+    </div>
   </header>
 
   <main>
-    <section class="section card reveal" id="contact">
-      <h2>Help & Contact Policy</h2>
-      <p>
-        If you need to reach out regarding my work, projects, or this website, use official channels only. Contact methods are currently under development.
-      </p>
-      <p>
-        Before contacting, review the site and confirm your question is relevant. Messages that are vague, repetitive, or low-effort may be ignored.
-      </p>
-      <h3>Required Message Structure</h3>
-      <ul class="simple-list">
-        <li>Who you are.</li>
-        <li>Why you are contacting me.</li>
-        <li>The exact context and desired outcome.</li>
-      </ul>
-      <h3>Response Conditions</h3>
-      <ul class="simple-list">
-        <li>Responses are not guaranteed.</li>
-        <li>Replies happen at my discretion and timeline.</li>
-        <li>Multiple follow-ups do not increase priority.</li>
-      </ul>
+    <section class="section reveal">
+      <div class="warning-banner">
+        <strong>Access Notice:</strong>
+        <span>Use of this site means you are entering a controlled system with active rules, boundaries, and immediate policy updates.</span>
+      </div>
     </section>
 
-    <section class="section card reveal" id="ownership">
-      <h2>Content Ownership & Usage</h2>
-      <p>
-        All content on this site is owned by me unless explicitly credited otherwise. This includes text, audio, music, visuals, concepts, and original design work.
-      </p>
-      <h3>What Is Not Allowed</h3>
-      <ul class="simple-list">
-        <li>Copying, downloading, reuploading, or redistributing content.</li>
-        <li>Removing attribution or claiming authorship.</li>
-        <li>Modifying, remixing, or adapting material without permission.</li>
-        <li>Commercial or promotional use without explicit approval.</li>
-        <li>Use in misleading, harmful, or defamatory contexts.</li>
-      </ul>
-      <h3>Limited Allowances</h3>
-      <ul class="simple-list">
-        <li>Sharing direct links to this website.</li>
-        <li>Referencing my work with clear credit.</li>
-        <li>Requesting written permission for specific usage.</li>
-      </ul>
-      <p class="note">Permission is never implied. Silence does not equal consent.</p>
-    </section>
+    <section class="section reveal protocol-grid">
+      <article class="protocol-card" id="contact">
+        <span class="protocol-code">P-01</span>
+        <h2>Help & Contact Policy</h2>
+        <p>
+          If you need to reach out regarding my work, projects, or this website, use official channels only. Contact methods are currently under development.
+        </p>
+        <p>
+          Before contacting, review the site and confirm your question is relevant. Messages that are vague, repetitive, or low-effort may be ignored.
+        </p>
+        <h3>Required Message Structure</h3>
+        <ul class="simple-list">
+          <li>Who you are.</li>
+          <li>Why you are contacting me.</li>
+          <li>The exact context and desired outcome.</li>
+        </ul>
+        <h3>Response Conditions</h3>
+        <ul class="simple-list">
+          <li>Responses are not guaranteed.</li>
+          <li>Replies happen at my discretion and timeline.</li>
+          <li>Multiple follow-ups do not increase priority.</li>
+        </ul>
+      </article>
 
-    <section class="section card reveal" id="collaboration">
-      <h2>Collaboration & Requests</h2>
-      <p>
-        Collaboration is selective and must align with quality, relevance, and mutual value. Not all requests will receive a response.
-      </p>
-      <h3>Eligibility</h3>
-      <ul class="simple-list">
-        <li>Clear scope and realistic expectations.</li>
-        <li>Direct relevance to my work and direction.</li>
-        <li>Defined contributions and outcomes.</li>
-      </ul>
-      <h3>Not Accepted</h3>
-      <ul class="simple-list">
-        <li>Exposure-only offers.</li>
-        <li>Unpaid work with no value exchange.</li>
-        <li>Vague ideas without goals.</li>
-        <li>Pressure-based or urgency-manipulative requests.</li>
-      </ul>
-      <p>
-        Decision authority is final. I reserve the right to decline, end discussions, or withdraw from collaboration when boundaries are crossed.
-      </p>
-    </section>
+      <article class="protocol-card" id="ownership">
+        <span class="protocol-code">P-02</span>
+        <h2>Content Ownership & Usage</h2>
+        <p>
+          All content on this site is owned by me unless explicitly credited otherwise. This includes text, audio, music, visuals, concepts, and original design work.
+        </p>
+        <h3>What Is Not Allowed</h3>
+        <ul class="simple-list">
+          <li>Copying, downloading, reuploading, or redistributing content.</li>
+          <li>Removing attribution or claiming authorship.</li>
+          <li>Modifying, remixing, or adapting material without permission.</li>
+          <li>Commercial or promotional use without explicit approval.</li>
+          <li>Use in misleading, harmful, or defamatory contexts.</li>
+        </ul>
+        <h3>Limited Allowances</h3>
+        <ul class="simple-list">
+          <li>Sharing direct links to this website.</li>
+          <li>Referencing my work with clear credit.</li>
+          <li>Requesting written permission for specific usage.</li>
+        </ul>
+        <p class="note">Permission is never implied. Silence does not equal consent.</p>
+      </article>
 
-    <section class="section card reveal" id="conduct">
-      <h2>Behavior & Conduct</h2>
-      <p>
-        All interaction must remain respectful, intentional, and in good faith. Disagreement does not permit disrespect.
-      </p>
-      <h3>Expected Conduct</h3>
-      <ul class="simple-list">
-        <li>Professional communication.</li>
-        <li>Respect for boundaries and decisions.</li>
-        <li>Good-faith engagement only.</li>
-      </ul>
-      <h3>Zero-Tolerance Behavior</h3>
-      <ul class="simple-list">
-        <li>Harassment, threats, abuse, or intimidation.</li>
-        <li>Hate speech, discrimination, or targeted hostility.</li>
-        <li>Spam, scams, trolling, or deliberate disruption.</li>
-        <li>Manipulation, bad-faith argument, or coercion.</li>
-      </ul>
-      <p>
-        Violations may result in immediate communication termination, access restrictions, platform reports, or further action where necessary.
-      </p>
-    </section>
+      <article class="protocol-card" id="collaboration">
+        <span class="protocol-code">P-03</span>
+        <h2>Collaboration & Requests</h2>
+        <p>
+          Collaboration is selective and must align with quality, relevance, and mutual value. Not all requests will receive a response.
+        </p>
+        <h3>Eligibility</h3>
+        <ul class="simple-list">
+          <li>Clear scope and realistic expectations.</li>
+          <li>Direct relevance to my work and direction.</li>
+          <li>Defined contributions and outcomes.</li>
+        </ul>
+        <h3>Not Accepted</h3>
+        <ul class="simple-list">
+          <li>Exposure-only offers.</li>
+          <li>Unpaid work with no value exchange.</li>
+          <li>Vague ideas without goals.</li>
+          <li>Pressure-based or urgency-manipulative requests.</li>
+        </ul>
+        <p>
+          Decision authority is final. I reserve the right to decline, end discussions, or withdraw from collaboration when boundaries are crossed.
+        </p>
+      </article>
 
-    <section class="section card reveal" id="privacy">
-      <h2>Privacy & Boundaries</h2>
-      <p>
-        Privacy is mandatory. Do not attempt to collect personal information, publish private communications, or contact outside official channels unless explicitly invited.
-      </p>
-      <h3>Digital Boundaries</h3>
-      <ul class="simple-list">
-        <li>No attempts to access restricted site areas.</li>
-        <li>No bypassing security or manipulating protected content.</li>
-        <li>No invasive monitoring or tracking behavior.</li>
-      </ul>
-      <p>
-        Boundary violations may result in removal of access, reporting to hosting platforms or authorities, and legal action if required.
-      </p>
-    </section>
+      <article class="protocol-card" id="conduct">
+        <span class="protocol-code">P-04</span>
+        <h2>Behavior & Conduct</h2>
+        <p>
+          All interaction must remain respectful, intentional, and in good faith. Disagreement does not permit disrespect.
+        </p>
+        <h3>Expected Conduct</h3>
+        <ul class="simple-list">
+          <li>Professional communication.</li>
+          <li>Respect for boundaries and decisions.</li>
+          <li>Good-faith engagement only.</li>
+        </ul>
+        <h3>Zero-Tolerance Behavior</h3>
+        <ul class="simple-list">
+          <li>Harassment, threats, abuse, or intimidation.</li>
+          <li>Hate speech, discrimination, or targeted hostility.</li>
+          <li>Spam, scams, trolling, or deliberate disruption.</li>
+          <li>Manipulation, bad-faith argument, or coercion.</li>
+        </ul>
+        <p>
+          Violations may result in immediate communication termination, access restrictions, platform reports, or further action where necessary.
+        </p>
+      </article>
 
-    <section class="section card reveal" id="changes">
-      <h2>Changes, Terms, and Enforcement</h2>
-      <p>
-        This website, its content, and its policies may change at any time without direct notice. Changes are effective immediately upon publication.
-      </p>
-      <h3>By Using This Website, You Accept</h3>
-      <ul class="simple-list">
-        <li>Current and future policy updates.</li>
-        <li>That continued use equals acceptance of latest terms.</li>
-        <li>That earlier versions do not provide ongoing exceptions.</li>
-      </ul>
-      <h3>Enforcement</h3>
-      <ul class="simple-list">
-        <li>Restriction or removal of access.</li>
-        <li>Reporting to platforms or relevant services.</li>
-        <li>Legal action in serious breach cases.</li>
-      </ul>
-      <p class="note">
-        If these terms are not acceptable to you, do not use or interact with this website.
-      </p>
+      <article class="protocol-card" id="privacy">
+        <span class="protocol-code">P-05</span>
+        <h2>Privacy & Boundaries</h2>
+        <p>
+          Privacy is mandatory. Do not attempt to collect personal information, publish private communications, or contact outside official channels unless explicitly invited.
+        </p>
+        <h3>Digital Boundaries</h3>
+        <ul class="simple-list">
+          <li>No attempts to access restricted site areas.</li>
+          <li>No bypassing security or manipulating protected content.</li>
+          <li>No invasive monitoring or tracking behavior.</li>
+        </ul>
+        <p>
+          Boundary violations may result in removal of access, reporting to hosting platforms or authorities, and legal action if required.
+        </p>
+      </article>
+
+      <article class="protocol-card" id="changes">
+        <span class="protocol-code">P-06</span>
+        <h2>Changes, Terms, and Enforcement</h2>
+        <p>
+          This website, its content, and its policies may change at any time without direct notice. Changes are effective immediately upon publication.
+        </p>
+        <h3>By Using This Website, You Accept</h3>
+        <ul class="simple-list">
+          <li>Current and future policy updates.</li>
+          <li>That continued use equals acceptance of latest terms.</li>
+          <li>That earlier versions do not provide ongoing exceptions.</li>
+        </ul>
+        <h3>Enforcement</h3>
+        <ul class="simple-list">
+          <li>Restriction or removal of access.</li>
+          <li>Reporting to platforms or relevant services.</li>
+          <li>Legal action in serious breach cases.</li>
+        </ul>
+        <p class="note">
+          If these terms are not acceptable to you, do not use or interact with this website.
+        </p>
+      </article>
     </section>
   </main>
 
@@ -171,5 +198,7 @@
   <script src="./script.js"></script>
 </body>
 </html>
+
+
 
 
